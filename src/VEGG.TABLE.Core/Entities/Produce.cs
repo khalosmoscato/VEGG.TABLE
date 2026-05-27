@@ -2,7 +2,7 @@
 
 public class Produce
 {
-    public int Id { get; set; }
+    public required int ProduceId { get; set; }
     public required string Name { get; set; }
     public int Stock { get; set; } = 0;
     public double Price { get; set; } = 0;
@@ -10,7 +10,12 @@ public class Produce
     public Category Category { get; set; } = Category.Unkown;
     public string Description { get; set; } = string.Empty;
     public string PhotograghPath { get; set; } = string.Empty;
-    public int UserId { get; set; }
+
+    public bool IsLiked { get; set; } = false;
+    public bool IsOnSale { get; set; } = false;
+    public bool IsPurchased { get; set; } = false;
+
+    public required int UserId { get; set; }
 }
 public enum Category
 {
