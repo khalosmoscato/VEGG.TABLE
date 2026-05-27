@@ -34,4 +34,14 @@ public class UserController : ControllerBase
         var created = _userService.AddUser(user);
         return CreatedAtAction(nameof(GetUserById), new { id = created.Id }, created);
     }
+    // PUT: api/user/1
+    [HttpPut("{id}")]
+    public IActionResult UpdateUser(int id, User user)
+    {
+        var result = _userService.UpdateUser(id, user);
+
+        if (result == null) return NotFound();
+
+        return NoContent();
+    }
 }
