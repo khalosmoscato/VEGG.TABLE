@@ -54,3 +54,4 @@ pkg/
 *.coverage
 *.coveragexml
 coverage/
+/src/VEGG.TABLE.API/appsettings.Development.json
