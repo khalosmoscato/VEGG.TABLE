@@ -4,5 +4,17 @@
 [Route("api/[controller]")]
 public class UserController : ControllerBase
 {
-    // Your endpoints will go here
+    private readonly IUserService _userService;
+
+    public UserController(IUserService userService)
+    {
+        _userService = userService;
+    }
+
+    // GET: api/user
+    [HttpGet]
+    public IActionResult GetAllUsers()
+    {
+        return Ok(_userService.GetAllUsers());
+    }
 }
