@@ -27,4 +27,11 @@ public class UserController : ControllerBase
 
         return Ok(user);
     }
+    // POST: api/user
+    [HttpPost]
+    public IActionResult AddUser(User user)
+    {
+        var created = _userService.AddUser(user);
+        return CreatedAtAction(nameof(GetUserById), new { id = created.Id }, created);
+    }
 }
