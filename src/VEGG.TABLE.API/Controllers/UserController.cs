@@ -17,4 +17,14 @@ public class UserController : ControllerBase
     {
         return Ok(_userService.GetAllUsers());
     }
+    // GET: api/user/1
+    [HttpGet("{id}")]
+    public IActionResult GetUserById(int id)
+    {
+        var user = _userService.GetUserById(id);
+
+        if (user == null) return NotFound();
+
+        return Ok(user);
+    }
 }
