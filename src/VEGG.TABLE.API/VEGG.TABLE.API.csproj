@@ -5,6 +5,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\tests\VEGG.TABLE.UnitTests\VEGG.TABLE.UnitTests.csproj" />
+    <ProjectReference Include="..\VEGG.TABLE.Client\VEGG.TABLE.Client.csproj" />
     <ProjectReference Include="..\VEGG.TABLE.Core\VEGG.TABLE.Core.csproj" />
+    <ProjectReference Include="..\VEGG.TABLE.Infrastructure\VEGG.TABLE.Infrastructure.csproj" />
   </ItemGroup>
 </Project>
