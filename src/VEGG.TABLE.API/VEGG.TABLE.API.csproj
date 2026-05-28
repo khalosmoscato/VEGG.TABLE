@@ -6,5 +6,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\VEGG.TABLE.Core\VEGG.TABLE.Core.csproj" />
+    <ProjectReference Include="..\VEGG.TABLE.Infrastructure\VEGG.TABLE.Infrastructure.csproj" />
   </ItemGroup>
 </Project>
