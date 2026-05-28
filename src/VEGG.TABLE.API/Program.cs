@@ -1,4 +1,5 @@
 using Scalar.AspNetCore;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +8,12 @@ builder.Services.AddOpenApi();
 
 // Add other services
 builder.Services.AddControllers();
+
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
+
+string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<DBContext>(options => options.UseSqlServer(connectionString));
 
 var app = builder.Build();
 
