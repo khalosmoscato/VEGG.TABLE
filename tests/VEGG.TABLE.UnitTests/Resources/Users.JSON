@@ -1,0 +1,30 @@
+[
+  {
+    "Id": 1,
+    "Name": "John Farmer",
+    "Email": "john.farmer@example.com",
+    "Password": "Password123!",
+    "UserType": "Seller"
+  },
+  {
+    "Id": 2,
+    "Name": "Sarah Green",
+    "Email": "sarah.green@example.com",
+    "Password": "GreenPass456!",
+    "UserType": "Buyer"
+  },
+  {
+    "Id": 3,
+    "Name": "Michael Roots",
+    "Email": "michael.roots@example.com",
+    "Password": "Roots789!",
+    "UserType": "Seller"
+  },
+  {
+    "Id": 4,
+    "Name": "Admin User",
+    "Email": "admin@example.com",
+    "Password": "AdminSecure999!",
+    "UserType": "Admin"
+  }
+]
