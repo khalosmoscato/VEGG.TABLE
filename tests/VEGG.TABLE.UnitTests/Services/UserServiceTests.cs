@@ -5,7 +5,8 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
 
-using RecordShop.Repository;
+using VEGG.TABLE.Infrastructure.Data;
+using VEGG.TABLE.Infrastructure.Services;
 
 namespace VEGG.TABLE.UnitTests.Services;
 
@@ -14,11 +15,13 @@ public class UserServiceTests
         private Mock<IUserRepository> _mockRepo;
         private UserService _service;
 
+
     //// Use cross-platform path formatting
     //var filePath = Path.Combine("tests", "VEGG.TABLE.UnitTest", "Resources", "Users.JSON");
     //var initialUsers = Utils.GetFileContent<User>(filePath);
 
     [SetUp]
+
         public void Setup()
         {
             _mockRepo = new Mock<IUserRepository>();
@@ -31,6 +34,7 @@ public class UserServiceTests
         // Arrange
         var users = Utils.GetFileContent<User>("tests\\VEGG.TABLE.UnitTest\\Resources\\Users.JSON");
 
+
         _mockRepo.Setup(repo => repo.GetAllUsers())
         .Returns(users);
 
@@ -40,6 +44,7 @@ public class UserServiceTests
         //ASSERT
         //check that the correct function is called
         _mockRepo.Verify(x => x.GetAllUsers(), Times.Once);
+
         //check result type
         Assert.IsInstanceOf<List<User>>(result);
         //check the data is matching expected
@@ -55,6 +60,7 @@ public class UserServiceTests
         var users = Utils.GetFileContent<User>("tests\\VEGG.TABLE.UnitTest\\Resources\\Users.JSON");
         User targetUser = users.FirstOrDefault(x => x.Id == parameter);
 
+
         _mockRepo.Setup(repo => repo.GetUserById(parameter))
                  .Returns(targetUser);
 
@@ -69,6 +75,7 @@ public class UserServiceTests
         //check the data is matching expected
         Assert.IsNotNull(result);
         Assert.That(result, Is.EqualTo(targetUser));
+
         }   
 
     
