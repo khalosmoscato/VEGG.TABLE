@@ -1,4 +1,5 @@
 using Scalar.AspNetCore;
+
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,11 +9,13 @@ builder.Services.AddOpenApi();
 
 // Add other services
 builder.Services.AddControllers();
-
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 
+// Get the connection string from appsettings.json
 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+// Add a service to the build in the form of our database context, configured to use SQL Server.
 builder.Services.AddDbContext<DBContext>(options => options.UseSqlServer(connectionString));
 
 var app = builder.Build();
@@ -22,7 +25,6 @@ if (app.Environment.IsDevelopment())
 {
     // Register the OpenAPI endpoint
     app.MapOpenApi();
-
     // Register Scalar UI
     app.MapScalarApiReference();
 }
@@ -30,5 +32,4 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
-
 app.Run();
