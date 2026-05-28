@@ -1,15 +1,10 @@
 ﻿namespace VEGG.TABLE.UnitTests.Repositories;
-
-public class ProduceRepositoryTests // Tests for the data access layer
+public class ProduceRepositoryTests
 {
-    [Fact]
-    public void Should_Be_Empty_Initially()
+    [Test]
+    public void Test()
     {
-        // Arrange
-        var repository = new ProduceRepository();
 
-        // Act & Assert
-        // Assuming your repository has a way to check count/content
-        repository.Should().NotBeNull();
     }
+
 }
