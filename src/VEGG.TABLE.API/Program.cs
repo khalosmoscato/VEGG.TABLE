@@ -23,6 +23,12 @@ var app = builder.Build();
 // 2. Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
+    // Dev-only: apply pending migrations on startup.
+    using (var scope = app.Services.CreateScope())
+    {
+        scope.ServiceProvider.GetRequiredService<DBContext>().Database.Migrate();
+    }
+
     // Register the OpenAPI endpoint
     app.MapOpenApi();
     // Register Scalar UI
