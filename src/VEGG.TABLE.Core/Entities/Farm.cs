@@ -1,0 +1,15 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace VEGG.TABLE.Core.Entities;
+
+public class Farm
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public double Lat { get; set; }
+    public double Lng { get; set; }
+    public int OwnerId { get; set; }
+    public List<Produce> Inventory { get; set; } = new();
+}
