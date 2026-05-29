@@ -2,7 +2,7 @@
 
 public class Produce
 {
-    public required int ProduceId { get; set; }
+    public int ProduceId { get; set; }
     public required string Name { get; set; }
     public int Stock { get; set; } = 0;
     public double Price { get; set; } = 0;
