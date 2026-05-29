@@ -1,7 +1,39 @@
 ﻿@page "/"
+@using VEGG.TABLE.Core.Entities
+@using VEGG.TABLE.Client.Components
+@inject HttpClient Http
 
-<PageTitle>Home</PageTitle>
+@* Hero / Welcome Section *@
+<div class="bg-emerald-800 text-white p-8 rounded-lg mb-8 shadow-md">
+    <h1 class="text-3xl font-bold mb-2">Welcome to VEGG.TABLE</h1>
+    <p class="text-emerald-100 max-w-2xl">
+        Connecting local, sustainable produce directly to your community. 
+        Precision-grown, farm-fresh, and ready for you to collect.
+    </p>
+</div>
 
-<h1>Hello, world!</h1>
+@* Product Feed *@
+<h2 class="text-2xl font-bold mb-6">Available Produce</h2>
 
-Welcome to your new app.
+@if (produceList == null)
+{
+    <p><em>Loading fresh produce...</em></p>
+}
+else
+{
+    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        @foreach (var item in produceList)
+        {
+            <Card Item="item" />
+        }
+    </div>
+}
+
+@code {
+    private List<Produce>? produceList;
+
+    protected override async Task OnInitializedAsync()
+    {
+        produceList = await Http.GetFromJsonAsync<List<Produce>>("api/produce");
+    }
+}
