@@ -12,7 +12,11 @@
     <ProjectReference Include="..\..\src\VEGG.TABLE.Core\VEGG.TABLE.Core.csproj" />
     <ProjectReference Include="..\..\src\VEGG.TABLE.Infrastructure\VEGG.TABLE.Infrastructure.csproj" />
   </ItemGroup>
+
+
   <ItemGroup>
-    <Folder Include="Resources\" />
+    <None Update="Resources\users.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

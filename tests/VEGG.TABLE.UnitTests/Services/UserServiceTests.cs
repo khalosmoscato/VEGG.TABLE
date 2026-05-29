@@ -15,11 +15,9 @@ public class UserServiceTests
         private Mock<IUserRepository> _mockRepo;
         private UserService _service;
 
-
-    //// Use cross-platform path formatting
-    //var filePath = Path.Combine("tests", "VEGG.TABLE.UnitTest", "Resources", "Users.JSON");
-    //var initialUsers = Utils.GetFileContent<User>(filePath);
-
+    //Use cross-platform path formatting
+    private readonly string filePath1 =
+    Path.Combine(AppContext.BaseDirectory, "Resources", "users.json");
     [SetUp]
 
         public void Setup()
@@ -28,11 +26,11 @@ public class UserServiceTests
             _service = new UserService(_mockRepo.Object);
         }
 
-        [Test]
+    [Test]
         public void GetAll_Ok()
         {
         // Arrange
-        var users = Utils.GetFileContent<User>("tests\\VEGG.TABLE.UnitTest\\Resources\\Users.JSON");
+        var users = Utils.GetFileContent<User>(filePath1);
 
 
         _mockRepo.Setup(repo => repo.GetAllUsers())
@@ -57,7 +55,7 @@ public class UserServiceTests
         {
         // Arrange
         var parameter = 1;
-        var users = Utils.GetFileContent<User>("tests\\VEGG.TABLE.UnitTest\\Resources\\Users.JSON");
+        var users = Utils.GetFileContent<User>(filePath1);
         User targetUser = users.FirstOrDefault(x => x.Id == parameter);
 
 
@@ -75,17 +73,14 @@ public class UserServiceTests
         //check the data is matching expected
         Assert.IsNotNull(result);
         Assert.That(result, Is.EqualTo(targetUser));
-
         }   
-
-    
 
     [Test]
     public void Delete_Ok()
     {
         // Arrange
         var parameter = 1;
-        var initialUsers = Utils.GetFileContent<User>("tests\\VEGG.TABLE.UnitTest\\Resources\\Users.JSON");
+        var initialUsers = Utils.GetFileContent<User>(filePath1);
         User targetUser = initialUsers.FirstOrDefault(x => x.Id == parameter);
         var ChangedUsers = initialUsers.Remove(targetUser);
 
@@ -99,9 +94,9 @@ public class UserServiceTests
         //check that the correct function is called
         _mockRepo.Verify(x => x.DeleteUser(parameter), Times.Once);
         //check result type
-        Assert.IsInstanceOf<List<User>>(result);
+        Assert.IsInstanceOf<bool>(result);
         //check the data is matching expected
         Assert.IsNotNull(result);
-        //Assert.That(result, Is.EquivalentTo(ChangedUsers));
+        Assert.That(result, Is.EqualTo(ChangedUsers));
     }
 }
