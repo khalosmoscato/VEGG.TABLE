@@ -22,8 +22,22 @@ public class UserRepository : IUserRepository
         return _context.UserTable.FirstOrDefault(x => x.Id == id);
     }
 
-    public User AddUser(User user)
+    public User AddUser(UserDTO userDTO)
     {
+        int currentMaxId = _context.UserTable.Any()
+        ? _context.UserTable.Max(x => x.Id)
+        : 0;
+
+        int newId = currentMaxId + 1;
+
+        User user = new User
+        { 
+            Id = newId,
+            Email = userDTO.Email,
+            Name = userDTO.Name,
+            UserType = UserType.Buyer,
+            Password = userDTO.Password };
+
         _context.UserTable.Add(user);
         _context.SaveChanges();
         return user;

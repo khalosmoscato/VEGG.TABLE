@@ -102,26 +102,26 @@ public class UserServiceTests
         }   
 
     [Test]
-    public void Delete_Ok()
-    {
-        // Arrange
-        var parameter = 2;
-        var initialUsers = testUsers;
-        User targetUser = initialUsers.FirstOrDefault(x => x.Id == parameter);
-        var ChangedUsers = initialUsers.Remove(targetUser);
+        public void Delete_Ok()
+        {
+            // Arrange
+            var parameter = 2;
+            var initialUsers = testUsers;
+            User targetUser = initialUsers.FirstOrDefault(x => x.Id == parameter);
+            var ChangedUsers = initialUsers.Remove(targetUser);
 
-        _mockRepo.Setup(repo => repo.DeleteUser(parameter))
-                 .Returns(ChangedUsers);
-        // Act
-        var result = _service.DeleteUser(parameter);
+            _mockRepo.Setup(repo => repo.DeleteUser(parameter))
+                     .Returns(ChangedUsers);
+            // Act
+            var result = _service.DeleteUser(parameter);
 
-        //ASSERT
-        //check that the correct function is called
-        _mockRepo.Verify(x => x.DeleteUser(parameter), Times.Once);
-        //check result type
-        Assert.IsInstanceOf<bool>(result);
-        //check the data is matching expected
-        Assert.IsNotNull(result);
-        Assert.That(result, Is.EqualTo(ChangedUsers));
-    }
+            //ASSERT
+            //check that the correct function is called
+            _mockRepo.Verify(x => x.DeleteUser(parameter), Times.Once);
+            //check result type
+            Assert.IsInstanceOf<bool>(result);
+            //check the data is matching expected
+            Assert.IsNotNull(result);
+            Assert.That(result, Is.EqualTo(ChangedUsers));
+        }
 }

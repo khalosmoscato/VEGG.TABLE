@@ -29,9 +29,9 @@ public class UserController : ControllerBase
     }
     // POST: api/user
     [HttpPost]
-    public IActionResult AddUser(User user)
+    public IActionResult AddUser(UserDTO userDTO)
     {
-        var created = _userService.AddUser(user);
+        var created = _userService.AddUser(userDTO);
         return CreatedAtAction(nameof(GetUserById), new { id = created.Id }, created);
     }
     // PUT: api/user/1
