@@ -14,5 +14,6 @@ namespace VEGG.TABLE.Infrastructure.Services
 
         public List<Produce> GetAllProduces() => _produceRepository.GetAllProduces();
         public Produce? GetProduceById(int id) => _produceRepository.GetProduceById(id);
+        public Produce AddProduce(Produce produce) => _produceRepository.AddProduce(produce);
     }
 }

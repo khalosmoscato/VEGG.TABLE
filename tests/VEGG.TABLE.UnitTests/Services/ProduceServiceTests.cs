@@ -47,4 +47,16 @@ public class ProduceServiceTests
 
         result.Should().BeNull();
     }
+
+    [Test]
+    public void AddProduce_ReturnsCreatedProduce()
+    {
+        var produce = new Produce { ProduceId = 1, Name = "Apples", UserId = 1 };
+        _mockRepo.Setup(r => r.AddProduce(produce)).Returns(produce);
+
+        var result = _service.AddProduce(produce);
+
+        result.Should().Be(produce);
+        _mockRepo.Verify(r => r.AddProduce(produce), Times.Once);
+    }
 }
