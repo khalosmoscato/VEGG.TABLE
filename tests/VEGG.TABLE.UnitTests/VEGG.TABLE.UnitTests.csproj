@@ -16,6 +16,11 @@
     <Folder Include="Domain\" />
     <Folder Include="Repositories\" />
   </ItemGroup>
+  <ItemGroup>
+    <None Update="Resources\Users.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 
 
 </Project>

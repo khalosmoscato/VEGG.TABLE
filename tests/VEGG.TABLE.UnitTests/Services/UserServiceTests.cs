@@ -12,15 +12,14 @@ namespace VEGG.TABLE.UnitTests.Services;
 
 public class UserServiceTests
 {
-        private Mock<IUserRepository> _mockRepo;
-        private UserService _service;
+    private Mock<IUserRepository> _mockRepo;
+    private UserService _service;
 
     private static List<User> testUsers = new List<User> { };
 
-
-    ////Use cross-platform path formatting
-    //private readonly string filePath1 =
-    //Path.Combine(AppContext.BaseDirectory, "Resources", "users.json");
+    //Use cross-platform path formatting
+    private readonly string filePath1 =
+    Path.Combine(AppContext.BaseDirectory, "Resources", "users.json");
 
     [SetUp]
 
@@ -28,31 +27,31 @@ public class UserServiceTests
     {
         _mockRepo = new Mock<IUserRepository>();
         _service = new UserService(_mockRepo.Object);
-    
 
         
-    testUsers = new List<User> { 
-                        new User
-                        {
-                            Id = 1,
-                            Name = "VegManDan",
-                            Email = "bossman@live.co.uk",
-                            Password = "highthere",
-                            UserType = UserType.Buyer
-                        },
-                         new User
-                        {
-                            Id = 2,
-                            Name = "VegManDan2",
-                            Email = "bossman2@live.co.uk",
-                            Password = "highthere2",
-                            UserType = UserType.Buyer
-                        }
-                        };
-                                 
+    testUsers = Utils.GetFileContent<User>(filePath1);
+
+        //new List<User> {
+        //                    new User
+        //                    {
+        //                        Id = 1,
+        //                        Name = "VegManDan",
+        //                        Email = "bossman@live.co.uk",
+        //                        Password = "highthere",
+        //                        UserType = UserType.Buyer
+        //                    },
+        //                     new User
+        //                    {
+        //                        Id = 2,
+        //                        Name = "VegManDan2",
+        //                        Email = "bossman2@live.co.uk",
+        //                        Password = "highthere2",
+        //                        UserType = UserType.Buyer
+        //                    }
+        //                };
+
     }
         
-
     [Test]
         public void GetAll_Ok()
         {
