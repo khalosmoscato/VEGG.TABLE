@@ -28,4 +28,12 @@ public class ProduceController : ControllerBase
 
         return Ok(produce);
     }
+
+    // POST: api/produce
+    [HttpPost]
+    public IActionResult AddProduce(Produce produce)
+    {
+        var created = _produceService.AddProduce(produce);
+        return CreatedAtAction(nameof(GetProduceById), new { id = created.ProduceId }, created);
+    }
 }
