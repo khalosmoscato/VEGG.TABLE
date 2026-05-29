@@ -1,10 +1,31 @@
-﻿using System;
+namespace VEGG.TABLE.API.Controllers;
 
-public class Class1
+[ApiController]
+[Route("api/[controller]")]
+public class ProduceController : ControllerBase
 {
-    public Class1()
+    private readonly IProduceService _produceService;
+
+    public ProduceController(IProduceService produceService)
     {
+        _produceService = produceService;
+    }
+
+    // GET: api/produce
+    [HttpGet]
+    public IActionResult GetAllProduces()
+    {
+        return Ok(_produceService.GetAllProduces());
+    }
+
+    // GET: api/produce/1
+    [HttpGet("{id}")]
+    public IActionResult GetProduceById(int id)
+    {
+        var produce = _produceService.GetProduceById(id);
+
+        if (produce == null) return NotFound();
+
+        return Ok(produce);
     }
 }
-
-// HTTP requests, calls Core/Interfaces

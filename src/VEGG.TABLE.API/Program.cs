@@ -11,6 +11,8 @@ builder.Services.AddOpenApi();
 builder.Services.AddControllers();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IProduceRepository, ProduceRepository>();
+builder.Services.AddScoped<IProduceService, ProduceService>();
 
 // Get the connection string from appsettings.json
 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
