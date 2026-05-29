@@ -1,0 +1,26 @@
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: veggtable-sqlserver
+    platform: linux/amd64
+    environment:
+      ACCEPT_EULA: "Y"
+      # Local-dev default, not a real secret. Override with a .env file if you want.
+      MSSQL_SA_PASSWORD: "${MSSQL_SA_PASSWORD:-Veggtable#7}"
+      MSSQL_PID: "Developer"
+    ports:
+      # localhost only, host port 14333 avoids a local SQL Server on 1433.
+      - "127.0.0.1:14333:1433"
+    volumes:
+      - veggtable-mssql-data:/var/opt/mssql
+    healthcheck:
+      test:
+        - "CMD-SHELL"
+        - "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -C -Q \"SELECT 1\" || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+volumes:
+  veggtable-mssql-data:
