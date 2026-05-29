@@ -59,4 +59,24 @@ public class ProduceServiceTests
         result.Should().Be(produce);
         _mockRepo.Verify(r => r.AddProduce(produce), Times.Once);
     }
+
+    [Test]
+    public void DeleteProduce_ReturnsTrue_WhenDeleted()
+    {
+        _mockRepo.Setup(r => r.DeleteProduce(1)).Returns(true);
+
+        var result = _service.DeleteProduce(1);
+
+        result.Should().BeTrue();
+    }
+
+    [Test]
+    public void DeleteProduce_ReturnsFalse_WhenNotFound()
+    {
+        _mockRepo.Setup(r => r.DeleteProduce(99)).Returns(false);
+
+        var result = _service.DeleteProduce(99);
+
+        result.Should().BeFalse();
+    }
 }

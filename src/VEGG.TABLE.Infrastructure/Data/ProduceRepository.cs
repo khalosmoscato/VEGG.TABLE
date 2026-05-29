@@ -28,4 +28,13 @@ public class ProduceRepository : IProduceRepository
         _context.SaveChanges();
         return produce;
     }
+
+    public bool DeleteProduce(int id)
+    {
+        var existing = _context.ProduceTable.FirstOrDefault(p => p.ProduceId == id);
+        if (existing == null) return false;
+        _context.ProduceTable.Remove(existing);
+        _context.SaveChanges();
+        return true;
+    }
 }

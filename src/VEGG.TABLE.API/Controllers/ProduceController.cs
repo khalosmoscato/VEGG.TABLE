@@ -36,4 +36,16 @@ public class ProduceController : ControllerBase
         var created = _produceService.AddProduce(produce);
         return CreatedAtAction(nameof(GetProduceById), new { id = created.ProduceId }, created);
     }
+
+    // DELETE: api/produce/1
+    [HttpDelete("{id}")]
+    public IActionResult DeleteProduce(int id)
+    {
+        var result = _produceService.DeleteProduce(id);
+
+        if (!result)
+            return NotFound();
+
+        return NoContent();
+    }
 }
