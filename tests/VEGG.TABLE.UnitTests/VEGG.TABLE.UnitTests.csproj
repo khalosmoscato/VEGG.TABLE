@@ -7,6 +7,7 @@
     <PackageReference Include="Moq" />
     <PackageReference Include="FluentAssertions" />
     <PackageReference Include="Microsoft.Extensions.Http" />
+    <ProjectReference Include="..\..\src\VEGG.TABLE.API\VEGG.TABLE.API.csproj" />
     <ProjectReference Include="..\..\src\VEGG.TABLE.Client\VEGG.TABLE.Client.csproj" />
     <ProjectReference Include="..\..\src\VEGG.TABLE.Core\VEGG.TABLE.Core.csproj" />
     <ProjectReference Include="..\..\src\VEGG.TABLE.Infrastructure\VEGG.TABLE.Infrastructure.csproj" />

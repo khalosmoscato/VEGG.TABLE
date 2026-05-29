@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 
-namespace RecordShop.Repository
-{
+namespace VEGG.TABLE.UnitTests;
+
     public class Utils
     {
         public static T DeserializeFromFile<T>(string filePath)
@@ -31,4 +31,3 @@ namespace RecordShop.Repository
         
 
     }
-}
