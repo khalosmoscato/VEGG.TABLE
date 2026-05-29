@@ -15,26 +15,52 @@ public class UserServiceTests
         private Mock<IUserRepository> _mockRepo;
         private UserService _service;
 
-    //Use cross-platform path formatting
-    private readonly string filePath1 =
-    Path.Combine(AppContext.BaseDirectory, "Resources", "users.json");
+    private static List<User> testUsers = new List<User> { };
+
+
+    ////Use cross-platform path formatting
+    //private readonly string filePath1 =
+    //Path.Combine(AppContext.BaseDirectory, "Resources", "users.json");
+
     [SetUp]
 
-        public void Setup()
-        {
-            _mockRepo = new Mock<IUserRepository>();
-            _service = new UserService(_mockRepo.Object);
-        }
+    public void Setup()
+    {
+        _mockRepo = new Mock<IUserRepository>();
+        _service = new UserService(_mockRepo.Object);
+    
+
+        
+    testUsers = new List<User> { 
+                        new User
+                        {
+                            Id = 1,
+                            Name = "VegManDan",
+                            Email = "bossman@live.co.uk",
+                            Password = "highthere",
+                            UserType = UserType.Buyer
+                        },
+                         new User
+                        {
+                            Id = 2,
+                            Name = "VegManDan2",
+                            Email = "bossman2@live.co.uk",
+                            Password = "highthere2",
+                            UserType = UserType.Buyer
+                        }
+                        };
+                                 
+    }
+        
 
     [Test]
         public void GetAll_Ok()
         {
         // Arrange
-        var users = Utils.GetFileContent<User>(filePath1);
-
+        var users = testUsers;
 
         _mockRepo.Setup(repo => repo.GetAllUsers())
-        .Returns(users);
+        .Returns(testUsers);
 
         // Act
         var result = _service.GetAllUsers();
@@ -50,18 +76,18 @@ public class UserServiceTests
         Assert.That(result, Is.EquivalentTo(users));
         }
 
-        [Test]
+    [Test]
         public void GetById_Ok()
         {
         // Arrange
         var parameter = 1;
-        var users = Utils.GetFileContent<User>(filePath1);
+        var users = testUsers;
         User targetUser = users.FirstOrDefault(x => x.Id == parameter);
 
+        Console.WriteLine(targetUser.Id + targetUser.Name);
 
         _mockRepo.Setup(repo => repo.GetUserById(parameter))
                  .Returns(targetUser);
-
         // Act
         var result = _service.GetUserById(parameter);
 
@@ -79,8 +105,8 @@ public class UserServiceTests
     public void Delete_Ok()
     {
         // Arrange
-        var parameter = 1;
-        var initialUsers = Utils.GetFileContent<User>(filePath1);
+        var parameter = 2;
+        var initialUsers = testUsers;
         User targetUser = initialUsers.FirstOrDefault(x => x.Id == parameter);
         var ChangedUsers = initialUsers.Remove(targetUser);
 
