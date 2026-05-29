@@ -40,6 +40,10 @@
     <script src="_framework/blazor.webassembly.js"></script>
     <script>
         window.themeManager = {
+            initializeTheme: () => {
+                // Returns true if dark mode is active
+                return document.documentElement.classList.contains('dark');
+            },
             toggleTheme: (isDark) => {
                 const html = document.documentElement;
                 if (isDark) {
@@ -49,9 +53,7 @@
                     html.classList.remove('dark');
                     localStorage.setItem('theme', 'light');
                 }
-                console.log("Dark class present:", html.classList.contains('dark'));
-            },
-            // ...
+            }
         };
     </script>
 </body>
