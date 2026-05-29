@@ -12,8 +12,8 @@ namespace VEGG.TABLE.UnitTests.Services;
 
 public class UserServiceTests
 {
-        private Mock<IUserRepository> _mockRepo;
-        private UserService _service;
+    private required Mock<IUserRepository> _mockRepo;
+    private required UserService _service;
 
     private static List<User> testUsers = new List<User> { };
 
@@ -28,10 +28,10 @@ public class UserServiceTests
     {
         _mockRepo = new Mock<IUserRepository>();
         _service = new UserService(_mockRepo.Object);
-    
 
-        
-    testUsers = new List<User> { 
+
+
+        testUsers = new List<User> {
                         new User
                         {
                             Id = 1,
@@ -49,13 +49,13 @@ public class UserServiceTests
                             UserType = UserType.Buyer
                         }
                         };
-                                 
+
     }
-        
+
 
     [Test]
-        public void GetAll_Ok()
-        {
+    public void GetAll_Ok()
+    {
         // Arrange
         var users = testUsers;
 
@@ -74,15 +74,15 @@ public class UserServiceTests
         //check the data is matching expected
         Assert.IsNotNull(result);
         Assert.That(result, Is.EquivalentTo(users));
-        }
+    }
 
     [Test]
-        public void GetById_Ok()
-        {
+    public void GetById_Ok()
+    {
         // Arrange
         var parameter = 1;
         var users = testUsers;
-        User targetUser = users.FirstOrDefault(x => x.Id == parameter);
+        User targetUser = users.FirstOrDefault(x => x.Id == parameter)!;
 
         Console.WriteLine(targetUser.Id + targetUser.Name);
 
@@ -99,7 +99,7 @@ public class UserServiceTests
         //check the data is matching expected
         Assert.IsNotNull(result);
         Assert.That(result, Is.EqualTo(targetUser));
-        }   
+    }
 
     [Test]
     public void Delete_Ok()
@@ -107,7 +107,7 @@ public class UserServiceTests
         // Arrange
         var parameter = 2;
         var initialUsers = testUsers;
-        User targetUser = initialUsers.FirstOrDefault(x => x.Id == parameter);
+        User targetUser = initialUsers.FirstOrDefault(x => x.Id == parameter)!;
         var ChangedUsers = initialUsers.Remove(targetUser);
 
         _mockRepo.Setup(repo => repo.DeleteUser(parameter))
