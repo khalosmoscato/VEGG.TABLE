@@ -1,10 +1,40 @@
-﻿using System;
+using VEGG.TABLE.Core.Entities;
+using VEGG.TABLE.Core.Interfaces;
 
 namespace VEGG.TABLE.Infrastructure.Data;
 
-public class ProduceRepository
+public class ProduceRepository : IProduceRepository
 {
-    public ProduceRepository() // implement repositories here
+    private readonly DBContext _context;
+
+    public ProduceRepository(DBContext context)
     {
+        _context = context;
+    }
+
+    public List<Produce> GetAllProduces()
+    {
+        return _context.ProduceTable.ToList();
+    }
+
+    public Produce? GetProduceById(int id)
+    {
+        return _context.ProduceTable.FirstOrDefault(p => p.ProduceId == id);
+    }
+
+    public Produce AddProduce(Produce produce)
+    {
+        _context.ProduceTable.Add(produce);
+        _context.SaveChanges();
+        return produce;
+    }
+
+    public bool DeleteProduce(int id)
+    {
+        var existing = _context.ProduceTable.FirstOrDefault(p => p.ProduceId == id);
+        if (existing == null) return false;
+        _context.ProduceTable.Remove(existing);
+        _context.SaveChanges();
+        return true;
     }
 }
