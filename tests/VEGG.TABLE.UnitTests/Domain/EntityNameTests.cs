@@ -5,7 +5,7 @@ public class EntityNameTests
     [Test]
     public void Test()
     {
-     
+
     }
-   
+
 }
