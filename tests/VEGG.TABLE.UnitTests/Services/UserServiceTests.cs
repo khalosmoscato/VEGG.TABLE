@@ -18,8 +18,8 @@ public class UserServiceTests
     private static List<User> testUsers = new List<User> { };
 
     //Use cross-platform path formatting
-    private readonly string filePath1 =
-    Path.Combine(AppContext.BaseDirectory, "Resources", "users.json");
+    //private readonly string filePath1 =
+    //Path.Combine(AppContext.BaseDirectory, "Resources", "users.json");
 
     [SetUp]
 
@@ -28,27 +28,28 @@ public class UserServiceTests
         _mockRepo = new Mock<IUserRepository>();
         _service = new UserService(_mockRepo.Object);
 
-        
-    testUsers = Utils.GetFileContent<User>(filePath1);
+        testUsers =
 
-        //new List<User> {
-        //                    new User
-        //                    {
-        //                        Id = 1,
-        //                        Name = "VegManDan",
-        //                        Email = "bossman@live.co.uk",
-        //                        Password = "highthere",
-        //                        UserType = UserType.Buyer
-        //                    },
-        //                     new User
-        //                    {
-        //                        Id = 2,
-        //                        Name = "VegManDan2",
-        //                        Email = "bossman2@live.co.uk",
-        //                        Password = "highthere2",
-        //                        UserType = UserType.Buyer
-        //                    }
-        //                };
+        //Utils.GetFileContent<User>(filePath1);
+
+        new List<User> {
+                            new User
+                            {
+                                Id = 1,
+                                Name = "VegManDan",
+                                Email = "bossman@live.co.uk",
+                                Password = "highthere",
+                                UserType = UserType.Buyer
+                            },
+                             new User
+                            {
+                                Id = 2,
+                                Name = "VegManDan2",
+                                Email = "bossman2@live.co.uk",
+                                Password = "highthere2",
+                                UserType = UserType.Buyer
+                            }
+                        };
 
     }
         
@@ -111,7 +112,6 @@ public class UserServiceTests
 
         _mockRepo.Setup(repo => repo.DeleteUser(parameter))
                  .Returns(ChangedUsers);
-
         // Act
         var result = _service.DeleteUser(parameter);
 
