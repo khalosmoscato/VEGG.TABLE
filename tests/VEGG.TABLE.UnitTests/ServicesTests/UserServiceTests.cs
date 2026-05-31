@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection.Metadata;
 using System.Text;
 
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
 
@@ -143,4 +145,46 @@ public class UserServiceTests
             //check the data is matching expected
             Assert.That(result, Is.EqualTo(mockTuple));
         }
+    [Test]
+    public void AddUser_Ok()
+        {
+            // Arrange
+            UserDTO userDTO = new UserDTO
+            {
+            Name = "Dylan",
+            Email = "Dylan@regex",
+            UserType = UserType.Buyer,
+            Password = "password"
+            };
+            var users = testUsers;
+
+            int currentMaxId = users.Max(x => x.Id);
+            int newId = currentMaxId + 1;
+
+            User newUser = new User
+            {
+                Id = newId,
+                Email = userDTO.Email,
+                Name = userDTO.Name,
+                Password = userDTO.Password,
+                UserType = userDTO.UserType,
+            };
+            _mockRepo.Setup(r => r.AddUser(userDTO)).Returns(newUser);
+            users.Add(newUser);
+
+        foreach (User user in users) { Console.WriteLine(user.Name); }
+
+            // Act
+            var result = _service.AddUser(userDTO);
+
+        foreach (User user in users) { Console.WriteLine(user.Name); }
+
+            //ASSERT
+            //check that the correct function is called
+            _mockRepo.Verify(x => x.AddUser(userDTO), Times.Once);
+            //check result type
+            Assert.IsInstanceOf<User>(result);
+            //check the data is matching expected
+            Assert.That(result, Is.EqualTo(newUser));
+    }
 }

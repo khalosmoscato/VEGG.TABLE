@@ -25,8 +25,6 @@ public class UserRepository : IUserRepository
     public User AddUser(UserDTO userDTO)
     {
         int currentMaxId = _context.UserTable.Any()
-
-
         ? _context.UserTable.Max(x => x.Id)
         : 0;
 
