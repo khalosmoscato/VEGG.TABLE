@@ -84,8 +84,6 @@ public class UserServiceTests
         var users = testUsers;
         User targetUser = users.FirstOrDefault(x => x.Id == parameter);
 
-        Console.WriteLine(targetUser.Id + targetUser.Name);
-
         _mockRepo.Setup(repo => repo.GetUserById(parameter))
                  .Returns(targetUser);
         // Act
@@ -99,7 +97,27 @@ public class UserServiceTests
         //check the data is matching expected
         Assert.IsNotNull(result);
         Assert.That(result, Is.EqualTo(targetUser));
-        }   
+        }
+    [Test]
+    public void GetById_NotOk()
+    {
+        // Arrange
+        var parameter = 0;
+        var users = testUsers;
+        User targetUser = users.FirstOrDefault(x => x.Id == parameter);
+
+        _mockRepo.Setup(repo => repo.GetUserById(parameter))
+                 .Returns(targetUser);
+        // Act
+        var result = _service.GetUserById(parameter);
+
+        //ASSERT
+        //check that the correct function is called
+        _mockRepo.Verify(x => x.GetUserById(parameter), Times.Once);
+        //check the data is matching expected
+        Assert.IsNull(result);
+        Assert.That(result, Is.EqualTo(targetUser));
+    }
 
     [Test]
         public void Delete_Ok()

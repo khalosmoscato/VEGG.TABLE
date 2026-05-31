@@ -54,7 +54,7 @@ public class UserControllerTests
         Assert.IsInstanceOf<List<User>>(resultPayload);
         //check the data is matching expected
         Assert.That(resultPayload, Is.EquivalentTo(users));
-    }
+        }
 
     [Test]
         public void GetById_Ok()
@@ -79,8 +79,26 @@ public class UserControllerTests
         Assert.IsInstanceOf<User>(resultPayload);
         //check the data is matching expected
         Assert.That(resultPayload, Is.EqualTo(targetUser));
-        }   
+        }
 
+    [Test]
+    public void GetById_NotOk()
+    {
+        // Arrange
+        var parameter = 0;
+        var users = testUsers;
+        User targetUser = users.FirstOrDefault(x => x.Id == parameter);
+        _mockService.Setup(s => s.GetUserById(parameter)).Returns(targetUser);
+
+        // Act
+        var result = _controller.GetUserById(parameter);
+
+        //ASSERT
+        //check that the correct function is called
+        _mockService.Verify(x => x.GetUserById(parameter), Times.Once);
+        //check result type
+        Assert.IsInstanceOf<NotFoundResult>(result);
+    }
     [Test]
         public void Delete_Ok()
         {
