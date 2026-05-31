@@ -21,6 +21,10 @@ string connectionString = builder.Configuration.GetConnectionString("DefaultConn
 // Add a service to the build in the form of our database context, configured to use SQL Server.
 builder.Services.AddDbContext<DBContext>(options => options.UseSqlServer(connectionString));
 
+// Health check: verifies EF can reach the database.
+builder.Services.AddHealthChecks()
+    .AddDbContextCheck<DBContext>();
+
 var app = builder.Build();
 
 // 2. Configure the HTTP request pipeline
@@ -41,4 +45,5 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
+app.MapHealthChecks("/health");
 app.Run();
