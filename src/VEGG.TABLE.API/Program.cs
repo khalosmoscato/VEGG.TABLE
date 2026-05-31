@@ -9,6 +9,7 @@ builder.Services.AddOpenApi();
 
 // Add other services
 builder.Services.AddControllers();
+builder.Services.AddProblemDetails();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProduceRepository, ProduceRepository>();
@@ -38,6 +39,7 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
 }
 
+app.UseExceptionHandler();
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
