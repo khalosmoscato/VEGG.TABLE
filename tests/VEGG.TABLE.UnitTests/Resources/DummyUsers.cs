@@ -6,7 +6,7 @@ namespace VEGG.TABLE.UnitTests.Resources;
 
 internal class DummyUsers
 {
-    public static List<User> testUsers = 
+    public static readonly List<User> testUsers = 
         new List<User> 
         {
                             new User

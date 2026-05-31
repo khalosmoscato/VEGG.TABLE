@@ -85,11 +85,13 @@ public class UserControllerTests
         public void Delete_Ok()
         {
             // Arrange
-            var parameter = 2;
-            var initialUsers = testUsers;
-            User targetUser = initialUsers.FirstOrDefault(x => x.Id == parameter);
-            var ChangedUsers = initialUsers.Remove(targetUser);
-            _mockService.Setup(repo => repo.DeleteUser(parameter)).Returns(ChangedUsers);
+            int parameter = 2;
+            List<User> changedUsers = testUsers;
+            User targetUser = changedUsers.FirstOrDefault(x => x.Id == parameter);
+            changedUsers.Remove(targetUser);
+
+            var mockTuple = (true, changedUsers);
+            _mockService.Setup(repo => repo.DeleteUser(parameter)).Returns(mockTuple);
 
             // Act
             var result = _controller.DeleteUser(parameter);
@@ -100,6 +102,5 @@ public class UserControllerTests
             //check result type
             Assert.IsInstanceOf<NoContentResult>(result);  
             //cast the controlleroutput as a message object in order to extract its value
-            
         }
 }

@@ -7,6 +7,6 @@ namespace VEGG.TABLE.Core.Interfaces
         User? GetUserById(int id);
         User AddUser(UserDTO userDTO);
         User? UpdateUser(int id, UserDTO userDTO);
-        bool DeleteUser(int id);
+        (bool, List<User>) DeleteUser(int id);
     }
 }

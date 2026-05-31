@@ -50,7 +50,9 @@ public class UserController : ControllerBase
     {
         var result = _userService.DeleteUser(id);
 
-        if (!result)
+        bool success = result.Item1;
+
+        if (!success)
             return NotFound();
 
         return NoContent();

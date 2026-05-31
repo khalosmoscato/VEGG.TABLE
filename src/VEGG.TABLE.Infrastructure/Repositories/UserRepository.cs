@@ -57,12 +57,14 @@ public class UserRepository : IUserRepository
         return existing;
     }
 
-    public bool DeleteUser(int id)
+    public (bool,List<User>) DeleteUser(int id)
     {
         var existing = _context.UserTable.FirstOrDefault(x => x.Id == id);
-        if (existing == null) return false;
+        if (existing == null) 
+        { return (false, _context.UserTable.ToList()); }
         _context.UserTable.Remove(existing);
         _context.SaveChanges();
-        return true;
+        var currentUsers = _context.UserTable.ToList();
+        return (true,currentUsers);
     }
 }
