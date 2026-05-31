@@ -36,9 +36,9 @@ public class UserController : ControllerBase
     }
     // PUT: api/user/1
     [HttpPut("{id}")]
-    public IActionResult UpdateUser(int id, User user)
+    public IActionResult UpdateUser(int id, UserDTO userDTO)
     {
-        var result = _userService.UpdateUser(id, user);
+        var result = _userService.UpdateUser(id, userDTO);
 
         if (result == null) return NotFound();
 
