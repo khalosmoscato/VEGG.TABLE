@@ -3,8 +3,8 @@ namespace VEGG.TABLE.Core.Interfaces;
 
 public interface IProduceRepository
 {
-    List<Produce> GetAllProduces();
-    Produce? GetProduceById(int id);
-    Produce AddProduce(Produce produce);
+    List<ProduceDTO> GetAllProduces();
+    ProduceDTO? GetProduceById(int id);
+    ProduceDTO AddProduce(ProduceDTO produce);
     bool DeleteProduce(int id);
 }

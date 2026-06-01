@@ -4,7 +4,7 @@ namespace VEGG.TABLE.Infrastructure.Data;
 
     public class DBContext : DbContext
     {
-        public DbSet<Produce> ProduceTable { get; set; }
+        public DbSet<ProduceDTO> ProduceTable { get; set; }
         public DbSet<User> UserTable { get; set; }
 
         public DbSet<UserProduceLike> LikedTable { get; set; }
@@ -21,8 +21,8 @@ namespace VEGG.TABLE.Infrastructure.Data;
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Produce>().HasData(
-                new Produce
+            modelBuilder.Entity<ProduceDTO>().HasData(
+                new ProduceDTO
                 {
                     ProduceId = 1,
                     Name = "Plums",
@@ -40,7 +40,7 @@ namespace VEGG.TABLE.Infrastructure.Data;
                     UserId = 1,
                 },
 
-                new Produce
+                new ProduceDTO
                 {
                     ProduceId = 2,
                     Name = "Apples",
@@ -58,7 +58,7 @@ namespace VEGG.TABLE.Infrastructure.Data;
                     UserId = 1,
                 },
 
-                new Produce
+                new ProduceDTO
                 {
                     ProduceId = 3,
                     Name = "Bananas",
@@ -76,7 +76,7 @@ namespace VEGG.TABLE.Infrastructure.Data;
                     UserId = 2,
                 },
 
-                new Produce
+                new ProduceDTO
                 {
                     ProduceId = 4,
                     Name = "Carrots",
@@ -94,7 +94,7 @@ namespace VEGG.TABLE.Infrastructure.Data;
                     UserId = 2,
                 },
 
-                new Produce
+                new ProduceDTO
                 {
                     ProduceId = 5,
                     Name = "Tomatoes",
@@ -112,7 +112,7 @@ namespace VEGG.TABLE.Infrastructure.Data;
                     UserId = 3,
                 },
 
-                new Produce
+                new ProduceDTO
                 {
                     ProduceId = 6,
                     Name = "Potatoes",
@@ -130,7 +130,7 @@ namespace VEGG.TABLE.Infrastructure.Data;
                     UserId = 3,
                 },
 
-                new Produce
+                new ProduceDTO
                 {
                     ProduceId = 7,
                     Name = "Strawberries",
@@ -148,7 +148,7 @@ namespace VEGG.TABLE.Infrastructure.Data;
                     UserId = 4,
                 },
 
-                new Produce
+                new ProduceDTO
                 {
                     ProduceId = 8,
                     Name = "Lettuce",
@@ -166,7 +166,7 @@ namespace VEGG.TABLE.Infrastructure.Data;
                     UserId = 4,
                 },
 
-                new Produce
+                new ProduceDTO
                 {
                     ProduceId = 9,
                     Name = "Oranges",
@@ -184,7 +184,7 @@ namespace VEGG.TABLE.Infrastructure.Data;
                     UserId = 5,
                 },
 
-                new Produce
+                new ProduceDTO
                 {
                     ProduceId = 10,
                     Name = "Cucumbers",

@@ -9,7 +9,7 @@ public class UserProduceTransaction
 
 
         public required int ProduceId { get; set; }
-        public required Produce Produce { get; set; }
+        public required ProduceDTO Produce { get; set; }
 
         public DateTime PurchasedAt { get; set; } = DateTime.UtcNow;
     }

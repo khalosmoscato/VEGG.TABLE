@@ -12,17 +12,17 @@ public class ProduceRepository : IProduceRepository
         _context = context;
     }
 
-    public List<Produce> GetAllProduces()
+    public List<ProduceDTO> GetAllProduces()
     {
         return _context.ProduceTable.ToList();
     }
 
-    public Produce? GetProduceById(int id)
+    public ProduceDTO? GetProduceById(int id)
     {
         return _context.ProduceTable.FirstOrDefault(p => p.ProduceId == id);
     }
 
-    public Produce AddProduce(Produce produce)
+    public ProduceDTO AddProduce(ProduceDTO produce)
     {
         _context.ProduceTable.Add(produce);
         _context.SaveChanges();

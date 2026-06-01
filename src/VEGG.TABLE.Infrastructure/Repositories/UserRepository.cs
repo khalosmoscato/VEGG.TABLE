@@ -55,7 +55,7 @@ public class UserRepository : IUserRepository
         return existing;
     }
 
-    public (bool,List<User>) DeleteUser(int id)
+    public (bool, List<User>) DeleteUser(int id)
     {
         var existing = _context.UserTable.FirstOrDefault(x => x.Id == id);
         if (existing == null) 
@@ -63,6 +63,6 @@ public class UserRepository : IUserRepository
         _context.UserTable.Remove(existing);
         _context.SaveChanges();
         var currentUsers = _context.UserTable.ToList();
-        return (true,currentUsers);
+        return (true, currentUsers);
     }
 }

@@ -15,10 +15,10 @@ public class ProduceServiceTests
     [Test]
     public void GetAllProduces_ReturnsAllFromRepository()
     {
-        var produces = new List<Produce>
+        var produces = new List<ProduceDTO>
         {
-            new Produce { ProduceId = 1, Name = "Apples", UserId = 1 },
-            new Produce { ProduceId = 2, Name = "Bananas", UserId = 2 }
+            new ProduceDTO { ProduceId = 1, Name = "Apples", UserId = 1 },
+            new ProduceDTO { ProduceId = 2, Name = "Bananas", UserId = 2 }
         };
         _mockRepo.Setup(r => r.GetAllProduces()).Returns(produces);
 
@@ -30,7 +30,7 @@ public class ProduceServiceTests
     [Test]
     public void GetProduceById_ReturnsProduce_WhenFound()
     {
-        var produce = new Produce { ProduceId = 1, Name = "Apples", UserId = 1 };
+        var produce = new ProduceDTO { ProduceId = 1, Name = "Apples", UserId = 1 };
         _mockRepo.Setup(r => r.GetProduceById(1)).Returns(produce);
 
         var result = _service.GetProduceById(1);
@@ -41,7 +41,7 @@ public class ProduceServiceTests
     [Test]
     public void GetProduceById_ReturnsNull_WhenNotFound()
     {
-        _mockRepo.Setup(r => r.GetProduceById(99)).Returns((Produce?)null);
+        _mockRepo.Setup(r => r.GetProduceById(99)).Returns((ProduceDTO?)null);
 
         var result = _service.GetProduceById(99);
 
@@ -51,7 +51,7 @@ public class ProduceServiceTests
     [Test]
     public void AddProduce_ReturnsCreatedProduce()
     {
-        var produce = new Produce { ProduceId = 1, Name = "Apples", UserId = 1 };
+        var produce = new ProduceDTO { ProduceId = 1, Name = "Apples", UserId = 1 };
         _mockRepo.Setup(r => r.AddProduce(produce)).Returns(produce);
 
         var result = _service.AddProduce(produce);
