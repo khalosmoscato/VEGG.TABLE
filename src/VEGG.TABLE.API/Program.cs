@@ -1,10 +1,10 @@
-using Scalar.AspNetCore;
-
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.Text.Json;
 using VEGG.TABLE.API.HealthChecks;
+
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +30,16 @@ builder.Services.AddHealthChecks()
     .AddCheck<UserTableHealthCheck>("users")
     .AddCheck<ProduceTableHealthCheck>("produce");
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowClient", policy =>
+    {
+        policy.WithOrigins("http://localhost:5209") // Update to your Client port
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 var app = builder.Build();
 
 // 2. Configure the HTTP request pipeline
@@ -48,6 +58,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors("AllowClient");
 app.UseAuthorization();
 app.MapControllers();
 app.MapHealthChecks("/health", new HealthCheckOptions
