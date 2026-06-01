@@ -12,8 +12,8 @@ namespace VEGG.TABLE.UnitTests.Services;
 
 public class UserServiceTests
 {
-    private required Mock<IUserRepository> _mockRepo;
-    private required UserService _service;
+    private Mock<IUserRepository> _mockRepo = null!;
+    private UserService _service = null!;
 
     private static List<User> testUsers = new List<User> { };
 
