@@ -22,30 +22,47 @@ public class UserRepository : IUserRepository
         return _context.UserTable.FirstOrDefault(x => x.Id == id);
     }
 
-    public User AddUser(User user)
+    public User AddUser(UserDTO userDTO)
     {
+        int currentMaxId = _context.UserTable.Any()
+        ? _context.UserTable.Max(x => x.Id)
+        : 0;
+
+        int newId = currentMaxId + 1;
+
+        User user = new User
+        {
+            Id = newId,
+            Email = userDTO.Email,
+            Name = userDTO.Name,
+            Password = userDTO.Password,
+            UserType = userDTO.UserType,
+        };
+
         _context.UserTable.Add(user);
         _context.SaveChanges();
         return user;
     }
 
-    public User? UpdateUser(int id, User user)
+    public User? UpdateUser(int id, UserDTO userDTO)
     {
         var existing = _context.UserTable.FirstOrDefault(x => x.Id == id);
         if (existing == null) return null;
-        existing.Name = user.Name;
-        existing.Email = user.Email;
-        existing.UserType = user.UserType;
+        existing.Name = userDTO.Name;
+        existing.Email = userDTO.Email;
+        existing.UserType = userDTO.UserType;
         _context.SaveChanges();
         return existing;
     }
 
-    public bool DeleteUser(int id)
+    public (bool, List<User>) DeleteUser(int id)
     {
         var existing = _context.UserTable.FirstOrDefault(x => x.Id == id);
-        if (existing == null) return false;
+        if (existing == null)
+        { return (false, _context.UserTable.ToList()); }
         _context.UserTable.Remove(existing);
         _context.SaveChanges();
-        return true;
+        var currentUsers = _context.UserTable.ToList();
+        return (true, currentUsers);
     }
 }

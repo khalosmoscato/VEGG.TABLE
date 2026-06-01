@@ -14,8 +14,8 @@ namespace VEGG.TABLE.Infrastructure.Services
 
         public List<User> GetAllUsers() => _userRepository.GetAllUsers();
         public User? GetUserById(int id) => _userRepository.GetUserById(id);
-        public User AddUser(User user) => _userRepository.AddUser(user);
-        public User? UpdateUser(int id, User user) => _userRepository.UpdateUser(id, user);
-        public bool DeleteUser(int id) => _userRepository.DeleteUser(id);
+        public User AddUser(UserDTO userDTO) => _userRepository.AddUser(userDTO);
+        public User? UpdateUser(int id, UserDTO userDTO) => _userRepository.UpdateUser(id, userDTO);
+        public (bool, List<User>) DeleteUser(int id) => _userRepository.DeleteUser(id);
     }
 }

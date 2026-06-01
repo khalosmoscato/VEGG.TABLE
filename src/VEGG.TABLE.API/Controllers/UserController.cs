@@ -29,16 +29,16 @@ public class UserController : ControllerBase
     }
     // POST: api/user
     [HttpPost]
-    public IActionResult AddUser(User user)
+    public IActionResult AddUser(UserDTO userDTO)
     {
-        var created = _userService.AddUser(user);
+        var created = _userService.AddUser(userDTO);
         return CreatedAtAction(nameof(GetUserById), new { id = created.Id }, created);
     }
     // PUT: api/user/1
     [HttpPut("{id}")]
-    public IActionResult UpdateUser(int id, User user)
+    public IActionResult UpdateUser(int id, UserDTO userDTO)
     {
-        var result = _userService.UpdateUser(id, user);
+        var result = _userService.UpdateUser(id, userDTO);
 
         if (result == null) return NotFound();
 
@@ -50,7 +50,9 @@ public class UserController : ControllerBase
     {
         var result = _userService.DeleteUser(id);
 
-        if (!result)
+        bool success = result.Item1;
+
+        if (!success)
             return NotFound();
 
         return NoContent();
