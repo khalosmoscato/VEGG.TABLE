@@ -5,8 +5,8 @@ namespace VEGG.TABLE.Core.Interfaces
     {
         List<User> GetAllUsers();
         User? GetUserById(int id);
-        User AddUser(User user);
-        User? UpdateUser(int id, User user);
-        bool DeleteUser(int id);
+        User AddUser(UserDTO userDTO);
+        User? UpdateUser(int id, UserDTO userDTO);
+        (bool, List<User>) DeleteUser(int id);
     }
 }
