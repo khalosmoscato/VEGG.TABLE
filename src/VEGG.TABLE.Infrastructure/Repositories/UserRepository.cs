@@ -55,6 +55,15 @@ public class UserRepository : IUserRepository
         return existing;
     }
 
+    public User? UpdateUserName(int id, string name)
+    {
+        var existing = _context.UserTable.FirstOrDefault(x => x.Id == id);
+        if (existing == null) return null;
+        existing.Name = name;
+        _context.SaveChanges();
+        return existing;
+    }
+
     public (bool, List<User>) DeleteUser(int id)
     {
         var existing = _context.UserTable.FirstOrDefault(x => x.Id == id);

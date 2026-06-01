@@ -121,4 +121,5 @@ public class UserControllerTests
             Assert.IsInstanceOf<NoContentResult>(result);  
             //cast the controlleroutput as a message object in order to extract its value
         }
+
 }
