@@ -1,6 +1,6 @@
-using Scalar.AspNetCore;
 
-using Microsoft.EntityFrameworkCore;
+
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,7 +21,31 @@ string connectionString = builder.Configuration.GetConnectionString("DefaultConn
 // Add a service to the build in the form of our database context, configured to use SQL Server.
 builder.Services.AddDbContext<DBContext>(options => options.UseSqlServer(connectionString));
 
+var key = Encoding.UTF8.GetBytes("SorryForPartyRockingSorryForPartyRocking");
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidIssuer = "your-name",
+        ValidateAudience = true,
+        ValidAudience = "your-app-name",
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key)
+    };
+});
+
 var app = builder.Build();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 // 2. Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
