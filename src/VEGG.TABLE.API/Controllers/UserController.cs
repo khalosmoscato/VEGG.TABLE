@@ -10,7 +10,6 @@ public class UserController : ControllerBase
     {
         _userService = userService;
     }
-
     // GET: api/user
     [HttpGet]
     public IActionResult GetAllUsers()
@@ -42,8 +41,20 @@ public class UserController : ControllerBase
 
         if (result == null) return NotFound();
 
-        return NoContent();
+        return Ok(result);
     }
+
+    // PUT: api/user/name
+    [HttpPut("{id}/name")]
+    public IActionResult UpdateUserName(int id, string name)
+    {
+        var result = _userService.UpdateUserName(id, name);
+
+        if (result == null) return NotFound();
+
+        return Ok(result);
+    }
+
     // DELETE: api/user/1
     [HttpDelete("{id}")]
     public IActionResult DeleteUser(int id)

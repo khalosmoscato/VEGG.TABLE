@@ -6,8 +6,8 @@ namespace VEGG.TABLE.UnitTests.Resources;
 
 internal class DummyUsers
 {
-    public static readonly List<User> testUsers =
-        new List<User>
+    public static readonly List<User> testUsers = 
+        new List<User> 
         {
                             new User
                             {
@@ -27,4 +27,26 @@ internal class DummyUsers
                             }
         };
 
+    public static readonly List<User> testUsers2 =
+        new List<User>
+        {
+                            new User
+                            {
+                                Id = 1,
+                                Name = "Dylan",
+                                Email = "Dylan@regex",
+                                UserType = UserType.Buyer,
+                                Password = "password",
+                            },
+                             new User
+                            {
+                                Id = 2,
+                                Name = "VegManDan2",
+                                Email = "bossman2@live.co.uk",
+                                Password = "highthere2",
+                                UserType = UserType.Buyer
+
+                                 
+                            }
+        };
 }
