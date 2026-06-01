@@ -12,9 +12,9 @@ namespace VEGG.TABLE.Infrastructure.Services
             _produceRepository = produceRepository;
         }
 
-        public List<ProduceDTO> GetAllProduces() => _produceRepository.GetAllProduces();
-        public ProduceDTO? GetProduceById(int id) => _produceRepository.GetProduceById(id);
-        public ProduceDTO AddProduce(ProduceDTO produce) => _produceRepository.AddProduce(produce);
+        public List<Produce> GetAllProduces() => _produceRepository.GetAllProduces();
+        public Produce? GetProduceById(int id) => _produceRepository.GetProduceById(id);
+        public Produce AddProduce(Produce produce) => _produceRepository.AddProduce(produce);
         public bool DeleteProduce(int id) => _produceRepository.DeleteProduce(id);
     }
 }

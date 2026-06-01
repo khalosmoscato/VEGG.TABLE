@@ -129,6 +129,10 @@ public class UserServiceTests
             var changedUsers = testUsers;
             User targetUser = changedUsers.FirstOrDefault(x => x.Id == parameter);
             changedUsers.Remove(targetUser);
+                foreach (var user in changedUsers)
+                {
+                    Console.WriteLine(user.Name);
+                }
 
             var mockTuple = (true, changedUsers);
             _mockRepo.Setup(repo => repo.DeleteUser(parameter)).Returns(mockTuple);
@@ -144,7 +148,14 @@ public class UserServiceTests
             Assert.IsInstanceOf<List<User>>(result.Item2);
             //check the data is matching expected
             Assert.That(result, Is.EqualTo(mockTuple));
+            Assert.That(result.Item1, Is.EqualTo(true));
+            Assert.That(result.Item2, Is.EqualTo(changedUsers));
+                foreach (var userResult in result.Item2)
+                {
+                    Console.WriteLine(userResult.Name);
+                }
         }
+
     [Test]
     public void AddUser_Ok()
         {
