@@ -1,7 +1,12 @@
 ﻿@using Microsoft.AspNetCore.Components.Routing
 
-<div class="relative w-full bg-primary text-white shadow-lg px-4 py-3 flex items-center justify-between">
-    <div class="text-2xl font-bold">VEGG.TABLE</div>
+<div class="relative w-full bg-primary text-white shadow-lg px-4 py-3 flex items-center justify-between"> 
+	
+    <!-- Logo -->
+    <div class="flex items-center gap-3">
+        <img src="/images/logo.png" alt="VEGG.TABLE" class="h-8 w-auto" />
+        <span class="text-xl font-bold">VEGG.TABLE</span>
+    </div>
 
     <button class="md:hidden p-2" @onclick="ToggleNav">
         <span class="bi bi-list text-2xl"></span>
