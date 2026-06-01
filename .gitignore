@@ -68,3 +68,6 @@ build/
 # --- Blazor specific ---
 _framework/
 dist/
+
+# --- Local Machine Configurations ---
+*.csproj.user
