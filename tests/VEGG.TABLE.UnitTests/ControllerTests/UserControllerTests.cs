@@ -126,6 +126,53 @@ public class UserControllerTests
             //cast the controlleroutput as a message object in order to extract its value
         }
     [Test]
+    public void AddUser_Ok()
+    {
+        // Arrange
+        UserDTO userDTO = new UserDTO
+        {
+            Name = "Dylan",
+            Email = "Dylan@regex",
+            UserType = UserType.Buyer,
+            Password = "password"
+        };
+        var users = testUsers;
+
+        int currentMaxId = users.Max(x => x.Id);
+        int newId = currentMaxId + 1;
+
+        User newUser = new User
+        {
+            Id = newId,
+            Email = userDTO.Email,
+            Name = userDTO.Name,
+            Password = userDTO.Password,
+            UserType = userDTO.UserType,
+        };
+        _mockService.Setup(r => r.AddUser(userDTO)).Returns(newUser);
+        users.Add(newUser);
+
+        foreach (User user in users) { Console.WriteLine(user.Name); }
+
+        // Act
+        var result = _controller.AddUser(userDTO);
+
+        foreach (User user in users) { Console.WriteLine(user.Name); }
+
+        //ASSERT
+        //check that the correct function is called
+        _mockService.Verify(x => x.AddUser(userDTO), Times.Once);
+        //check result type
+        Assert.IsInstanceOf<CreatedAtActionResult>(result);
+        //cast the controlleroutput as a message object in order to extract its value
+        var resultObject = result as CreatedAtActionResult;
+        var resultPayload = resultObject.Value as User;
+        Assert.IsInstanceOf<User>(resultPayload);
+        //check the data is matching expected
+        Assert.That(resultPayload, Is.EqualTo(newUser));
+        //Assert.That(users, Is.EquivalentTo(expectedUsers))
+    }
+    [Test]
     public void UpdateUser_Ok()
     {
         // Arrange
