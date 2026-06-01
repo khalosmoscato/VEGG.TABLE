@@ -7,6 +7,5 @@ public interface IUserService
     User? GetUserById(int id);
     User AddUser(UserDTO userDTO);
     User? UpdateUser(int id, UserDTO userDTO);
-    User? UpdateUserName(int id, string name);
     (bool, List<User>) DeleteUser(int id);
 }

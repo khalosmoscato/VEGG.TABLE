@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +20,16 @@ string connectionString = builder.Configuration.GetConnectionString("DefaultConn
 
 // Add a service to the build in the form of our database context, configured to use SQL Server.
 builder.Services.AddDbContext<DBContext>(options => options.UseSqlServer(connectionString));
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowClient", policy =>
+    {
+        policy.WithOrigins("http://localhost:5209") // Update to your Client port
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
 
         var key = Encoding.UTF8.GetBytes("SorryForPartyRockingSorryForPartyRocking");
 
@@ -62,5 +74,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors("AllowClient");
+app.UseAuthorization();
 app.MapControllers();
 app.Run();

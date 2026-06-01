@@ -31,7 +31,7 @@ public class UserRepository : IUserRepository
         int newId = currentMaxId + 1;
 
         User user = new User
-        { 
+        {
             Id = newId,
             Email = userDTO.Email,
             Name = userDTO.Name,
@@ -67,7 +67,7 @@ public class UserRepository : IUserRepository
     public (bool, List<User>) DeleteUser(int id)
     {
         var existing = _context.UserTable.FirstOrDefault(x => x.Id == id);
-        if (existing == null) 
+        if (existing == null)
         { return (false, _context.UserTable.ToList()); }
         _context.UserTable.Remove(existing);
         _context.SaveChanges();

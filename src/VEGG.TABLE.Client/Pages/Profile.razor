@@ -1,0 +1,18 @@
+﻿@page "/profile"
+<!-- THIS PAGE NEEDS TO BE CREATED ONCE LOGIN/REGISTER IS COMPLETED. IF THE USER IS A SELLER IT WILL DISPLAY THEIR PRODUCE LISTINGS AND THEY CAN EDIT THEM, ADD MORE, DELETE, ALSO EDIT THEIR ACCOUNTS / IF THE USER LOGGED IN IS A BUYER ONLY THEY CAN VIEW THEIR PURCHASE HISTORY AND EDIT THEIR ACCOUNT / IF THE USER LOGGED IN IS AN ADMIN THEY CAN CHANGE VARIOUS ASPECTS OF THE WEBSITE POSSIBLY, MODERATE LISTINGS ETC ..-->
+<PageTitle>Counter</PageTitle>
+
+<h1>Counter</h1>
+
+<p role="status">Current count: @currentCount</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+
+@code {
+    private int currentCount = 0;
+
+    private void IncrementCount()
+    {
+        currentCount++;
+    }
+}
