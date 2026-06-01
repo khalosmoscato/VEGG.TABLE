@@ -56,3 +56,14 @@ pkg/
 coverage/
 # appsettings.Development.json is committed on purpose (local-dev DB only, no real
 # secrets). Don't add it to this ignore list.
+
+# --- Frontend / Node.js ---
+node_modules/
+package-lock.json
+dist/
+build/
+.output/
+
+# --- Blazor specific ---
+_framework/
+dist/
