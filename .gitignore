@@ -58,6 +58,7 @@ coverage/
 # secrets). Don't add it to this ignore list.
 
 # --- Frontend / Node.js ---
+wwwroot/lib/
 node_modules/
 package-lock.json
 dist/
