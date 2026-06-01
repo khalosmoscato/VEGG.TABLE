@@ -176,14 +176,13 @@ public class UserServiceTests
             //check the data is matching expected
             Assert.That(result, Is.EqualTo(newUser));
     }
-
     [Test]
     public void UpdateUser_Ok()
     {
         // Arrange
         int parameterId = 1;
         var users = testUsers;
-        var expecetedUsers = testUsers2;
+        var expectedUsers = testUsers2;
         UserDTO userDTO = new UserDTO
         {
             Name = "Dylan",
@@ -214,6 +213,33 @@ public class UserServiceTests
         Assert.IsInstanceOf<User>(result);
         //check the data is matching expected
         Assert.That(result, Is.EqualTo(newUser));
-        //Assert.That(users, Is.EquivalentTo(expecetedUsers));
+        //Assert.That(users, Is.EquivalentTo(expectedUsers));
+    }
+    [Test]
+    public void UpdateUserName_Ok()
+    {
+        // Arrange
+        int parameterId = 1;
+        var users = testUsers;
+        string parameterString = "Nicheal Bluth";
+
+        foreach (User user in users) {Console.WriteLine(user.Name); }
+
+        User newUser = users.FirstOrDefault(x => x.Id == parameterId);
+        newUser.Name = parameterString;
+
+        _mockRepo.Setup(r => r.UpdateUserName(parameterId, parameterString)).Returns(newUser);
+
+        // Act
+        var result = _service.UpdateUserName(parameterId, parameterString);
+        foreach (User user in users) { Console.WriteLine(user.Name); }
+        //ASSERT
+        //check that the correct function is called
+        _mockRepo.Verify(x => x.UpdateUserName(parameterId, parameterString), Times.Once);
+        //check result type
+        Assert.IsInstanceOf<User>(result);
+        //check the data is matching expected
+        Assert.That(result, Is.EqualTo(newUser));
+        //Assert.That(users, Is.EquivalentTo(expectedUsers));
     }
 }

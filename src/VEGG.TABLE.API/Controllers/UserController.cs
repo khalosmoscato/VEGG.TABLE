@@ -41,7 +41,7 @@ public class UserController : ControllerBase
 
         if (result == null) return NotFound();
 
-        return Created();
+        return Ok(result);
     }
 
     // PUT: api/user/name
@@ -52,7 +52,7 @@ public class UserController : ControllerBase
 
         if (result == null) return NotFound();
 
-        return Created();
+        return Ok(result);
     }
 
     // DELETE: api/user/1
