@@ -9,4 +9,3 @@ public class UserDTO
     public UserType UserType { get; set; } = UserType.Buyer;
 
 }
-
