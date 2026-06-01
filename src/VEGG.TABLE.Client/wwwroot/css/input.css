@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+@theme {
+    /* Brand Colours */
+    --color-primary: #065f46;
+    --color-accent: #F97316;
+    --color-accent-hover: #EA580C;
+    /* Theme Defaults */
+    --color-bg-body: #F5F6F8;
+    --color-text-main: #1F2937;
+    /* Dark Mode Defaults */
+    --color-bg-body-dark: #111827;
+    --color-text-main-dark: #F9FAFB;
+}
+
+@layer base {
+    body {
+        background-color: var(--color-bg-body);
+        color: var(--color-text-main);
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .dark body {
+        background-color: var(--color-bg-body-dark);
+        color: var(--color-text-main-dark);
+    }
+}
+
+@layer components {
+    .btn-accent {
+        @apply bg-accent text-white font-bold px-4 py-2 rounded-lg ml-4 transition-colors duration-200 flex items-center justify-center h-10 whitespace-nowrap;
+    }
+
+        .btn-accent:hover {
+            @apply bg-accent-hover;
+        }
+
+    .nav-link-stable {
+        @apply flex items-center justify-center gap-2 px-4 py-2 rounded-lg transition-colors duration-200 h-10 whitespace-nowrap;
+    }
+
+        .nav-link-stable:hover {
+            @apply bg-accent text-white;
+        }
+}
