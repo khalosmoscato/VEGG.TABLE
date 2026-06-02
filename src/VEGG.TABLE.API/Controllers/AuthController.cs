@@ -1,4 +1,6 @@
-﻿using VEGG.TABLE.Core.Entities.DTOs;
+﻿using Microsoft.AspNetCore.Identity;
+
+using VEGG.TABLE.Core.Entities.DTOs;
 
 namespace VEGG.TABLE.API.Controllers;
 
@@ -14,17 +16,20 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
-    public IActionResult Login([FromBody] UserLoginDTO loginDto)
+    public async Task<IActionResult> Login([FromBody] UserLoginDTO loginDto)
     {
-        var userResponse = _authService.Authenticate(loginDto.Email, loginDto.Password);
+        // The framework handles password hashing and salt verification internally
+        var result = await _signInManager.PasswordSignInAsync(
+            loginDto.Email,
+            loginDto.Password,
+            isPersistent: false,
+            lockoutOnFailure: true);
 
-        if (userResponse == null)
+        if (result.Succeeded)
         {
-            // Returning Unauthorized (401) is the standard for failed logins
-            return Unauthorized("Invalid email or password.");
+            return Ok("Login successful");
         }
 
-        // Return the user DTO upon successful login
-        return Ok(userResponse);
+        return Unauthorized("Invalid email or password.");
     }
 }

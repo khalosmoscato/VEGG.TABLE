@@ -1,4 +1,10 @@
 using System.Text.Json;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
+using VEGG.TABLE.Infrastructure.Data;
+using VEGG.TABLE.Core.Entities;
 
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
@@ -28,6 +34,8 @@ string connectionString = builder.Configuration.GetConnectionString("DefaultConn
 
 // Add a service to the build in the form of our database context, configured to use SQL Server.
 builder.Services.AddDbContext<DBContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddIdentity<User, IdentityRole>()
+    .AddEntityFrameworkStores<DBContext>();
 
 // Health checks: one per critical table, each reports queryability + descriptive message.
 builder.Services.AddHealthChecks()

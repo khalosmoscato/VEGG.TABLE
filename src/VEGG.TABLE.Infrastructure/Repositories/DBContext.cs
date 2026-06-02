@@ -1,15 +1,9 @@
-﻿using System;
+﻿namespace VEGG.TABLE.Infrastructure.Data;
 
-namespace VEGG.TABLE.Infrastructure.Data;
-
-public class DBContext : DbContext
+public class DBContext : IdentityDbContext<User>
 {
     public DbSet<Produce> ProduceTable { get; set; } = null!;
-    public DbSet<User> UserTable { get; set; } = null!;
-
     public DbSet<UserProduceLike> LikedTable { get; set; } = null!;
-    //public DbSet<UserProduceTransaction> TransactionTable { get; set; }
-
 
     public DBContext(DbContextOptions<DBContext> options)
         : base(options) { }
@@ -21,6 +15,7 @@ public class DBContext : DbContext
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
         modelBuilder.Entity<Produce>().HasData(
             new Produce
             {
@@ -202,17 +197,7 @@ public class DBContext : DbContext
                 UserId = 5,
             }
         );
-        modelBuilder.Entity<User>().HasData(
-            new User
-            {
-                Id = 1,
-                Name = "VegManDan",
-                Email = "bossman@live.co.uk",
-                Password = "highthere",
-                UserType = UserType.Buyer
-            }
-        );
-        //Juuction table for likes
+        //Junction table for likes
         modelBuilder.Entity<UserProduceLike>()
           .HasKey(like => new { like.UserId, like.ProduceId });
 
@@ -225,19 +210,5 @@ public class DBContext : DbContext
             .HasOne(x => x.Produce)
             .WithMany()
             .HasForeignKey(x => x.ProduceId);
-
-        //junction table for Transactions
-        //modelBuilder.Entity<UserProduceTransaction>()
-        //  .HasKey(transaction => new { transaction.SellerId, transaction.BuyerId });
-
-        //modelBuilder.Entity<UserProduceTransaction>()
-        //    .HasOne(transaction => transaction.Seller)
-        //    .WithMany()
-        //    .HasForeignKey(transaction => transaction.SellerId);
-
-        //modelBuilder.Entity<UserProduceTransaction>()
-        //    .HasOne(transaction => transaction.Buyer)
-        //    .WithMany()
-        //    .HasForeignKey(transaction => transaction.BuyerId);
     }
 }
