@@ -20,6 +20,8 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProduceRepository, ProduceRepository>();
 builder.Services.AddScoped<IProduceService, ProduceService>();
+builder.Services.AddScoped<ILikeRepository, LikeRepository>();
+builder.Services.AddScoped<ILikeService, LikeService>();
 
 // Get the connection string from appsettings.json
 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
