@@ -7,3 +7,8 @@ global using VEGG.TABLE.Core.Interfaces;
 global using VEGG.TABLE.Infrastructure;
 global using VEGG.TABLE.Infrastructure.Data;
 global using VEGG.TABLE.Infrastructure.Services;
+
+global using Microsoft.AspNetCore.Authentication.JwtBearer;
+global using Microsoft.IdentityModel.Tokens;
+
+global using System.Text;
