@@ -12,17 +12,61 @@
     </p>
 </div>
 
+@* How It Works Section *@
+<div class="mt-12 mb-12">
+    <h3 class="text-2xl font-bold text-emerald-900 mb-6 text-center">How VEGG.TABLE Works</h3>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <div class="bg-white p-6 rounded-lg border border-emerald-200 shadow-sm text-center">
+            <div class="text-orange-500 text-3xl mb-4">🛒</div>
+            <h4 class="font-bold text-emerald-900 mb-2">1. Request</h4>
+            <p class="text-emerald-700 text-sm">Browse fresh, local produce and click "Request to Buy" on what you need.</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg border border-emerald-200 shadow-sm text-center">
+            <div class="text-orange-500 text-3xl mb-4">💬</div>
+            <h4 class="font-bold text-emerald-900 mb-2">2. Connect</h4>
+            <p class="text-emerald-700 text-sm">We put you in touch with the local grower to arrange the final details.</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg border border-emerald-200 shadow-sm text-center">
+            <div class="text-orange-500 text-3xl mb-4">🥕</div>
+            <h4 class="font-bold text-emerald-900 mb-2">3. Collect</h4>
+            <p class="text-emerald-700 text-sm">Pick up your fresh goods directly from the farm or community hub.</p>
+        </div>
+
+    </div>
+</div>
+
+@* Search and Filter Section *@
+<div class="mb-6 flex flex-wrap gap-4 items-end">
+    <div>
+        <label class="block text-sm font-medium text-emerald-900 mb-1">Search:</label>
+        <input type="text" @oninput="OnSearchInput" placeholder="Search produce..." 
+               class="bg-white border border-emerald-300 text-emerald-900 text-sm rounded-lg p-2.5 w-64" />
+    </div>
+
+    <div>
+        <label class="block text-sm font-medium text-emerald-900 mb-1">Category:</label>
+        <select @onchange="OnCategoryChange" class="bg-white border border-emerald-300 text-emerald-900 text-sm rounded-lg p-2.5 w-64">
+            <option value="all">All Produce</option>
+            <option value="fruit">Fruit</option>
+            <option value="vegetable">Vegetable</option>
+        </select>
+    </div>
+</div>
+
 @* Product Feed *@
 <h2 class="text-2xl font-bold mb-6">Available Produce</h2>
 
-@if (produceList == null)
+@if (filteredList == null)
 {
     <p><em>Loading fresh produce...</em></p>
 }
 else
 {
     <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        @foreach (var item in produceList)
+        @foreach (var item in filteredList)
         {
             <ProduceCard Item="item" />
         }
@@ -30,10 +74,49 @@ else
 }
 
 @code {
-    private List<Produce>? produceList;
+private List<Produce>? allProduce;
+    private List<Produce>? filteredList;
+    private string searchTerm = "";
+    private string selectedCategory = "all";
+
+    // You can easily update these lists whenever you want
+    private readonly string[] FruitNames = { "Plums", "Apples", "Bananas", "Strawberries", "Oranges" };
+    private readonly string[] VegNames = { "Carrots", "Tomatoes", "Potatoes", "Lettuce", "Cucumbers" };
 
     protected override async Task OnInitializedAsync()
     {
-        produceList = await Http.GetFromJsonAsync<List<Produce>>("api/produce");
+        allProduce = await Http.GetFromJsonAsync<List<Produce>>("api/produce");
+        filteredList = allProduce;
+    }
+
+    private void ApplyFilters()
+    {
+        filteredList = allProduce?.Where(p => 
+            MatchesCategory(p.Name) &&
+            (string.IsNullOrWhiteSpace(searchTerm) || p.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+        ).ToList();
+    }
+
+    private bool MatchesCategory(string name)
+    {
+        if (selectedCategory == "fruit") 
+            return FruitNames.Contains(name, StringComparer.OrdinalIgnoreCase);
+            
+        if (selectedCategory == "vegetable") 
+            return VegNames.Contains(name, StringComparer.OrdinalIgnoreCase);
+            
+        return true; // "all"
+    }
+
+    private void OnCategoryChange(ChangeEventArgs e)
+    {
+        selectedCategory = e.Value.ToString();
+        ApplyFilters();
+    }
+
+    private void OnSearchInput(ChangeEventArgs e)
+    {
+        searchTerm = e.Value?.ToString() ?? "";
+        ApplyFilters();
     }
 }
