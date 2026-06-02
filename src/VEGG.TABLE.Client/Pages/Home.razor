@@ -12,6 +12,25 @@
     </p>
 </div>
 
+@* Search and Filter Section *@
+<div class="mb-6 flex flex-wrap gap-4 items-end">
+    <div>
+        <label for="searchInput" class="block text-base font-medium text-accent mb-1">Search:</label>
+        <input id="searchInput" type="text" @oninput="OnSearchInput" placeholder="Search produce..." 
+               class="bg-white border border-primary text-primary font-semibold placeholder:font-semibold placeholder:text-emerald-700 text-base rounded-lg p-2.5 w-64 focus:ring-2 focus:ring-emerald-500 outline-none" />
+    </div>
+
+    <div>
+        <label for="categorySelect" class="block text-base font-medium text-accent mb-1">Category:</label>
+        <select id="categorySelect" @onchange="OnCategoryChange" 
+                class="bg-white border border-primary text-primary font-semibold text-base rounded-lg p-2.5 w-64 outline-none focus:ring-2 focus:ring-emerald-500">
+            <option value="all">All Produce</option>
+            <option value="fruit">Fruit</option>
+            <option value="vegetable">Vegetable</option>
+        </select>
+    </div>
+</div>
+
 @* How It Works Section *@
 <div class="mt-12 mb-12">
     <h3 class="text-2xl font-bold text-emerald-900 mb-6 text-center">How VEGG.TABLE Works</h3>
@@ -85,6 +104,39 @@ private List<Produce>? allProduce;
 
     protected override async Task OnInitializedAsync()
     {
+        allProduce = await Http.GetFromJsonAsync<List<Produce>>("api/produce");
+        filteredList = allProduce;
+    }
+
+    private void ApplyFilters()
+    {
+        filteredList = allProduce?.Where(p => 
+            MatchesCategory(p.Name) &&
+            (string.IsNullOrWhiteSpace(searchTerm) || p.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+        ).ToList();
+    }
+
+    private bool MatchesCategory(string name)
+    {
+        if (selectedCategory == "fruit") 
+            return FruitNames.Contains(name, StringComparer.OrdinalIgnoreCase);
+            
+        if (selectedCategory == "vegetable") 
+            return VegNames.Contains(name, StringComparer.OrdinalIgnoreCase);
+            
+        return true; // "all"
+    }
+
+    private void OnCategoryChange(ChangeEventArgs e)
+    {
+        selectedCategory = e.Value?.ToString() ?? "all";
+        ApplyFilters();
+    }
+
+    private void OnSearchInput(ChangeEventArgs e)
+    {
+        searchTerm = e.Value?.ToString() ?? "";
+        ApplyFilters();
         allProduce = await Http.GetFromJsonAsync<List<Produce>>("api/produce");
         filteredList = allProduce;
     }

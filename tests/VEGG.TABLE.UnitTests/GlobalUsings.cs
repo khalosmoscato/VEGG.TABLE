@@ -1,5 +1,6 @@
 ﻿global using FluentAssertions;
 
+global using Microsoft.EntityFrameworkCore;
 global using Microsoft.Extensions.Http;
 
 global using Moq;
