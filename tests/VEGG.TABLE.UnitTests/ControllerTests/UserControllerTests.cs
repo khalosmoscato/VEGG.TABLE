@@ -36,8 +36,8 @@ public class UserControllerTests
     }
 
     [Test]
-        public void GetAll_Ok()
-        {
+    public void GetAll_Ok()
+    {
         // Arrange
         var users = testUsers;
 
@@ -58,11 +58,11 @@ public class UserControllerTests
         Assert.IsInstanceOf<List<User>>(resultPayload);
         //check the data is matching expected
         Assert.That(resultPayload, Is.EquivalentTo(users));
-        }
+    }
 
     [Test]
-        public void GetById_Ok()
-        {
+    public void GetById_Ok()
+    {
         // Arrange
         var parameter = 1;
         var users = testUsers;
@@ -83,7 +83,7 @@ public class UserControllerTests
         Assert.IsInstanceOf<User>(resultPayload);
         //check the data is matching expected
         Assert.That(resultPayload, Is.EqualTo(targetUser));
-        }
+    }
 
     [Test]
     public void GetById_NotOk()
@@ -104,30 +104,30 @@ public class UserControllerTests
         Assert.IsInstanceOf<NotFoundResult>(result);
     }
     [Test]
-        public void Delete_Ok()
+    public void Delete_Ok()
+    {
+        // Arrange
+        int parameter = 2;
+        List<User> changedUsers = testUsers;
+        User? targetUser = changedUsers.FirstOrDefault(x => x.Id == parameter);
+        if (targetUser != null)
         {
-            // Arrange
-            int parameter = 2;
-            List<User> changedUsers = testUsers;
-            User? targetUser = changedUsers.FirstOrDefault(x => x.Id == parameter);
-            if (targetUser != null)
-            {
-                changedUsers.Remove(targetUser);
-            }
+            changedUsers.Remove(targetUser);
+        }
 
         var mockTuple = (true, changedUsers);
-            _mockService.Setup(repo => repo.DeleteUser(parameter)).Returns(mockTuple);
+        _mockService.Setup(repo => repo.DeleteUser(parameter)).Returns(mockTuple);
 
-            // Act
-            var result = _controller.DeleteUser(parameter);
+        // Act
+        var result = _controller.DeleteUser(parameter);
 
-            //ASSERT
-            //check that the correct function is called
-            _mockService.Verify(x => x.DeleteUser(parameter), Times.Once);
-            //check result type
-            Assert.IsInstanceOf<NoContentResult>(result);  
-            //cast the controlleroutput as a message object in order to extract its value
-        }
+        //ASSERT
+        //check that the correct function is called
+        _mockService.Verify(x => x.DeleteUser(parameter), Times.Once);
+        //check result type
+        Assert.IsInstanceOf<NoContentResult>(result);
+        //cast the controlleroutput as a message object in order to extract its value
+    }
     [Test]
     public void AddUser_Ok()
     {

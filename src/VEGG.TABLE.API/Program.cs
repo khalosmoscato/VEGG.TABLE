@@ -1,6 +1,12 @@
+using System.Text.Json;
+
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 using Scalar.AspNetCore;
+
+using VEGG.TABLE.API.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +15,7 @@ builder.Services.AddOpenApi();
 
 // Add other services
 builder.Services.AddControllers();
+builder.Services.AddProblemDetails();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProduceRepository, ProduceRepository>();
@@ -20,6 +27,11 @@ string connectionString = builder.Configuration.GetConnectionString("DefaultConn
 
 // Add a service to the build in the form of our database context, configured to use SQL Server.
 builder.Services.AddDbContext<DBContext>(options => options.UseSqlServer(connectionString));
+
+// Health checks: one per critical table, each reports queryability + descriptive message.
+builder.Services.AddHealthChecks()
+    .AddCheck<UserTableHealthCheck>("users")
+    .AddCheck<ProduceTableHealthCheck>("produce");
 
 builder.Services.AddCors(options =>
 {
@@ -48,8 +60,30 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
 }
 
+app.UseExceptionHandler();
 app.UseHttpsRedirection();
 app.UseCors("AllowClient");
 app.UseAuthorization();
 app.MapControllers();
+app.MapHealthChecks("/health", new HealthCheckOptions
+{
+    ResponseWriter = WriteHealthResponse
+});
 app.Run();
+
+static Task WriteHealthResponse(HttpContext ctx, HealthReport report)
+{
+    ctx.Response.ContentType = "application/json";
+    var payload = new
+    {
+        status = report.Status.ToString(),
+        checks = report.Entries.Select(e => new
+        {
+            name = e.Key,
+            status = e.Value.Status.ToString(),
+            description = e.Value.Description,
+            error = e.Value.Exception?.Message
+        })
+    };
+    return ctx.Response.WriteAsync(JsonSerializer.Serialize(payload));
+}
