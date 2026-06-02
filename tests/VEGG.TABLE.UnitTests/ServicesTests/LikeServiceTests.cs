@@ -17,7 +17,10 @@ public class LikeServiceTests
     {
         var like = new UserProduceLike
         {
-            UserId = 1, User = null!, ProduceId = 2, Produce = null!
+            UserId = 1,
+            User = null!,
+            ProduceId = 2,
+            Produce = null!
         };
         _mockRepo.Setup(r => r.AddLike(1, 2)).Returns(like);
 

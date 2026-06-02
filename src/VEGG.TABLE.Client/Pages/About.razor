@@ -1,22 +1,45 @@
 @page "/about"
 
-<div class="max-w-4xl mx-auto p-6">
-    <h1 class="text-3xl font-bold text-accent mb-6">About VEGG.TABLE</h1>
-    
-    <div class="bg-primary p-8 rounded-lg shadow-sm ">
-        <h2 class="text-xl text-accent font-semibold mb-4">Our Mission</h2>
-        <p class="text-white mb-6">
-            VEGG.TABLE was created to bridge the gap between local growers and their communities. 
-            We believe that high-quality, sustainable produce should be accessible, 
-            transparent, and grown with care.
-        </p>
+<div class="max-w-5xl mx-auto p-8">
+    <h1 class="text-4xl font-bold mb-10 text-center text-accent">About VEGG.TABLE</h1>
 
-        <h2 class="text-xl text-accent font-semibold mb-4">How it works</h2>
-        <p class="text-white mb-4">
-            By connecting you directly with local growers, we reduce food miles, 
-            support local economies, and ensure you get the freshest ingredients 
-            possible. Simply browse, request to buy, and coordinate your collection 
-            with the grower.
-        </p>
+    <!-- 1. Stats Section: Added 'justify-center' to parent -->
+    <div class="flex flex-wrap justify-center gap-6 mb-10">
+        <div class="bg-white p-6 rounded-lg shadow-sm border-b-4 border-orange-500 text-center w-48">
+            <h3 class="text-3xl font-bold text-emerald-900 mb-2">40</h3>
+            <p class="text-emerald-800 font-medium">Miles saved per order</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-sm border-b-4 border-emerald-500 text-center w-48">
+            <h3 class="text-3xl font-bold text-emerald-900 mb-2">15+</h3>
+            <p class="text-emerald-800 font-medium">Local family farms</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-sm border-b-4 border-orange-500 text-center w-48">
+            <h3 class="text-3xl font-bold text-emerald-900 mb-2">500+</h3>
+            <p class="text-emerald-800 font-medium">Items shared yearly</p>
+        </div>
     </div>
+
+    <!-- 2. Mission and Story Section -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+        <div class="bg-white p-8 rounded-lg border-t-4 border-orange-500 shadow-sm">
+            <h2 class="text-2xl font-bold text-emerald-900 mb-4">Our Mission</h2>
+            <p class="text-emerald-700 leading-relaxed">VEGG.TABLE was created to bridge the gap between local growers and their communities. We believe that high-quality produce should be accessible, transparent, and grown with care.</p>
+        </div>
+        <div class="bg-white p-8 rounded-lg border-t-4 border-emerald-500 shadow-sm">
+            <h2 class="text-2xl font-bold text-emerald-900 mb-4">Our Story</h2>
+            <p class="text-emerald-700 leading-relaxed">We started with a simple question: why is it so hard to get fresh food from the farm right next door? We built this platform to make local eating the easiest choice for everyone.</p>
+        </div>
+    </div>
+
+    <!-- 3. Final CTA Section -->
+    <div class="p-8 bg-emerald-900 rounded-lg text-center shadow-lg">
+        <h2 class="text-2xl font-bold text-white mb-4">Ready to find fresh, local produce?</h2>
+        <p class="text-emerald-100 mb-8 max-w-xl mx-auto">
+            Join our growing community of growers and neighbors. Start browsing fresh items available in your area today.
+        </p>
+        <a href="/" class="inline-block bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-8 rounded-full transition-colors duration-300">
+            Browse Local Produce
+        </a>
+    </div>
+
 </div>

@@ -74,4 +74,6 @@ public class UserRepository : IUserRepository
         var currentUsers = _context.UserTable.ToList();
         return (true, currentUsers);
     }
+    public User? GetByEmail(string email)
+        => _context.UserTable.FirstOrDefault(u => u.Email == email.ToLower());
 }

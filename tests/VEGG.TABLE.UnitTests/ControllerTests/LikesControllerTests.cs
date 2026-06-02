@@ -19,7 +19,10 @@ public class LikesControllerTests
     {
         var like = new UserProduceLike
         {
-            UserId = 1, User = null!, ProduceId = 2, Produce = null!
+            UserId = 1,
+            User = null!,
+            ProduceId = 2,
+            Produce = null!
         };
         _mockService.Setup(s => s.AddLike(1, 2)).Returns(like);
 
