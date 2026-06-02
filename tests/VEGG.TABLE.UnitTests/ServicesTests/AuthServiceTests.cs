@@ -3,8 +3,8 @@
 [TestFixture]
 public class AuthServiceTests
 {
-    private Mock<IUserRepository> _mockRepo;
-    private AuthService _authService;
+    private Mock<IUserRepository> _mockRepo = null!;
+    private AuthService _authService = null!;
 
     [SetUp]
     public void Setup()
@@ -16,19 +16,19 @@ public class AuthServiceTests
     [Test]
     public void Authenticate_ValidCredentials_ReturnsUserDto()
     {
-        var user = new User 
+        var user = new User
         {
-            Email = "test@test.com", 
-            Password = BCrypt.Net.BCrypt.HashPassword("testpw"), 
-            Name = "Test", 
-            UserType = UserType.Buyer 
+            Email = "test@test.com",
+            Password = BCrypt.Net.BCrypt.HashPassword("testpw"),
+            Name = "Test",
+            UserType = UserType.Buyer
         };
         _mockRepo.Setup(repo => repo.GetByEmail("test@test.com")).Returns(user);
 
         var result = _authService.Authenticate("test@test.com", "testpw");
 
         Assert.That(result, Is.Not.Null);
-        Assert.That(result.Email, Is.EqualTo("test@test.com"));
+        Assert.That(result!.Email, Is.EqualTo("test@test.com"));
     }
 
     [Test]
