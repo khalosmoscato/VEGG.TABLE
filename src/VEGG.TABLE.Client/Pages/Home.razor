@@ -4,9 +4,9 @@
 @inject HttpClient Http
 
 @* Hero / Welcome Section *@
-<div class="bg-emerald-800 text-white p-8 rounded-lg mb-8 shadow-md">
+<div class="bg-emerald-800 text-white p-8 rounded-lg mb-8 shadow-md text-center">
     <h1 class="text-3xl font-bold mb-2">Welcome to VEGG.TABLE</h1>
-    <p class="text-emerald-100 max-w-2xl">
+    <p class="max-w-2xl mx-auto">
         Connecting local, sustainable produce directly to your community. 
         Precision-grown, farm-fresh, and ready for you to collect.
     </p>
@@ -49,13 +49,13 @@
     <div>
         <label for="searchInput" class="block text-base font-medium text-accent mb-1 text-center w-full">Search:</label>
         <input id="searchInput" type="text" @oninput="OnSearchInput" placeholder="Search produce..." 
-               class="bg-white border border-primary text-primary font-semibold placeholder:font-semibold placeholder:text-emerald-700 text-base rounded-lg p-2.5 w-64 focus:ring-2 focus:ring-emerald-500 outline-none" />
+               class="bg-white border border-primary text-primary font-semibold placeholder:font-semibold placeholder:text-primary text-center text-base rounded-lg p-2.5 w-64 focus:ring-2 focus:ring-emerald-500 outline-none" />
     </div>
 
     <div>
         <label for="categorySelect" class="block text-base font-medium text-accent mb-1 text-center w-full">Category:</label>
         <select id="categorySelect" @onchange="OnCategoryChange" 
-                class="bg-white border border-primary text-primary font-semibold text-base rounded-lg p-2.5 w-64 outline-none focus:ring-2 focus:ring-emerald-500">
+                class="bg-white border border-primary text-primary text-center font-semibold text-base rounded-lg p-2.5 w-64 outline-none focus:ring-2 focus:ring-emerald-500">
             <option value="all">All Produce</option>
             <option value="fruit">Fruit</option>
             <option value="vegetable">Vegetable</option>
