@@ -12,16 +12,48 @@
     </p>
 </div>
 
+@* Divider Line *@
+<div class="border-t border-primary my-8"></div>
+
+@* How It Works Section *@
+<div class="mt-12 mb-12">
+    <h2 class="text-2xl font-bold mb-6 text-center">How VEGG.TABLE Works</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <div class="bg-white p-6 rounded-lg border border-emerald-200 shadow-sm text-center">
+            <div class="text-orange-500 text-3xl mb-4">🛒</div>
+            <h4 class="font-bold text-emerald-900 mb-2">1. Request</h4>
+            <p class="text-emerald-700 text-sm">Browse fresh, local produce and click "Request to Buy" on what you need.</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg border border-emerald-200 shadow-sm text-center">
+            <div class="text-orange-500 text-3xl mb-4">💬</div>
+            <h4 class="font-bold text-emerald-900 mb-2">2. Connect</h4>
+            <p class="text-emerald-700 text-sm">We put you in touch with the local grower to arrange the final details.</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg border border-emerald-200 shadow-sm text-center">
+            <div class="text-orange-500 text-3xl mb-4">🥕</div>
+            <h4 class="font-bold text-emerald-900 mb-2">3. Collect</h4>
+            <p class="text-emerald-700 text-sm">Pick up your fresh goods directly from the farm or community hub.</p>
+        </div>
+
+    </div>
+</div>
+
+@* Divider Line *@
+<div class="border-t border-primary my-8"></div>
+
 @* Search and Filter Section *@
-<div class="mb-6 flex flex-wrap gap-4 items-end">
+<div class="mb-6 flex flex-wrap gap-4 items-end justify-center">
     <div>
-        <label for="searchInput" class="block text-base font-medium text-accent mb-1">Search:</label>
+        <label for="searchInput" class="block text-base font-medium text-accent mb-1 text-center w-full">Search:</label>
         <input id="searchInput" type="text" @oninput="OnSearchInput" placeholder="Search produce..." 
                class="bg-white border border-primary text-primary font-semibold placeholder:font-semibold placeholder:text-emerald-700 text-base rounded-lg p-2.5 w-64 focus:ring-2 focus:ring-emerald-500 outline-none" />
     </div>
 
     <div>
-        <label for="categorySelect" class="block text-base font-medium text-accent mb-1">Category:</label>
+        <label for="categorySelect" class="block text-base font-medium text-accent mb-1 text-center w-full">Category:</label>
         <select id="categorySelect" @onchange="OnCategoryChange" 
                 class="bg-white border border-primary text-primary font-semibold text-base rounded-lg p-2.5 w-64 outline-none focus:ring-2 focus:ring-emerald-500">
             <option value="all">All Produce</option>
@@ -32,7 +64,7 @@
 </div>
 
 @* Product Feed *@
-<h2 class="text-2xl font-bold mb-6">Available Produce</h2>
+<h2 class="text-2xl font-bold mb-6 text-center">Available Produce</h2>
 
 @if (filteredList == null)
 {
@@ -49,12 +81,11 @@ else
 }
 
 @code {
-private List<Produce>? allProduce;
+    private List<Produce>? allProduce;
     private List<Produce>? filteredList;
     private string searchTerm = "";
     private string selectedCategory = "all";
 
-    // You can easily update these lists whenever you want
     private readonly string[] FruitNames = { "Plums", "Apples", "Bananas", "Strawberries", "Oranges" };
     private readonly string[] VegNames = { "Carrots", "Tomatoes", "Potatoes", "Lettuce", "Cucumbers" };
 
@@ -80,7 +111,7 @@ private List<Produce>? allProduce;
         if (selectedCategory == "vegetable") 
             return VegNames.Contains(name, StringComparer.OrdinalIgnoreCase);
             
-        return true; // "all"
+        return true; 
     }
 
     private void OnCategoryChange(ChangeEventArgs e)
