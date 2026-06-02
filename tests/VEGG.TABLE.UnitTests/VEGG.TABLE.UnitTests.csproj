@@ -11,10 +11,10 @@
     <ProjectReference Include="..\..\src\VEGG.TABLE.Client\VEGG.TABLE.Client.csproj" />
     <ProjectReference Include="..\..\src\VEGG.TABLE.Core\VEGG.TABLE.Core.csproj" />
     <ProjectReference Include="..\..\src\VEGG.TABLE.Infrastructure\VEGG.TABLE.Infrastructure.csproj" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Domain\" />
-    <Folder Include="Repositories\" />
   </ItemGroup>
   
 
