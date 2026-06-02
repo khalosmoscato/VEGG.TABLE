@@ -1,10 +1,12 @@
+using System.Text.Json;
+
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System.Text.Json;
-using VEGG.TABLE.API.HealthChecks;
 
 using Scalar.AspNetCore;
+
+using VEGG.TABLE.API.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(args);
 

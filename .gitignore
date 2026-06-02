@@ -84,3 +84,6 @@ dist/
 # --- Local Machine Configurations ---
 
 *.csproj.user 
+
+# Ignore generated CSS files (Tailwind CSS generates this automathically at each run
+/src/VEGG.TABLE.Client/wwwroot/css/app.css
