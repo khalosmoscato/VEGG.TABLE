@@ -3,8 +3,8 @@
 [TestFixture]
 public class UserRepositoryTests
 {
-    private DBContext? _context;
-    private UserRepository? _repo;
+    private DBContext _context = null!;
+    private UserRepository _repo = null!;
 
     [SetUp]
     public void Setup()
@@ -31,6 +31,7 @@ public class UserRepositoryTests
         var result = _repo.GetByEmail("TEST@TEST.COM");
 
         Assert.That(result, Is.Not.Null);
-        Assert.That(result.Email, Is.EqualTo("test@test.com"));
+
+        Assert.That(result!.Email, Is.EqualTo("test@test.com"));
     }
 }
