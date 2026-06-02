@@ -8,5 +8,6 @@ namespace VEGG.TABLE.Core.Interfaces
         User AddUser(UserDTO userDTO);
         User? UpdateUser(int id, UserDTO userDTO);
         (bool, List<User>) DeleteUser(int id);
+        public User? GetByEmail(string email);
     }
 }
