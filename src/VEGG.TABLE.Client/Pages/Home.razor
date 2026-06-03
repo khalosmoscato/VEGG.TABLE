@@ -1,7 +1,7 @@
 ﻿@page "/"
 @using VEGG.TABLE.Core.Entities
 @using VEGG.TABLE.Client.Components
-@inject HttpClient Http
+@inject IHttpClientFactory ClientFactory
 
 @* Hero / Welcome Section *@
 <div class="bg-emerald-800 text-white p-8 rounded-lg mb-8 shadow-md text-center">
@@ -27,7 +27,7 @@
         </div>
 
         <div class="bg-white p-6 rounded-lg border border-emerald-200 shadow-sm text-center">
-            <div class="text-orange-500 text-3xl mb-4">💬</div>
+            <div class="text-orange-500 text-3xl mb-4">🤝</div>
             <h4 class="font-bold text-emerald-900 mb-2">2. Connect</h4>
             <p class="text-emerald-700 text-sm">We put you in touch with the local grower to arrange the final details.</p>
         </div>
@@ -91,7 +91,9 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        allProduce = await Http.GetFromJsonAsync<List<Produce>>("api/produce");
+        // Using PublicAPI client to avoid sending auth headers for this public data
+        var http = ClientFactory.CreateClient("PublicAPI");
+        allProduce = await http.GetFromJsonAsync<List<Produce>>("api/produce");
         filteredList = allProduce;
     }
 

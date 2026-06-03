@@ -1,27 +1,88 @@
 @page "/login"
+@using VEGG.TABLE.Core.Entities.DTOs
+@using Microsoft.AspNetCore.Components.Authorization
+@using VEGG.TABLE.Client.Services
+@inject IHttpClientFactory ClientFactory
+@inject NavigationManager Nav
+@inject IJSRuntime JS
+@inject AuthenticationStateProvider AuthStateProvider
 
 <div class="max-w-md mx-auto p-6 mt-10">
     <div class="bg-primary p-8 rounded-lg shadow-sm">
-        <h1 class="text-2xl font-bold text-accent mb-6">Sign In</h1>
+        <h1 class="text-2xl font-bold text-accent mb-6 text-center">Sign In</h1>
         
-        <div class="space-y-4">
-            <div>
-                <label for="email" class="block text-white text-sm font-medium mb-1">Email</label>
-                <input id="email" name="email" type="email" autocomplete="email" class="w-full text-white p-2 rounded border border-gray-300" placeholder="your@email.com" />
-            </div>
-            
-            <div>
-                <label for="password" class="block text-white text-sm font-medium mb-1">Password</label>
-                <input id="password" name="password" type="password" autocomplete="current-password" class="w-full text-white p-2 rounded border border-gray-300" placeholder="••••••••" />
-            </div>
+        <EditForm Model="loginModel" OnValidSubmit="HandleLogin">
+            <div class="space-y-4">
+                <div>
+                    <label for="email" class="block text-white text-sm font-medium mb-1">Email</label>
+                    <InputText id="email" 
+                               @bind-Value="loginModel.Email" 
+                               type="email" 
+                               autocomplete="email" 
+                               placeholder="e.g. bossman@live.co.uk" 
+                               class="w-full text-white bg-primary p-2 rounded border border-emerald-300 placeholder:text-gray-300" 
+                               required />
+                </div>
+                
+                <div>
+                    <label for="password" class="block text-white text-sm font-medium mb-1">Password</label>
+                    <InputText id="password" 
+                               @bind-Value="loginModel.Password" 
+                               type="password" 
+                               autocomplete="current-password" 
+                               placeholder="••••••••" 
+                               class="w-full text-white bg-primary p-2 rounded border border-emerald-300 placeholder:text-gray-300" 
+                               required />
+                </div>
 
-            <button type="submit" class="w-full bg-accent text-white font-bold py-2 rounded hover:bg-orange-600 transition-colors mt-4">
-                Login
-            </button>
-        </div>
+                <button type="submit" class="w-full bg-accent text-white font-bold py-2 rounded hover:opacity-90 transition-colors mt-4">
+                    Login
+                </button>
+            </div>
+        </EditForm>
+        
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <p class="text-red-400 mt-4 text-center text-sm font-medium">@errorMessage</p>
+        }
         
         <p class="text-white text-sm mt-4 text-center">
             Don't have an account? <a href="register" class="text-accent underline">Sign up here</a>
         </p>
     </div>
 </div>
+
+@code {
+    private UserLoginDTO loginModel = new();
+    private string? errorMessage;
+
+    private async Task HandleLogin()
+    {
+        errorMessage = null;
+        try
+        {
+            var http = ClientFactory.CreateClient("PublicAPI");
+            var response = await http.PostAsJsonAsync("api/auth/login", loginModel);
+            
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadFromJsonAsync<UserResponseDTO>();
+                
+                if (result != null)
+                {
+                    await JS.InvokeVoidAsync("localStorage.setItem", "authToken", result.Token);
+                    ((AuthStateProvider)AuthStateProvider).NotifyUserAuthentication(result.Token);
+                    Nav.NavigateTo("/");
+                }
+            }
+            else
+            {
+                errorMessage = "Invalid email or password.";
+            }
+        }
+        catch (Exception)
+        {
+            errorMessage = "Service unavailable. Please try later.";
+        }
+    }
+}
