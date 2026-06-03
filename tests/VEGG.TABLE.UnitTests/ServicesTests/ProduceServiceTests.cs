@@ -79,4 +79,15 @@ public class ProduceServiceTests
 
         result.Should().BeFalse();
     }
+
+    [Test]
+    public void GetProduceByUserIdAll_returnsProduce()
+    {
+        var parameter = 1;
+        _mockRepo.Setup(r => r.GetProduceByUserIdAll(parameter)).Returns();
+
+        var result = _service.DeleteProduce(99);
+
+        result.Should().BeFalse();
+    }
 }
