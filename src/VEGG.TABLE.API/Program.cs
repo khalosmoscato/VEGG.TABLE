@@ -24,6 +24,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ILikeRepository, LikeRepository>();
 builder.Services.AddScoped<ILikeService, LikeService>();
 builder.Services.AddScoped<IFarmRepository, FarmRepository>();
+builder.Services.AddScoped<IFarmService, FarmService>();
 
 // Get the connection string from appsettings.json
 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
