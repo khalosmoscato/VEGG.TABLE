@@ -18,7 +18,7 @@ internal class DummyProduce
         Category = Category.LeafyGreens,
         Description = "Fresh baby spinach leaves.",
         PhotograghPath = "/images/spinach.jpg",
-        IsOnSale = true,
+        IsOnSale = false,
         IsLiked = true,
         IsPurchased = true,
         UserId = 1

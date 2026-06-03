@@ -104,4 +104,27 @@ public class ProduceServiceTests
         Assert.IsNotNull(result);
         Assert.That(result, Is.EquivalentTo(expectedProduce));
     }
+
+    [Test]
+    public void GetProduceByUserId_returnsProduceOnSale()
+    {
+        //ARRANGE
+        var parameter = 1;
+        var produceList = DummyProduce.DummyProduceList;
+        var expectedProduce = produceList.Where(p => p.UserId == parameter && p.IsOnSale == true).ToList();
+        _mockRepo.Setup(r => r.GetProduceByUserId(parameter)).Returns(expectedProduce);
+
+        foreach (Produce p in expectedProduce) Console.WriteLine(p.Name + p.ProduceId);
+        //ACT
+        var result = _service.GetProduceByUserId(parameter);
+
+        //ASSERT
+        //check that the correct function is called
+        _mockRepo.Verify(x => x.GetProduceByUserId(parameter), Times.Once);
+        //check result type
+        Assert.IsInstanceOf<List<Produce>>(result);
+        //check the data is matching expected
+        Assert.IsNotNull(result);
+        Assert.That(result, Is.EquivalentTo(expectedProduce));
+    }
 }
