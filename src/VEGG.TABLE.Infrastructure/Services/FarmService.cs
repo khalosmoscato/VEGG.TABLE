@@ -15,6 +15,6 @@ public class FarmService : IFarmService
 
     public async Task<IEnumerable<Farm>> GetFarms()
     {
-        return await _repository.GetAllFarmsAsync();
+        return await _repository.GetFarms();
     }
 }
