@@ -9,7 +9,7 @@ public class FarmRepository : IFarmRepository
     private readonly DBContext _context;
     public FarmRepository(DBContext context) => _context = context;
 
-    public async Task<IEnumerable<Farm>> GetAllFarmsAsync()
+    public async Task<IEnumerable<Farm>> GetFarms()
     {
         return await _context.Farms.ToListAsync();
     }
