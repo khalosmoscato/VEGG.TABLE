@@ -214,7 +214,7 @@ public class DBContext : DbContext
             new User { Id = 4, Name = "SpitalFieldsOrg", Email = "hello@spital.co.uk", Password = "hashed_pw_4", UserType = UserType.Seller },
             new User { Id = 5, Name = "CrystalVeg", Email = "team@crystalveg.co.uk", Password = "hashed_pw_5", UserType = UserType.Seller }
         );
-        //Juuction table for likes
+        //Junction table for likes
         modelBuilder.Entity<UserProduceLike>()
           .HasKey(like => new { like.UserId, like.ProduceId });
 
@@ -228,18 +228,5 @@ public class DBContext : DbContext
             .WithMany()
             .HasForeignKey(x => x.ProduceId);
 
-        //junction table for Transactions
-        //modelBuilder.Entity<UserProduceTransaction>()
-        //  .HasKey(transaction => new { transaction.SellerId, transaction.BuyerId });
-
-        //modelBuilder.Entity<UserProduceTransaction>()
-        //    .HasOne(transaction => transaction.Seller)
-        //    .WithMany()
-        //    .HasForeignKey(transaction => transaction.SellerId);
-
-        //modelBuilder.Entity<UserProduceTransaction>()
-        //    .HasOne(transaction => transaction.Buyer)
-        //    .WithMany()
-        //    .HasForeignKey(transaction => transaction.BuyerId);
     }
 }
