@@ -24,15 +24,11 @@ public class UserRepository : IUserRepository
 
     public User AddUser(UserDTO userDTO)
     {
-        int currentMaxId = _context.UserTable.Any()
-        ? _context.UserTable.Max(x => x.Id)
-        : 0;
-
-        int newId = currentMaxId + 1;
+       
 
         User user = new User
         {
-            Id = newId,
+            //Id is automatically set by DB
             Email = userDTO.Email,
             Name = userDTO.Name,
             Password = userDTO.Password,
