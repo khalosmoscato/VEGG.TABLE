@@ -1,0 +1,26 @@
+﻿<PageTitle>Map</PageTitle>
+
+@page "/map"
+@inject IHttpClientFactory ClientFactory
+@inject IJSRuntime JS
+
+<div id="farmMap" class="w-full h-[400px] md:h-[600px] lg:h-[700px] border border-gray-300 rounded-lg shadow-sm"></div>
+
+@code {
+    private List<Farm>? farms;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var http = ClientFactory.CreateClient("PublicAPI");
+            farms = await http.GetFromJsonAsync<List<Farm>>("/api/farms");
+
+            if (farms != null)
+            {
+                var module = await JS.InvokeAsync<IJSObjectReference>("import", "./js/mapHelper.js");
+                await module.InvokeVoidAsync("initializeMap", "farmMap", farms);
+            }
+        }
+    }
+}
