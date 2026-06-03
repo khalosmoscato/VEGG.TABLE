@@ -14,9 +14,10 @@
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
 
-        // Processes each farm to create pins and list items
-        farms.forEach(farm => {
-            // Creates the Marker on the map
+        const sortedFarms = [...farms].sort((a, b) => a.name.localeCompare(b.name));
+
+        // creates the Markers and the sidebar items for each farm
+        sortedFarms.forEach(farm => {
             const marker = L.marker([farm.lat, farm.lng])
                 .addTo(map)
                 .bindPopup(`<b>${farm.name}</b><br>Owner ID: ${farm.ownerId}`);
