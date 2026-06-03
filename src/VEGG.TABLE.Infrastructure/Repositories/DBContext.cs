@@ -206,7 +206,7 @@ public class DBContext : DbContext
                 Id = 1,
                 Name = "VegManDan",
                 Email = "bossman@live.co.uk",
-                Password = "highthere",
+                Password = "$2a$11$.L.EhNZir7n.hylCEenduOkBlqrdyXHt0jtDqMrW46jy0.pKbkMw2",
                 UserType = UserType.Buyer
             },
             new User { Id = 2, Name = "FreshFarmers", Email = "contact@fresh.co.uk", Password = "hashed_pw_2", UserType = UserType.Seller },
