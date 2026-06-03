@@ -10,7 +10,6 @@ public class UserController : ControllerBase
     {
         _userService = userService;
     }
-
     // GET: api/user
     [HttpGet]
     public IActionResult GetAllUsers()
@@ -29,28 +28,42 @@ public class UserController : ControllerBase
     }
     // POST: api/user
     [HttpPost]
-    public IActionResult AddUser(User user)
+    public IActionResult AddUser(UserDTO userDTO)
     {
-        var created = _userService.AddUser(user);
+        var created = _userService.AddUser(userDTO);
         return CreatedAtAction(nameof(GetUserById), new { id = created.Id }, created);
     }
     // PUT: api/user/1
     [HttpPut("{id}")]
-    public IActionResult UpdateUser(int id, User user)
+    public IActionResult UpdateUser(int id, UserDTO userDTO)
     {
-        var result = _userService.UpdateUser(id, user);
+        var result = _userService.UpdateUser(id, userDTO);
 
         if (result == null) return NotFound();
 
-        return NoContent();
+        return Ok(result);
     }
+
+    // PUT: api/user/name
+    [HttpPut("{id}/name")]
+    public IActionResult UpdateUserName(int id, string name)
+    {
+        var result = _userService.UpdateUserName(id, name);
+
+        if (result == null) return NotFound();
+
+        return Ok(result);
+    }
+
     // DELETE: api/user/1
     [HttpDelete("{id}")]
     public IActionResult DeleteUser(int id)
     {
         var result = _userService.DeleteUser(id);
 
-        if (!result)
+        bool success = result.Item1;
+
+        if (!success)
             return NotFound();
 
         return NoContent();

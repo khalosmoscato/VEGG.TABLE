@@ -1,0 +1,44 @@
+﻿@using VEGG.TABLE.Core.Entities
+@inject NavigationManager Navigation
+
+<div class="produce-card border border-primary/20 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 p-4 bg-primary text-white flex flex-col text-center">
+    
+    <div class="w-full h-40 bg-white/10 rounded-md mb-3 flex items-center justify-center text-6xl">
+        @GetProduceEmoji(Item.Name)
+    </div>
+
+    <h3 class="text-lg font-semibold">@Item.Name</h3>
+    <p class="text-sm text-primary-50">Price: £@Item.Price</p>
+    <p class="text-sm text-primary-100">In Stock: @Item.Stock</p>
+    
+    <button class="w-full mt-4 bg-accent hover:bg-accent-hover text-white py-2 rounded-md transition-all duration-200 active:scale-95 font-medium" 
+            @onclick="() => RequestToBuy(Item)">
+        Request to Buy
+    </button>
+</div>
+
+@code {
+    [Parameter] public Produce Item { get; set; } = default!;
+
+    private string GetProduceEmoji(string name) => name.ToLower() switch
+    {
+        "plums" => "🍑",
+        "apples" => "🍎",
+        "bananas" => "🍌",
+        "carrots" => "🥕",
+        "tomatoes" => "🍅",
+        "potatoes" => "🥔",
+        "strawberries" => "🍓",
+        "lettuce" => "🥬",
+        "oranges" => "🍊",
+        "cucumbers" => "🥒",
+        _ => "🥦"
+    };
+
+    private void RequestToBuy(Produce item)
+    {
+        var subject = $"Interested in buying {item.Name}";
+        var body = $"Hi, I am interested in your {item.Name}.";
+        Navigation.NavigateTo($"mailto:support@vegg.table?subject={Uri.EscapeDataString(subject)}&body={Uri.EscapeDataString(body)}");
+    }
+}

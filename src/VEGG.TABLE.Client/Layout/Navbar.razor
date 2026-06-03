@@ -1,0 +1,41 @@
+﻿@using Microsoft.AspNetCore.Components.Routing
+
+<div class="relative w-full bg-primary text-white shadow-lg px-4 py-3 flex items-center justify-between">
+   
+	<a href="/" class="flex items-center gap-2">
+    <img src="/images/logo.png"
+         alt="VEGG.TABLE"
+         class="h-16 md:h-24 w-auto object-contain block" />
+    <span class="text-xl font-bold hidden min-[320px]:inline-block md:text-2xl">VEGG.TABLE</span>
+</a>
+
+    <button class="md:hidden p-2" @onclick="ToggleNav">
+        <span class="bi bi-list text-2xl"></span>
+    </button>
+
+    <nav class="@(isExpanded ? "flex flex-col items-center text-center" : "hidden") 
+                 md:flex md:flex-row md:flex-1 md:justify-end md:items-center 
+                 absolute md:static top-full left-0 w-full bg-primary p-4 gap-6 z-50 shadow-md md:shadow-none">
+        
+        <NavLink class="nav-link-stable" href="" Match="NavLinkMatch.All" @onclick="CloseNav">
+            <span class="bi bi-house-door-fill"></span> Home
+        </NavLink>
+        
+        <NavLink class="nav-link-stable" href="about" @onclick="CloseNav">
+            <span class="bi bi-info-circle"></span> About
+        </NavLink>
+
+        @* Theme Toggle integrated into the navigation flow *@
+        <div class="flex items-center justify-center p-2">
+            <ThemeToggle />
+        </div>
+
+        <a href="login" class="bg-accent text-white px-4 py-2 rounded-md hover:bg-orange-600 transition-colors">Login</a>
+    </nav>
+</div>
+
+@code {
+    private bool isExpanded = false;
+    private void ToggleNav() => isExpanded = !isExpanded;
+    private void CloseNav() => isExpanded = false;
+}

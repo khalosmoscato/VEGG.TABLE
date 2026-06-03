@@ -1,6 +1,12 @@
+using System.Text.Json;
+
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+
 using Scalar.AspNetCore;
 
-using Microsoft.EntityFrameworkCore;
+using VEGG.TABLE.API.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,10 +15,14 @@ builder.Services.AddOpenApi();
 
 // Add other services
 builder.Services.AddControllers();
+builder.Services.AddProblemDetails();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProduceRepository, ProduceRepository>();
 builder.Services.AddScoped<IProduceService, ProduceService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ILikeRepository, LikeRepository>();
+builder.Services.AddScoped<ILikeService, LikeService>();
 
 // Get the connection string from appsettings.json
 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
@@ -20,6 +30,36 @@ string connectionString = builder.Configuration.GetConnectionString("DefaultConn
 
 // Add a service to the build in the form of our database context, configured to use SQL Server.
 builder.Services.AddDbContext<DBContext>(options => options.UseSqlServer(connectionString));
+
+// Health checks: one per critical table, each reports queryability + descriptive message.
+builder.Services.AddHealthChecks()
+    .AddCheck<UserTableHealthCheck>("users")
+    .AddCheck<ProduceTableHealthCheck>("produce");
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowClient", policy =>
+    {
+        policy.WithOrigins("http://localhost:5209") // Update to your Client port
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
+        };
+    });
 
 var app = builder.Build();
 
@@ -38,7 +78,31 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
 }
 
+app.UseExceptionHandler();
 app.UseHttpsRedirection();
+app.UseCors("AllowClient");
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.MapHealthChecks("/health", new HealthCheckOptions
+{
+    ResponseWriter = WriteHealthResponse
+});
 app.Run();
+
+static Task WriteHealthResponse(HttpContext ctx, HealthReport report)
+{
+    ctx.Response.ContentType = "application/json";
+    var payload = new
+    {
+        status = report.Status.ToString(),
+        checks = report.Entries.Select(e => new
+        {
+            name = e.Key,
+            status = e.Value.Status.ToString(),
+            description = e.Value.Description,
+            error = e.Value.Exception?.Message
+        })
+    };
+    return ctx.Response.WriteAsync(JsonSerializer.Serialize(payload));
+}

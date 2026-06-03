@@ -5,8 +5,10 @@ namespace VEGG.TABLE.Core.Interfaces
     {
         List<User> GetAllUsers();
         User? GetUserById(int id);
-        User AddUser(User user);
-        User? UpdateUser(int id, User user);
-        bool DeleteUser(int id);
+        User AddUser(UserDTO userDTO);
+        User? UpdateUser(int id, UserDTO userDTO);
+        User? UpdateUserName(int id, string name);
+        (bool, List<User>) DeleteUser(int id);
+        public User? GetByEmail(string email);
     }
 }
