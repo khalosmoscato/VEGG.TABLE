@@ -4,12 +4,10 @@ namespace VEGG.TABLE.Infrastructure.Data;
 
 public class DBContext : DbContext
 {
-    public DbSet<Produce> ProduceTable { get; set; } = null!;
-    public DbSet<User> UserTable { get; set; } = null!;
-
-    public DbSet<UserProduceLike> LikedTable { get; set; } = null!;
-    //public DbSet<UserProduceTransaction> TransactionTable { get; set; }
-
+    public DbSet<Produce> ProduceTable => Set<Produce>();
+    public DbSet<User> UserTable => Set<User>();
+    public DbSet<UserProduceLike> LikedTable => Set<UserProduceLike>();
+    public DbSet<Farm> Farms => Set<Farm>();
 
     public DBContext(DbContextOptions<DBContext> options)
         : base(options) { }
@@ -210,9 +208,20 @@ public class DBContext : DbContext
                 Email = "bossman@live.co.uk",
                 Password = "$2a$11$.L.EhNZir7n.hylCEenduOkBlqrdyXHt0jtDqMrW46jy0.pKbkMw2",
                 UserType = UserType.Buyer
-            }
+            },
+            new User { Id = 2, Name = "FreshFarmers", Email = "contact@fresh.co.uk", Password = "hashed_pw_2", UserType = UserType.Seller },
+            new User { Id = 3, Name = "LondonGreens", Email = "info@londongreens.co.uk", Password = "hashed_pw_3", UserType = UserType.Seller },
+            new User { Id = 4, Name = "SpitalFieldsOrg", Email = "hello@spital.co.uk", Password = "hashed_pw_4", UserType = UserType.Seller },
+            new User { Id = 5, Name = "CrystalVeg", Email = "team@crystalveg.co.uk", Password = "hashed_pw_5", UserType = UserType.Seller }
         );
-        //Juuction table for likes
+        modelBuilder.Entity<Farm>().HasData(
+            new Farm { Id = 1, Name = "Hackney City Farm", Lat = 51.5332, Lng = -0.0632, OwnerId = 1 },
+            new Farm { Id = 2, Name = "Surrey Docks Farm", Lat = 51.4988, Lng = -0.0416, OwnerId = 2 },
+            new Farm { Id = 3, Name = "Kentish Town City Farm", Lat = 51.5478, Lng = -0.1456, OwnerId = 3 },
+            new Farm { Id = 4, Name = "Spitalfields Farm", Lat = 51.5195, Lng = -0.0645, OwnerId = 4 },
+            new Farm { Id = 5, Name = "Crystal Palace Park Farm", Lat = 51.4225, Lng = -0.0635, OwnerId = 5 }
+        );
+        //Junction table for likes
         modelBuilder.Entity<UserProduceLike>()
           .HasKey(like => new { like.UserId, like.ProduceId });
 
@@ -226,18 +235,5 @@ public class DBContext : DbContext
             .WithMany()
             .HasForeignKey(x => x.ProduceId);
 
-        //junction table for Transactions
-        //modelBuilder.Entity<UserProduceTransaction>()
-        //  .HasKey(transaction => new { transaction.SellerId, transaction.BuyerId });
-
-        //modelBuilder.Entity<UserProduceTransaction>()
-        //    .HasOne(transaction => transaction.Seller)
-        //    .WithMany()
-        //    .HasForeignKey(transaction => transaction.SellerId);
-
-        //modelBuilder.Entity<UserProduceTransaction>()
-        //    .HasOne(transaction => transaction.Buyer)
-        //    .WithMany()
-        //    .HasForeignKey(transaction => transaction.BuyerId);
     }
 }
