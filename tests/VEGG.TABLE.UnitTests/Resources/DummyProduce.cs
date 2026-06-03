@@ -6,7 +6,7 @@ namespace VEGG.TABLE.UnitTests.Resources;
 
 internal class DummyProduce
 {
-    public static readonly List<Produce> produceItems = new List<Produce>
+    public static readonly List<Produce> DummyProduceList = new List<Produce>
     {
     new()
     {

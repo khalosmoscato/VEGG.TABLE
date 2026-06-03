@@ -1,3 +1,5 @@
+using VEGG.TABLE.UnitTests.Resources;
+
 namespace VEGG.TABLE.UnitTests.Services;
 
 public class ProduceServiceTests
@@ -83,11 +85,23 @@ public class ProduceServiceTests
     [Test]
     public void GetProduceByUserIdAll_returnsProduce()
     {
+        //Arrange
         var parameter = 1;
-        _mockRepo.Setup(r => r.GetProduceByUserIdAll(parameter)).Returns();
+        var produceList = DummyProduce.DummyProduceList;
+        var expectedProduce = produceList.Where(p => p.UserId == parameter).ToList();
+        _mockRepo.Setup(r => r.GetProduceByUserIdAll(parameter)).Returns(expectedProduce);
+        
+        foreach(Produce p in expectedProduce) Console.WriteLine(p.Name + p.ProduceId);
+        //Act
+        var result = _service.GetProduceByUserIdAll(parameter);
 
-        var result = _service.DeleteProduce(99);
-
-        result.Should().BeFalse();
+        //ASSERT
+        //check that the correct function is called
+        _mockRepo.Verify(x => x.GetProduceByUserIdAll(parameter), Times.Once);
+        //check result type
+        Assert.IsInstanceOf<List<Produce>>(result);
+        //check the data is matching expected
+        Assert.IsNotNull(result);
+        Assert.That(result, Is.EquivalentTo(expectedProduce));
     }
 }
