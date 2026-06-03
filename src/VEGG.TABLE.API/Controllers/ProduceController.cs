@@ -18,6 +18,18 @@ public class ProduceController : ControllerBase
         return Ok(_produceService.GetAllProduces());
     }
 
+    // GET: api/produce
+    [HttpGet]
+    public IActionResult GetAllProduceOnSale()
+    {
+        var onSale = _produceService.GetAllProduceOnSale();
+        if (onSale != null)
+        {
+            return Ok(onSale);
+        }
+        else return NoContent();
+    }
+
     // GET: api/produce/1
     [HttpGet("{id}")]
     public IActionResult GetProduceById(int id)

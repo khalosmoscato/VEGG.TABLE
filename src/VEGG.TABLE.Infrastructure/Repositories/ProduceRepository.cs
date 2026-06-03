@@ -43,6 +43,14 @@ public class ProduceRepository : IProduceRepository
         return produceList;
     }
 
+    public List<Produce>? GetAllProduceOnSale()
+    {
+        var onSaleList = _context.ProduceTable
+            .Where(p => p.IsOnSale == true)
+            .ToList();
+        if (onSaleList.Count > 0) {return onSaleList;}
+        return null;
+    }
     public Produce AddProduce(Produce produce)
     {
         _context.ProduceTable.Add(produce);
