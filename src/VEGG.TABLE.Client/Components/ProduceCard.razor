@@ -1,8 +1,22 @@
 ﻿@using VEGG.TABLE.Core.Entities
 @inject NavigationManager Navigation
 
-<div class="produce-card border border-primary/20 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 p-4 bg-primary text-white flex flex-col text-center">
+@* I added 'relative' to the class list below so the absolute heart stays inside the card *@
+<div class="produce-card relative border border-primary/20 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 p-4 bg-primary text-white flex flex-col text-center">
     
+    <button @onclick="ToggleFavorite" class="absolute top-2 right-2 p-2 hover:bg-white/10 rounded-full transition-all">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 transition-colors duration-200 text-white/50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+        </svg>
+    </button>
+
+    @if (showLoginMsg)
+    {
+        <div class="absolute top-12 right-2 bg-white text-primary text-xs px-2 py-1 rounded shadow-md z-10">
+            Login required
+        </div>
+    }
+
     <div class="w-full h-40 bg-white/10 rounded-md mb-3 flex items-center justify-center text-6xl">
         @GetProduceEmoji(Item.Name)
     </div>
@@ -20,6 +34,9 @@
 @code {
     [Parameter] public Produce Item { get; set; } = default!;
 
+    // This variable is required for the code to compile
+    private bool showLoginMsg = false;
+
     private string GetProduceEmoji(string name) => name.ToLower() switch
     {
         "plums" => "🍑",
@@ -34,6 +51,15 @@
         "cucumbers" => "🥒",
         _ => "🥦"
     };
+
+    private async Task ToggleFavorite()
+    {
+        showLoginMsg = true;
+        StateHasChanged();
+        await Task.Delay(2000);
+        showLoginMsg = false;
+        StateHasChanged();
+    }
 
     private void RequestToBuy(Produce item)
     {
