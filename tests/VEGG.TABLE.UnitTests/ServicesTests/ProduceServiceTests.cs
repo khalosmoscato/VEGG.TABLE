@@ -7,26 +7,27 @@ public class ProduceServiceTests
     private Mock<IProduceRepository> _mockRepo = null!;
     private ProduceService _service = null!;
 
+    private static List<Produce> testProduce = new List<Produce> { };
+
     [SetUp]
     public void Setup()
     {
         _mockRepo = new Mock<IProduceRepository>();
         _service = new ProduceService(_mockRepo.Object);
+
+        testProduce = DummyProduce.DummyProduceList;
     }
 
     [Test]
     public void GetAllProduces_ReturnsAllFromRepository()
     {
-        var produces = new List<Produce>
-        {
-            new Produce { ProduceId = 1, Name = "Apples", UserId = 1 },
-            new Produce { ProduceId = 2, Name = "Bananas", UserId = 2 }
-        };
-        _mockRepo.Setup(r => r.GetAllProduces()).Returns(produces);
+
+        var produces = testProduce;
+        _mockRepo.Setup(r => r.GetAllProduces()).Returns(testProduce);
 
         var result = _service.GetAllProduces();
 
-        result.Should().BeEquivalentTo(produces);
+        result.Should().BeEquivalentTo(testProduce);
     }
 
     [Test]
@@ -126,7 +127,6 @@ public class ProduceServiceTests
         //check the data is matching expected
         Assert.That(result, Is.EquivalentTo(expectedProduce));
     }
-
 
     [Test]
     public void GetProduceByUserId_returnsProduceOnSale()

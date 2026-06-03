@@ -24,11 +24,21 @@ public class ProduceRepository : IProduceRepository
 
     public List<Produce>? GetProduceByUserId(int userId)
     {
+        var user = _context.UserTable.FirstOrDefault(u => u.Id == userId);
+        if (user == null)
+        {
+            return null;
+        }
         var produceList = _context.ProduceTable.Where(p => p.UserId == userId && p.IsOnSale == true).ToList();
         return produceList;   
     }
     public List<Produce>? GetProduceByUserIdAll(int userId)
     {
+        var user = _context.UserTable.FirstOrDefault(u => u.Id == userId);
+        if (user == null)
+        {
+            return null;
+        }
         var produceList = _context.ProduceTable.Where(p => p.UserId == userId).ToList();
         return produceList;
     }

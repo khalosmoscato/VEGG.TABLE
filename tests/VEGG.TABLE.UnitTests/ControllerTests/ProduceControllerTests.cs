@@ -12,23 +12,26 @@ public class ProduceControllerTests
     private Mock<IProduceService> _mockService = null!;
     private ProduceController _controller = null!;
 
+    private static List<Produce> testProduce = new List<Produce> { };
+
     [SetUp]
     public void Setup()
     {
         _mockService = new Mock<IProduceService>();
         _controller = new ProduceController(_mockService.Object);
+
+        testProduce = DummyProduce.DummyProduceList;
     }
 
     [Test]
     public void GetAllProduces_ReturnsAllFromService()
     {
-        var produces = new List<Produce>
-        {
-            new Produce { ProduceId = 1, Name = "Apples", UserId = 1 },
-            new Produce { ProduceId = 2, Name = "Bananas", UserId = 2 }
-        };
+        //arrange
+        var produces = testProduce;
+
         _mockService.Setup(s => s.GetAllProduces()).Returns(produces);
 
+        //Act
         var result = _controller.GetAllProduces();
 
         //ASSERT
@@ -183,4 +186,44 @@ public class ProduceControllerTests
         Assert.That(resultPayload, Is.EquivalentTo(expectedProduce));
     }
 
+    [Test]
+    public void GetProduceByUserId_returnsNotFoundWhenNoUser()
+    {
+        //ARRANGE
+        var parameter = 0;
+        var produceList = DummyProduce.DummyProduceList;
+        var expectedProduce = produceList.Where(p => p.UserId == parameter && p.IsOnSale == true).ToList();
+        _mockService.Setup(s => s.GetProduceByUserId(parameter)).Returns(expectedProduce);
+
+        foreach (Produce p in expectedProduce) Console.WriteLine(p.Name + p.ProduceId);
+        //ACT
+        var result = _controller.GetProduceByUserId(parameter);
+
+        //ASSERT
+        //check that the correct function is called
+        _mockService.Verify(x => x.GetProduceByUserId(parameter), Times.Once);
+        //check result type
+        Assert.IsInstanceOf<NotFoundResult>(result);
+    }
+
+    [Test]
+    public void GetProduceByUserId_returnsNotFoundWhenNoProduce()
+    {
+        //ARRANGE
+        var parameter = 3;
+        var produceList = DummyProduce.DummyProduceList;
+        var expectedProduce = produceList.Where(p => p.UserId == parameter && p.IsOnSale == true).ToList();
+        _mockService.Setup(s => s.GetProduceByUserId(parameter)).Returns(expectedProduce);
+
+        foreach (Produce p in expectedProduce) Console.WriteLine(p.Name + p.ProduceId);
+        //ACT
+        var result = _controller.GetProduceByUserId(parameter);
+
+        //ASSERT
+        //check that the correct function is called
+        _mockService.Verify(x => x.GetProduceByUserId(parameter), Times.Once);
+        //check result type
+        Assert.IsInstanceOf<NoContentResult>(result);
+        
+    }
 }

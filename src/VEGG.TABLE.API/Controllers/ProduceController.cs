@@ -30,12 +30,15 @@ public class ProduceController : ControllerBase
     }
 
     // GET: api/produce/seller/1/
+    //Shows what is on sale for a particular seller
     [HttpGet("seller/{userId}")]
     public IActionResult GetProduceByUserId(int userId)
     {
         List<Produce>? produceList = _produceService.GetProduceByUserId(userId);
 
         if (produceList == null) return NotFound();
+        
+        if (produceList.Count == 0) return NoContent();
 
         return Ok(produceList);
     }
@@ -44,10 +47,11 @@ public class ProduceController : ControllerBase
     [HttpGet("seller/all/{userId}")]
     public IActionResult GetProduceByUserIdAll(int userId)
     {
-        List<Produce>? produceList = _produceService.GetProduceByUserIdAll(userId);
+        List<Produce>? produceList = _produceService.GetProduceByUserId(userId);
 
         if (produceList == null) return NotFound();
 
+        if (produceList.Count == 0) return NoContent();
         return Ok(produceList);
     }
 
@@ -66,7 +70,8 @@ public class ProduceController : ControllerBase
         var result = _produceService.DeleteProduce(id);
 
         if (!result)
-            return NotFound();
+            
+        return NotFound();
 
         return NoContent();
     }
