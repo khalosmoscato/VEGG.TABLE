@@ -4,12 +4,10 @@ namespace VEGG.TABLE.Infrastructure.Data;
 
 public class DBContext : DbContext
 {
-    public DbSet<Produce> ProduceTable { get; set; } = null!;
-    public DbSet<User> UserTable { get; set; } = null!;
-
-    public DbSet<UserProduceLike> LikedTable { get; set; } = null!;
-    //public DbSet<UserProduceTransaction> TransactionTable { get; set; }
-
+    public DbSet<Produce> ProduceTable => Set<Produce>();
+    public DbSet<User> UserTable => Set<User>();
+    public DbSet<UserProduceLike> LikedTable => Set<UserProduceLike>();
+    public DbSet<Farm> Farms => Set<Farm>();
 
     public DBContext(DbContextOptions<DBContext> options)
         : base(options) { }
