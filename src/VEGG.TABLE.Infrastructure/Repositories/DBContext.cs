@@ -214,6 +214,13 @@ public class DBContext : DbContext
             new User { Id = 4, Name = "SpitalFieldsOrg", Email = "hello@spital.co.uk", Password = "hashed_pw_4", UserType = UserType.Seller },
             new User { Id = 5, Name = "CrystalVeg", Email = "team@crystalveg.co.uk", Password = "hashed_pw_5", UserType = UserType.Seller }
         );
+        modelBuilder.Entity<Farm>().HasData(
+            new Farm { Id = 1, Name = "Hackney City Farm", Lat = 51.5332, Lng = -0.0632, OwnerId = 1 },
+            new Farm { Id = 2, Name = "Surrey Docks Farm", Lat = 51.4988, Lng = -0.0416, OwnerId = 2 },
+            new Farm { Id = 3, Name = "Kentish Town City Farm", Lat = 51.5478, Lng = -0.1456, OwnerId = 3 },
+            new Farm { Id = 4, Name = "Spitalfields Farm", Lat = 51.5195, Lng = -0.0645, OwnerId = 4 },
+            new Farm { Id = 5, Name = "Crystal Palace Park Farm", Lat = 51.4225, Lng = -0.0635, OwnerId = 5 }
+        );
         //Junction table for likes
         modelBuilder.Entity<UserProduceLike>()
           .HasKey(like => new { like.UserId, like.ProduceId });
