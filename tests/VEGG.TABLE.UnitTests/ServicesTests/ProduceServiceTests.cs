@@ -106,6 +106,29 @@ public class ProduceServiceTests
     }
 
     [Test]
+    public void GetProduceByUserIdAll_returnsNotFound()
+    {
+        //Arrange
+        var parameter = 0;
+        var produceList = DummyProduce.DummyProduceList;
+        var expectedProduce = produceList.Where(p => p.UserId == parameter).ToList();
+        _mockRepo.Setup(r => r.GetProduceByUserIdAll(parameter)).Returns(expectedProduce);
+
+        foreach (Produce p in expectedProduce) Console.WriteLine(p.Name + p.ProduceId);
+        //Act
+        var result = _service.GetProduceByUserIdAll(parameter);
+
+        //ASSERT
+        //check that the correct function is called
+        _mockRepo.Verify(x => x.GetProduceByUserIdAll(parameter), Times.Once);
+        //check result type
+        Assert.IsInstanceOf<List<Produce>>(result);
+        //check the data is matching expected
+        Assert.That(result, Is.EquivalentTo(expectedProduce));
+    }
+
+
+    [Test]
     public void GetProduceByUserId_returnsProduceOnSale()
     {
         //ARRANGE
