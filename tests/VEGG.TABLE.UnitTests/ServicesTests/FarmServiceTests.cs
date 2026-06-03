@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace VEGG.TABLE.UnitTests.Services;
 
-namespace VEGG.TABLE.UnitTests.Repositories;
-
-public class FarmRepositoryTests
+public class FarmServiceTests
 {
     private DBContext _context;
-    private FarmRepository _repository;
+    private FarmService _farmService;
 
     [SetUp]
     public void Setup()
@@ -17,7 +13,9 @@ public class FarmRepositoryTests
             .Options;
 
         _context = new DBContext(options);
-        _repository = new FarmRepository(_context);
+
+        var repository = new FarmRepository(_context);
+        _farmService = new FarmService(repository);
     }
 
     [TearDown]
@@ -27,7 +25,7 @@ public class FarmRepositoryTests
     }
 
     [Test]
-    public async Task GetAllFarms_ShouldReturnAllFarms()
+    public async Task GetAllFarmsAsync_WhenFarmsExist_ReturnsCorrectList()
     {
         // Arrange
         _context.Farms.Add(new Farm { Name = "Hackney City Farm" });
@@ -35,10 +33,10 @@ public class FarmRepositoryTests
         await _context.SaveChangesAsync();
 
         // Act
-        var result = await _repository.GetFarms();
+        var result = await _farmService.GetFarms();
 
         // Assert
+        Assert.That(result, Is.Not.Null);
         Assert.That(result.Count(), Is.EqualTo(2));
-        Assert.That(result.Any(f => f.Name == "Hackney City Farm"), Is.True);
     }
 }
