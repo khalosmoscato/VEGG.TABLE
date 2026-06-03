@@ -27,6 +27,11 @@ public class ProduceRepository : IProduceRepository
         var produceList = _context.ProduceTable.Where(p => p.UserId == userId && p.IsOnSale == true).ToList();
         return produceList;   
     }
+    public List<Produce>? GetProduceByUserIdAll(int userId)
+    {
+        var produceList = _context.ProduceTable.Where(p => p.UserId == userId).ToList();
+        return produceList;
+    }
 
     public Produce AddProduce(Produce produce)
     {

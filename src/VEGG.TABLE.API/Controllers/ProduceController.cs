@@ -41,6 +41,18 @@ public class ProduceController : ControllerBase
         return Ok(produceList);
     }
 
+    // GET: api/produce/seller/all/1
+
+    [HttpGet("/produce/seller/all/{id}")]
+    public IActionResult GetProduceByUserIdAll(int userId)
+    {
+        List<Produce>? produceList = _produceService.GetProduceByUserId(userId);
+
+        if (produceList == null) return NotFound();
+
+        return Ok(produceList);
+    }
+
     // POST: api/produce
     [HttpPost]
     public IActionResult AddProduce(Produce produce)
