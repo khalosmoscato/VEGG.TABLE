@@ -208,7 +208,11 @@ public class DBContext : DbContext
                 Email = "bossman@live.co.uk",
                 Password = "highthere",
                 UserType = UserType.Buyer
-            }
+            },
+            new User { Id = 2, Name = "FreshFarmers", Email = "contact@fresh.co.uk", Password = "hashed_pw_2", UserType = UserType.Seller },
+            new User { Id = 3, Name = "LondonGreens", Email = "info@londongreens.co.uk", Password = "hashed_pw_3", UserType = UserType.Seller },
+            new User { Id = 4, Name = "SpitalFieldsOrg", Email = "hello@spital.co.uk", Password = "hashed_pw_4", UserType = UserType.Seller },
+            new User { Id = 5, Name = "CrystalVeg", Email = "team@crystalveg.co.uk", Password = "hashed_pw_5", UserType = UserType.Seller }
         );
         //Juuction table for likes
         modelBuilder.Entity<UserProduceLike>()
