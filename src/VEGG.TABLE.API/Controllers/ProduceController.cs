@@ -50,7 +50,7 @@ public class ProduceController : ControllerBase
 
         if (produceList == null) return NotFound();
         
-        if (produceList.Count == 0) return NoContent();
+        if (!produceList.Any()) return NoContent();
 
         return Ok(produceList);
     }
@@ -59,11 +59,11 @@ public class ProduceController : ControllerBase
     [HttpGet("seller/all/{userId}")]
     public IActionResult GetProduceByUserIdAll(int userId)
     {
-        List<Produce>? produceList = _produceService.GetProduceByUserId(userId);
+        List<Produce>? produceList = _produceService.GetProduceByUserIdAll(userId);
 
         if (produceList == null) return NotFound();
 
-        if (produceList.Count == 0) return NoContent();
+        if (!produceList.Any()) return NoContent();
         return Ok(produceList);
     }
 

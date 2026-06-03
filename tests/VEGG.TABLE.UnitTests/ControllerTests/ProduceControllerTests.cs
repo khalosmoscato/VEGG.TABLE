@@ -192,10 +192,13 @@ public class ProduceControllerTests
         //ARRANGE
         var parameter = 0;
         var produceList = DummyProduce.DummyProduceList;
-        var expectedProduce = produceList.Where(p => p.UserId == parameter && p.IsOnSale == true).ToList();
+        List<Produce>? expectedProduce = null;
+        var user = produceList.FirstOrDefault(p => p.UserId == parameter);
+            if(user != null){
+            expectedProduce = produceList.Where(p => p.UserId == parameter && p.IsOnSale == true).ToList();
+            };
         _mockService.Setup(s => s.GetProduceByUserId(parameter)).Returns(expectedProduce);
 
-        foreach (Produce p in expectedProduce) Console.WriteLine(p.Name + p.ProduceId);
         //ACT
         var result = _controller.GetProduceByUserId(parameter);
 
