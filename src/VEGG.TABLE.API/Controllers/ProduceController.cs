@@ -30,7 +30,6 @@ public class ProduceController : ControllerBase
     }
 
     // GET: api/produce/seller/1/
-
     [HttpGet("/produce/seller/{id}")]
     public IActionResult GetProduceByUserId(int userId)
     {
@@ -42,11 +41,10 @@ public class ProduceController : ControllerBase
     }
 
     // GET: api/produce/seller/all/1
-
     [HttpGet("/produce/seller/all/{id}")]
     public IActionResult GetProduceByUserIdAll(int userId)
     {
-        List<Produce>? produceList = _produceService.GetProduceByUserId(userId);
+        List<Produce>? produceList = _produceService.GetProduceByUserIdAll(userId);
 
         if (produceList == null) return NotFound();
 

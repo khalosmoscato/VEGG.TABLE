@@ -1,82 +1,186 @@
+using System.Data.Common;
+using System.Reflection.Metadata;
+
+using Microsoft.AspNetCore.Mvc;
+
+using VEGG.TABLE.UnitTests.Resources;
+
 namespace VEGG.TABLE.UnitTests.Services;
 
 public class ProduceControllerTests
 {
-    private Mock<IProduceRepository> _mockRepo = null!;
-    private ProduceService _service = null!;
+    private Mock<IProduceService> _mockService = null!;
+    private ProduceController _controller = null!;
 
     [SetUp]
     public void Setup()
     {
-        _mockRepo = new Mock<IProduceRepository>();
-        _service = new ProduceService(_mockRepo.Object);
+        _mockService = new Mock<IProduceService>();
+        _controller = new ProduceController(_mockService.Object);
     }
 
     [Test]
-    public void GetAllProduces_ReturnsAllFromRepository()
+    public void GetAllProduces_ReturnsAllFromService()
     {
         var produces = new List<Produce>
         {
             new Produce { ProduceId = 1, Name = "Apples", UserId = 1 },
             new Produce { ProduceId = 2, Name = "Bananas", UserId = 2 }
         };
-        _mockRepo.Setup(r => r.GetAllProduces()).Returns(produces);
+        _mockService.Setup(s => s.GetAllProduces()).Returns(produces);
 
-        var result = _service.GetAllProduces();
+        var result = _controller.GetAllProduces();
 
-        result.Should().BeEquivalentTo(produces);
+        //ASSERT
+        //check that the correct function is called
+        _mockService.Verify(x => x.GetAllProduces(), Times.Once);
+        //check result type
+        Assert.IsInstanceOf<OkObjectResult>(result);
+        //cast the controlleroutput as a message object in order to extract its value
+        var resultObject = result as OkObjectResult;
+        var resultPayload = resultObject?.Value as List<Produce>;
+        //check the data is matching expected
+        Assert.IsNotNull(result);
+        Assert.That(resultPayload, Is.EquivalentTo(produces));
     }
 
     [Test]
     public void GetProduceById_ReturnsProduce_WhenFound()
     {
         var produce = new Produce { ProduceId = 1, Name = "Apples", UserId = 1 };
-        _mockRepo.Setup(r => r.GetProduceById(1)).Returns(produce);
+        _mockService.Setup(s => s.GetProduceById(1)).Returns(produce);
 
-        var result = _service.GetProduceById(1);
+        var result = _controller.GetProduceById(1);
 
-        result.Should().Be(produce);
+        //ASSERT
+        //check that the correct function is called
+        _mockService.Verify(x => x.GetProduceById(1), Times.Once);
+        //check result type
+        Assert.IsInstanceOf<OkObjectResult>(result);
+        //cast the controlleroutput as a message object in order to extract its value
+        var resultObject = result as OkObjectResult;
+        var resultPayload = resultObject?.Value as Produce;
+        //check the data is matching expected
+        Assert.IsNotNull(result);
+        Assert.That(resultPayload, Is.EqualTo(produce));
+
     }
 
     [Test]
     public void GetProduceById_ReturnsNull_WhenNotFound()
     {
-        _mockRepo.Setup(r => r.GetProduceById(99)).Returns((Produce?)null);
+        _mockService.Setup(s => s.GetProduceById(99)).Returns((Produce?)null);
 
-        var result = _service.GetProduceById(99);
+        var result = _controller.GetProduceById(99);
 
-        result.Should().BeNull();
+        //ASSERT
+        //check that the correct function is called
+        _mockService.Verify(x => x.GetProduceById(99), Times.Once);
+        //check result type
+        Assert.IsInstanceOf<NotFoundResult>(result);
     }
 
     [Test]
     public void AddProduce_ReturnsCreatedProduce()
     {
         var produce = new Produce { ProduceId = 1, Name = "Apples", UserId = 1 };
-        _mockRepo.Setup(r => r.AddProduce(produce)).Returns(produce);
+        _mockService.Setup(s => s.AddProduce(produce)).Returns(produce);
 
-        var result = _service.AddProduce(produce);
+        var result = _controller.AddProduce(produce);
 
-        result.Should().Be(produce);
-        _mockRepo.Verify(r => r.AddProduce(produce), Times.Once);
+        //ASSERT
+        //check that the correct function is called
+        _mockService.Verify(x => x.AddProduce(produce), Times.Once);
+        //check result type
+        Assert.IsInstanceOf<CreatedAtActionResult>(result);
+        //cast the controlleroutput as a message object in order to extract its value
+        var resultObject = result as CreatedAtActionResult;
+        var resultPayload = resultObject?.Value as Produce;
+        //check the data is matching expected
+        Assert.That(resultPayload, Is.EqualTo(produce));
+        //Assert.That(users, Is.EquivalentTo(expectedUsers))
     }
 
     [Test]
     public void DeleteProduce_ReturnsTrue_WhenDeleted()
     {
-        _mockRepo.Setup(r => r.DeleteProduce(1)).Returns(true);
+        _mockService.Setup(s => s.DeleteProduce(1)).Returns(true);
 
-        var result = _service.DeleteProduce(1);
+        var result = _controller.DeleteProduce(1);
 
-        result.Should().BeTrue();
+        //ASSERT
+        //check that the correct function is called
+        _mockService.Verify(x => x.DeleteProduce(1), Times.Once);
+        //check result type
+        Assert.IsInstanceOf<NoContentResult>(result);
+        
     }
 
     [Test]
     public void DeleteProduce_ReturnsFalse_WhenNotFound()
     {
-        _mockRepo.Setup(r => r.DeleteProduce(99)).Returns(false);
+        _mockService.Setup(s => s.DeleteProduce(99)).Returns(false);
 
-        var result = _service.DeleteProduce(99);
+        var result = _controller.DeleteProduce(99);
 
-        result.Should().BeFalse();
+        //check that the correct function is called
+        _mockService.Verify(x => x.DeleteProduce(99), Times.Once);
+        //check result type
+        Assert.IsInstanceOf<NotFoundResult>(result);
+       
     }
+
+    [Test]
+    public void GetProduceByUserIdAll_returnsProduce()
+    {
+        //Arrange
+        var parameter = 1;
+        var produceList = DummyProduce.DummyProduceList;
+        var expectedProduce = produceList.Where(p => p.UserId == parameter).ToList();
+        _mockService.Setup(s => s.GetProduceByUserIdAll(parameter)).Returns(expectedProduce);
+        
+        foreach (Produce p in expectedProduce) Console.WriteLine(p.Name + p.ProduceId);
+        //Act
+        var result = _controller.GetProduceByUserIdAll(parameter);
+
+        //ASSERT
+        //check that the correct function is called
+        _mockService.Verify(x => x.GetProduceByUserIdAll(parameter), Times.Once);
+        //check result type
+        Assert.IsInstanceOf<OkObjectResult>(result);
+        //cast the controlleroutput as a message object in order to extract its value
+        var resultObject = result as OkObjectResult;
+        var resultPayload = resultObject?.Value as List<Produce>;
+        //check the data is matching expected
+        Assert.IsNotNull(result);
+        Assert.That(resultPayload, Is.EquivalentTo(expectedProduce));
+
+    }
+
+    [Test]
+    public void GetProduceByUserId_returnsProduceOnSale()
+    {
+        //ARRANGE
+        var parameter = 1;
+        var produceList = DummyProduce.DummyProduceList;
+        var expectedProduce = produceList.Where(p => p.UserId == parameter && p.IsOnSale == true).ToList();
+        _mockService.Setup(s => s.GetProduceByUserId(parameter)).Returns(expectedProduce);
+
+        foreach (Produce p in expectedProduce) Console.WriteLine(p.Name + p.ProduceId);
+        //ACT
+        var result = _controller.GetProduceByUserId(parameter);
+
+        //ASSERT
+        //check that the correct function is called
+        _mockService.Verify(x => x.GetProduceByUserId(parameter), Times.Once);
+        //check result type
+        Assert.IsInstanceOf<OkObjectResult>(result);
+        //cast the controlleroutput as a message object in order to extract its value
+        var resultObject = result as OkObjectResult;
+        var resultPayload = resultObject?.Value as List<Produce>;
+        //check the data is matching expected
+        Assert.IsNotNull(result);
+        Assert.That(resultPayload, Is.EquivalentTo(expectedProduce));
+    }
+
 }
