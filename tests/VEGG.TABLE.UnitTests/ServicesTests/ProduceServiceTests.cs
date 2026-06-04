@@ -1,3 +1,5 @@
+using System.Collections;
+
 using Microsoft.AspNetCore.Mvc;
 
 using VEGG.TABLE.UnitTests.Resources;
@@ -104,11 +106,11 @@ public class ProduceServiceTests
     }
 
     [Test]
-    public void AddProduce_ReturnsCreatedProduce()
+    public void AddProduce_ReturnsUpdatedProduce()
     {
         //ARRANGE
         var produceList = testProduce;
-        var produceDTO = new ProduceDTO {  Name = "Apples", UserId = 1 };
+        var produceDTO = new CreateProduceDTO { Name = "Apples", UserId = 1, Stock =5, Description= "An Apple", IsOnSale = true, Price = 2.00};
         var produce = new Produce { ProduceId = 8, Name = "Apples", UserId = 1 };
         _mockRepo.Setup(r => r.AddProduce(produceDTO)).Returns(produce);
         //ACT
@@ -116,6 +118,46 @@ public class ProduceServiceTests
         //ASSERT
         result.Should().Be(produce);
         _mockRepo.Verify(r => r.AddProduce(produceDTO), Times.Once);
+    }
+
+    [Test]
+    public void UpdateProduce_ReturnsCreatedProduce()
+    {
+        //ARRANGE
+        var produceList = testProduce;
+        var produceDTO = new ProduceDTO { Name = "Apples", UserId = 1, Stock = 5, Description = "An Apple", IsOnSale = true, Price = 2.00 };
+        var produce = new Produce { ProduceId = 8, Name = "Apples", UserId = 1, Stock = 5, Description = "An Apple", IsOnSale = true, Price = 2.00 };
+        _mockRepo.Setup(r => r.UpdateProduce(8, produceDTO)).Returns(produce);
+
+        //ACT
+        var result = _service.UpdateProduce(8, produceDTO);
+
+        //ASSERT
+        //check that the correct function is called
+        _mockRepo.Verify(x => x.UpdateProduce(8, produceDTO), Times.Once);
+        //check result type
+        Assert.IsInstanceOf<Produce>(result);
+        //check the data is matching expected
+        Assert.That(result, Is.EqualTo(produce));
+    }
+
+    [Test]
+    public void UpdateProduce_Returnsnull_WhenNoproduce()
+    {
+        //ARRANGE
+        var produceList = testProduce;
+        var produceDTO = new ProduceDTO { Name = "Apples", UserId = 1, Stock = 5, Description = "An Apple", IsOnSale = true, Price = 2.00 };
+        Produce? produce = null;
+        _mockRepo.Setup(r => r.UpdateProduce(99, produceDTO)).Returns(produce);
+
+        //ACT
+        var result = _service.UpdateProduce(99, produceDTO);
+
+        //ASSERT
+        //check that the correct function is called
+        _mockRepo.Verify(x => x.UpdateProduce(99, produceDTO), Times.Once);
+        //check result type
+        Assert.IsNull(result);
     }
 
     [Test]

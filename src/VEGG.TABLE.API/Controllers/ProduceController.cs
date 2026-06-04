@@ -72,10 +72,19 @@ public class ProduceController : ControllerBase
     // POST: api/produce
     [Authorize(Roles = "Seller")]
     [HttpPost]
-    public IActionResult AddProduce(ProduceDTO produceDTO)
+    public IActionResult AddProduce(CreateProduceDTO produceDTO)
     {
         var created = _produceService.AddProduce(produceDTO);
         return CreatedAtAction(nameof(GetProduceById), new { id = created.ProduceId }, created);
+    }
+
+    // PATCH: api/produce
+    [HttpPatch("{id}")]
+    public IActionResult UpdateProduce(int id, ProduceDTO produceDTO)
+    {
+        var updated = _produceService.UpdateProduce(id, produceDTO);
+        if(updated == null) return NotFound();
+        return Ok(updated);
     }
 
     // DELETE: api/produce/1

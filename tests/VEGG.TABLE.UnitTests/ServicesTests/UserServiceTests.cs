@@ -112,7 +112,6 @@ public class UserServiceTests
         {
             Console.WriteLine(user.Name);
         }
-
         var mockTuple = (true, changedUsers);
         _mockRepo.Setup(repo => repo.DeleteUser(parameter)).Returns(mockTuple);
 
@@ -133,6 +132,33 @@ public class UserServiceTests
         {
             Console.WriteLine(userResult.Name);
         }
+    }
+
+    [Test]
+    public void Delete_NotOk()
+    {
+        // Arrange
+        int parameter = 2;
+        List<User> changedUsers = testUsers;
+        User? targetUser = changedUsers.FirstOrDefault(x => x.Id == parameter);
+        if (targetUser != null)
+        {
+            changedUsers.Remove(targetUser);
+        }
+        var mockTuple = (false, changedUsers);
+        _mockRepo.Setup(repo => repo.DeleteUser(parameter)).Returns(mockTuple);
+
+        // Act
+        var result = _service.DeleteUser(parameter);
+
+        //ASSERT
+        //check that the correct function is called
+        _mockRepo.Verify(x => x.DeleteUser(parameter), Times.Once);
+        //check result type
+        Assert.That(result, Is.EqualTo(mockTuple));
+        Assert.That(result.Item1, Is.EqualTo(false));
+        Assert.That(result.Item2, Is.EqualTo(changedUsers));
+
     }
 
     [Test]
