@@ -20,7 +20,10 @@
         sortedFarms.forEach(farm => {
             const marker = L.marker([farm.lat, farm.lng])
                 .addTo(map)
-                .bindPopup(`<b>${farm.name}</b><br>Owner: ${farm.ownerName || 'N/A'}`);
+                .bindPopup(`
+                    <b>${farm.name}</b><br>
+                    Contact: <a href="mailto:${farm.ownerEmail}">${farm.ownerEmail || 'N/A'}</a>
+                `);
             // Creates the Sidebar Item
             const item = document.createElement('div');
             item.className = "p-4 border-b cursor-pointer hover:bg-green-50 transition";

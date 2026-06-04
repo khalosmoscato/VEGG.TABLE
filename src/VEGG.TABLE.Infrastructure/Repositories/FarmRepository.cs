@@ -18,7 +18,8 @@ public class FarmRepository : IFarmRepository
                 Name = f.Name,
                 Lat = f.Lat,
                 Lng = f.Lng,
-                OwnerName = f.Owner != null ? f.Owner.Name : "Unknown"
+                OwnerName = f.Owner != null ? f.Owner.Name : "Unknown",
+                OwnerEmail = f.Owner != null ? f.Owner.Email : "No email available"
             })
             .ToListAsync();
     }
