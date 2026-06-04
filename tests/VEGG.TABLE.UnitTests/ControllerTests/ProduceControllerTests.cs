@@ -158,6 +158,49 @@ public class ProduceControllerTests
     }
 
     [Test]
+    public void UpdateProduce_ReturnsUpdatedProduce()
+    {
+        //ARRANGE
+        var produceList = testProduce;
+        var produceDTO = new ProduceDTO { Name = "Apples", UserId = 1, Stock = 5, Description = "An Apple", IsOnSale = true, Price = 2.00 };
+        var produce = new Produce { ProduceId = 8, Name = "Apples", UserId = 1, Stock = 5, Description = "An Apple", IsOnSale = true, Price = 2.00 };
+        _mockService.Setup(r => r.UpdateProduce(8, produceDTO)).Returns(produce);
+
+        //ACT
+        var result = _controller.UpdateProduce(8, produceDTO);
+
+        //ASSERT
+        //check that the correct function is called
+        _mockService.Verify(x => x.UpdateProduce(8, produceDTO), Times.Once);
+        //check result type
+        Assert.IsInstanceOf<OkObjectResult>(result);
+        //cast the controlleroutput as a message object in order to extract its value
+        var resultObject = result as OkObjectResult;
+        var resultPayload = resultObject?.Value as Produce;
+        //check the data is matching expected
+        Assert.That(resultPayload, Is.EqualTo(produce));
+    }
+
+    [Test]
+    public void UpdateProduce_ReturnsNotfound_WhenNoproduce()
+    {
+        //ARRANGE
+        var produceList = testProduce;
+        var produceDTO = new ProduceDTO { Name = "Apples", UserId = 1, Stock = 5, Description = "An Apple", IsOnSale = true, Price = 2.00 };
+        Produce? produce = null;
+        _mockService.Setup(r => r.UpdateProduce(99, produceDTO)).Returns(produce);
+
+        //ACT
+        var result = _controller.UpdateProduce(99, produceDTO);
+
+        //ASSERT
+        //check that the correct function is called
+        _mockService.Verify(x => x.UpdateProduce(99, produceDTO), Times.Once);
+        //check result type
+        Assert.IsInstanceOf<NotFoundResult>(result);
+    }
+
+    [Test]
     public void DeleteProduce_ReturnsTrue_WhenDeleted()
     {
         //ARRANGE

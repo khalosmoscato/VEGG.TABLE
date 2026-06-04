@@ -80,6 +80,7 @@ public class ProduceController : ControllerBase
     public IActionResult UpdateProduce(int id, ProduceDTO produceDTO)
     {
         var updated = _produceService.UpdateProduce(id, produceDTO);
+        if(updated == null) return NotFound();
         return Ok(updated);
     }
 
