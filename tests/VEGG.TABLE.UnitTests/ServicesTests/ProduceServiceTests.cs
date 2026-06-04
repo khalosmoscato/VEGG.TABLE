@@ -56,7 +56,7 @@ public class ProduceServiceTests
         Assert.IsInstanceOf<List<Produce>>(result);
         //check the data is matching expected
         Assert.IsNotNull(result);
-        Assert.That(result, Is.EquivalentTo(expectedProduces));
+        Assert.That(result, Is.EquivalentTo(expectedProduces!));
     }
 
     [Test]
@@ -110,7 +110,7 @@ public class ProduceServiceTests
     {
         //ARRANGE
         var produceList = testProduce;
-        var produceDTO = new CreateProduceDTO { Name = "Apples", UserId = 1, Stock =5, Description= "An Apple", IsOnSale = true, Price = 2.00};
+        var produceDTO = new CreateProduceDTO { Name = "Apples", UserId = 1, Stock = 5, Description = "An Apple", IsOnSale = true, Price = 2.00 };
         var produce = new Produce { ProduceId = 8, Name = "Apples", UserId = 1 };
         _mockRepo.Setup(r => r.AddProduce(produceDTO)).Returns(produce);
         //ACT
@@ -190,8 +190,8 @@ public class ProduceServiceTests
         var produceList = DummyProduce.DummyProduceList;
         var expectedProduce = produceList.Where(p => p.UserId == parameter).ToList();
         _mockRepo.Setup(r => r.GetProduceByUserIdAll(parameter)).Returns(expectedProduce);
-        
-        foreach(Produce p in expectedProduce) Console.WriteLine(p.Name + p.ProduceId);
+
+        foreach (Produce p in expectedProduce) Console.WriteLine(p.Name + p.ProduceId);
         //Act
         var result = _service.GetProduceByUserIdAll(parameter);
 

@@ -29,7 +29,7 @@ public class ProduceRepository : IProduceRepository
             return null;
         }
         var produceList = _context.ProduceTable.Where(p => p.UserId == userId && p.IsOnSale == true).ToList();
-        return produceList;   
+        return produceList;
     }
     public List<Produce>? GetProduceByUserIdAll(int userId)
     {
@@ -47,16 +47,17 @@ public class ProduceRepository : IProduceRepository
         var onSaleList = _context.ProduceTable
             .Where(p => p.IsOnSale == true)
             .ToList();
-        if (!onSaleList.Any()) {return onSaleList;}
+        if (!onSaleList.Any()) { return onSaleList; }
         return null;
     }
     public Produce AddProduce(CreateProduceDTO produceDTO)
     {
-        Produce produce = new Produce {
+        Produce produce = new Produce
+        {
             Category = produceDTO.Category,
             Name = produceDTO.Name,
             Description = produceDTO.Description,
-            IsOnSale =   produceDTO.IsOnSale,
+            IsOnSale = produceDTO.IsOnSale,
             Stock = produceDTO.Stock,
             Price = produceDTO.Price,
             Weight = produceDTO.Weight,
@@ -86,7 +87,7 @@ public class ProduceRepository : IProduceRepository
         {
             targetProduce.Description = produceDTO.Description;
         }
-        if (produceDTO.PhotograghPath != null )
+        if (produceDTO.PhotograghPath != null)
         {
             targetProduce.PhotograghPath = produceDTO.PhotograghPath;
         }
