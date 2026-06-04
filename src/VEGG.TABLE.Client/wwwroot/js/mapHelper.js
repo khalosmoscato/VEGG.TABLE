@@ -15,7 +15,7 @@
         farms.forEach(farm => {
             L.marker([farm.lat, farm.lng])
                 .addTo(map)
-                .bindPopup(`<b>${farm.name}</b><br>Owner ID: ${farm.ownerId}`);
+                .bindPopup(`<b>${farm.name}</b><br>Owner: ${farm.ownerName || 'N/A'}`);
         });
         window.addEventListener('resize', () => {
             map.invalidateSize();
