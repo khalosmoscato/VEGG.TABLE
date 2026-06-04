@@ -18,6 +18,7 @@ namespace VEGG.TABLE.Infrastructure.Services
         public List<Produce>? GetProduceByUserIdAll(int userId) => _produceRepository.GetProduceByUserIdAll(userId);
         public List<Produce>? GetAllProduceOnSale() => _produceRepository.GetAllProduceOnSale();
         public Produce AddProduce(ProduceDTO produceDTO) => _produceRepository.AddProduce(produceDTO);
+        public Produce UpdateProduce(int id, ProduceDTO produceDTO) => _produceRepository.UpdateProduce(id, produceDTO);
         public bool DeleteProduce(int id) => _produceRepository.DeleteProduce(id);
     }
 }

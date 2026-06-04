@@ -75,6 +75,14 @@ public class ProduceController : ControllerBase
         return CreatedAtAction(nameof(GetProduceById), new { id = created.ProduceId }, created);
     }
 
+    // PATCH: api/produce
+    [HttpPatch]
+    public IActionResult UpdateProduce(int id, ProduceDTO produceDTO)
+    {
+        var updated = _produceService.UpdateProduce(id, produceDTO);
+        return Ok(updated);
+    }
+
     // DELETE: api/produce/1
     [HttpDelete("{id}")]
     public IActionResult DeleteProduce(int id)

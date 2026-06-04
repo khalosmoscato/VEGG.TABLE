@@ -9,5 +9,6 @@ public interface IProduceService
     List<Produce>? GetProduceByUserIdAll(int userId);
     List<Produce>? GetAllProduceOnSale();
     Produce AddProduce(ProduceDTO produceDTO);
+    Produce UpdateProduce(int id, ProduceDTO produceDTO);
     bool DeleteProduce(int id);
 }

@@ -1,3 +1,5 @@
+using System.Reflection.Metadata.Ecma335;
+
 using VEGG.TABLE.Core.Entities;
 using VEGG.TABLE.Core.Interfaces;
 
@@ -70,6 +72,56 @@ public class ProduceRepository : IProduceRepository
         return produce;
     }
 
+    public Produce? UpdateProduce(int id, ProduceDTO produceDTO)
+    {
+        var targetProduce = _context.ProduceTable.FirstOrDefault(p => p.ProduceId == id);
+        //if there is no produce to modify we will return null
+        if (targetProduce == null)
+        {
+            return null;
+        }
+
+        if (produceDTO.Name != null && produceDTO.Name != targetProduce.Name)
+        {
+            targetProduce.Name = produceDTO.Name;
+        }
+        if (produceDTO.Description != null && produceDTO.Description != targetProduce.Description)
+        {
+            targetProduce.Description = produceDTO.Description;
+        }
+        if (produceDTO.PhotograghPath != null && produceDTO.PhotograghPath != targetProduce.PhotograghPath)
+        {
+            targetProduce.PhotograghPath = produceDTO.PhotograghPath;
+        }
+        if (produceDTO.Category != targetProduce.Category)
+        {
+            targetProduce.Category = produceDTO.Category;
+        }
+        if (produceDTO.IsOnSale != targetProduce.IsOnSale)
+        {
+            targetProduce.IsOnSale = produceDTO.IsOnSale;
+        }
+        if (produceDTO.Stock != targetProduce.Stock)
+        {
+            targetProduce.Stock = produceDTO.Stock;
+        }
+        if (produceDTO.Price != targetProduce.Price)
+        {
+            targetProduce.Price = produceDTO.Price;
+        }
+        if (produceDTO.Weight != targetProduce.Weight)
+        {
+            targetProduce.Weight = produceDTO.Weight;
+        }
+        if (produceDTO.UserId != targetProduce.UserId)
+        {
+            targetProduce.UserId = produceDTO.UserId;
+        }
+
+        _context.SaveChanges();
+        return targetProduce;
+    }
+
     public bool DeleteProduce(int id)
     {
         var existing = _context.ProduceTable.FirstOrDefault(p => p.ProduceId == id);
@@ -78,4 +130,5 @@ public class ProduceRepository : IProduceRepository
         _context.SaveChanges();
         return true;
     }
+
 }
