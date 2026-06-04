@@ -22,5 +22,34 @@ services:
       retries: 10
       start_period: 30s
 
+  api:
+    build:
+      # Build context is repo root so Dockerfile can COPY src/...
+      context: .
+      dockerfile: src/VEGG.TABLE.API/Dockerfile
+    container_name: veggtable-api
+    ports:
+      - "127.0.0.1:5167:5167"
+    environment:
+      # API talks to sqlserver via the container hostname, not localhost:14333
+      ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=master;User Id=sa;Password=Veggtable#7;TrustServerCertificate=true;"
+      Jwt__Key: "YourSuperSecretKeyMustBeAtLeast16CharactersLong"
+      Jwt__Issuer: "VEGG.TABLE.API"
+      Jwt__Audience: "VEGG.TABLE.Client"
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+
+  client:
+    build:
+      context: .
+      dockerfile: src/VEGG.TABLE.Client/Dockerfile
+    container_name: veggtable-client
+    ports:
+      # Host port 5209 (matches CORS allowlist), container nginx on 80
+      - "127.0.0.1:5209:80"
+    depends_on:
+      - api
+
 volumes:
   veggtable-mssql-data:
