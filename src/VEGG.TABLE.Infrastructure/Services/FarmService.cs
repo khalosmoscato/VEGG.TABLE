@@ -13,7 +13,7 @@ public class FarmService : IFarmService
         _repository = repository;
     }
 
-    public async Task<IEnumerable<Farm>> GetFarms()
+    public async Task<IEnumerable<FarmDTO>> GetFarms()
     {
         return await _repository.GetFarms();
     }
