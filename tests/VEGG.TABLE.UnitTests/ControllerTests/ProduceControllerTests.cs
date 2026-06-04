@@ -136,14 +136,17 @@ public class ProduceControllerTests
     [Test]
     public void AddProduce_ReturnsCreatedProduce()
     {
-        var produce = new Produce { ProduceId = 1, Name = "Apples", UserId = 1 };
-        _mockService.Setup(s => s.AddProduce(produce)).Returns(produce);
-
-        var result = _controller.AddProduce(produce);
-
+        //ARRANGE
+        var produceList = testProduce;
+        var produceDTO = new ProduceDTO { Name = "Apples", UserId = 1 };
+        var produce = new Produce { ProduceId = 8, Name = "Apples", UserId = 1 };
+        _mockService.Setup(r => r.AddProduce(produceDTO)).Returns(produce);
+        //ACT
+        var result = _controller.AddProduce(produceDTO);
+       
         //ASSERT
         //check that the correct function is called
-        _mockService.Verify(x => x.AddProduce(produce), Times.Once);
+        _mockService.Verify(x => x.AddProduce(produceDTO), Times.Once);
         //check result type
         Assert.IsInstanceOf<CreatedAtActionResult>(result);
         //cast the controlleroutput as a message object in order to extract its value

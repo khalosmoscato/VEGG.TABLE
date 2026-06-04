@@ -51,8 +51,20 @@ public class ProduceRepository : IProduceRepository
         if (!onSaleList.Any()) {return onSaleList;}
         return null;
     }
-    public Produce AddProduce(Produce produce)
+    public Produce AddProduce(ProduceDTO produceDTO)
     {
+        Produce produce = new Produce {
+            Category = produceDTO.Category,
+            Name = produceDTO.Name,
+            Description = produceDTO.Description,
+            IsOnSale =   produceDTO.IsOnSale,
+            Stock = produceDTO.Stock,
+            Price = produceDTO.Price,
+            Weight = produceDTO.Weight,
+            PhotograghPath = produceDTO.PhotograghPath,
+            UserId = produceDTO.UserId,
+        };
+
         _context.ProduceTable.Add(produce);
         _context.SaveChanges();
         return produce;

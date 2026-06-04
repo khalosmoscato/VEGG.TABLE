@@ -23,12 +23,12 @@ public class ProduceServiceTests
     [Test]
     public void GetAllProduces_ReturnsAllFromRepository()
     {
-
+        //ARRANGE
         var produces = testProduce;
         _mockRepo.Setup(r => r.GetAllProduces()).Returns(testProduce);
-
+        //ACT
         var result = _service.GetAllProduces();
-
+        //ASSERT
         result.Should().BeEquivalentTo(testProduce);
     }
 
@@ -69,7 +69,6 @@ public class ProduceServiceTests
         }
         _mockRepo.Setup(r => r.GetAllProduceOnSale()).Returns(expectedProduces);
 
-
         //Act
         var result = _service.GetAllProduceOnSale();
 
@@ -84,19 +83,21 @@ public class ProduceServiceTests
     [Test]
     public void GetProduceById_ReturnsProduce_WhenFound()
     {
+        //ARRANGE
         var produce = new Produce { ProduceId = 1, Name = "Apples", UserId = 1 };
         _mockRepo.Setup(r => r.GetProduceById(1)).Returns(produce);
-
+        //ACT
         var result = _service.GetProduceById(1);
-
+        //ASSERT
         result.Should().Be(produce);
     }
 
     [Test]
     public void GetProduceById_ReturnsNull_WhenNotFound()
     {
+        //ARRANGE
         _mockRepo.Setup(r => r.GetProduceById(99)).Returns((Produce?)null);
-
+        //ACT
         var result = _service.GetProduceById(99);
 
         result.Should().BeNull();
@@ -105,32 +106,37 @@ public class ProduceServiceTests
     [Test]
     public void AddProduce_ReturnsCreatedProduce()
     {
-        var produce = new Produce { ProduceId = 1, Name = "Apples", UserId = 1 };
-        _mockRepo.Setup(r => r.AddProduce(produce)).Returns(produce);
-
-        var result = _service.AddProduce(produce);
-
+        //ARRANGE
+        var produceList = testProduce;
+        var produceDTO = new ProduceDTO {  Name = "Apples", UserId = 1 };
+        var produce = new Produce { ProduceId = 8, Name = "Apples", UserId = 1 };
+        _mockRepo.Setup(r => r.AddProduce(produceDTO)).Returns(produce);
+        //ACT
+        var result = _service.AddProduce(produceDTO);
+        //ASSERT
         result.Should().Be(produce);
-        _mockRepo.Verify(r => r.AddProduce(produce), Times.Once);
+        _mockRepo.Verify(r => r.AddProduce(produceDTO), Times.Once);
     }
 
     [Test]
     public void DeleteProduce_ReturnsTrue_WhenDeleted()
     {
+        //ARRANGE
         _mockRepo.Setup(r => r.DeleteProduce(1)).Returns(true);
-
+        //ACT
         var result = _service.DeleteProduce(1);
-
+        //ASSERT
         result.Should().BeTrue();
     }
 
     [Test]
     public void DeleteProduce_ReturnsFalse_WhenNotFound()
     {
+        //ARRANGE
         _mockRepo.Setup(r => r.DeleteProduce(99)).Returns(false);
-
+        //ACT
         var result = _service.DeleteProduce(99);
-
+        //ASSERT
         result.Should().BeFalse();
     }
 

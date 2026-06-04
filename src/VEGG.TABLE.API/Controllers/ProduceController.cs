@@ -69,9 +69,9 @@ public class ProduceController : ControllerBase
 
     // POST: api/produce
     [HttpPost]
-    public IActionResult AddProduce(Produce produce)
+    public IActionResult AddProduce(ProduceDTO produceDTO)
     {
-        var created = _produceService.AddProduce(produce);
+        var created = _produceService.AddProduce(produceDTO);
         return CreatedAtAction(nameof(GetProduceById), new { id = created.ProduceId }, created);
     }
 
