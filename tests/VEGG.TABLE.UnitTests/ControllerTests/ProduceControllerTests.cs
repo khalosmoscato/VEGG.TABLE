@@ -48,6 +48,56 @@ public class ProduceControllerTests
     }
 
     [Test]
+    public void GetAllProducesOnSale_ReturnsAllOnSaleProduce()
+    {
+        //arrange
+        List<Produce> produces = testProduce;
+        var expectedProduces = produces.Where(p => p.IsOnSale == true).ToList();
+        if (expectedProduces.Count == 0)
+        {
+            expectedProduces = null;
+        }
+        _mockService.Setup(s => s.GetAllProduceOnSale()).Returns(expectedProduces);
+
+        //Act
+        var result = _controller.GetAllProduceOnSale();
+
+        //ASSERT
+        //check that the correct function is called
+        _mockService.Verify(x => x.GetAllProduceOnSale(), Times.Once);
+        //check result type
+        Assert.IsInstanceOf<OkObjectResult>(result);
+        //cast the controlleroutput as a message object in order to extract its value
+        var resultObject = result as OkObjectResult;
+        var resultPayload = resultObject?.Value as List<Produce>;
+        //check the data is matching expected
+        Assert.IsNotNull(result);
+        Assert.That(resultPayload, Is.EquivalentTo(expectedProduces));
+    }
+
+    [Test]
+    public void GetAllProducesOnSale_ReturnsEmptyProduceWhenNothingOnSale()
+    {
+        //arrange
+        List<Produce> produces = new List<Produce>();
+        List<Produce>? expectedProduces = produces.Where(p => p.IsOnSale == true).ToList();
+        if (expectedProduces.Count == 0)
+        {
+            expectedProduces = null;
+        }
+        _mockService.Setup(s => s.GetAllProduceOnSale()).Returns(expectedProduces);
+
+        //Act
+        var result = _controller.GetAllProduceOnSale();
+
+        //ASSERT
+        //check that the correct function is called
+        _mockService.Verify(x => x.GetAllProduceOnSale(), Times.Once);
+        //check result type
+        Assert.IsInstanceOf<NoContentResult>(result);
+    }
+
+    [Test]
     public void GetProduceById_ReturnsProduce_WhenFound()
     {
         var produce = new Produce { ProduceId = 1, Name = "Apples", UserId = 1 };

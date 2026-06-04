@@ -18,8 +18,8 @@ public class ProduceController : ControllerBase
         return Ok(_produceService.GetAllProduces());
     }
 
-    // GET: api/produce
-    [HttpGet]
+     //GET: /api/produce/onsale
+    [HttpGet("onsale")]
     public IActionResult GetAllProduceOnSale()
     {
         var onSale = _produceService.GetAllProduceOnSale();
@@ -81,9 +81,7 @@ public class ProduceController : ControllerBase
     {
         var result = _produceService.DeleteProduce(id);
 
-        if (!result)
-            
-        return NotFound();
+        if (!result) { return NotFound(); }
 
         return NoContent();
     }

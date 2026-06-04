@@ -48,7 +48,7 @@ public class ProduceRepository : IProduceRepository
         var onSaleList = _context.ProduceTable
             .Where(p => p.IsOnSale == true)
             .ToList();
-        if (onSaleList.Count > 0) {return onSaleList;}
+        if (!onSaleList.Any()) {return onSaleList;}
         return null;
     }
     public Produce AddProduce(Produce produce)

@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Mvc;
+
 using VEGG.TABLE.UnitTests.Resources;
 
 namespace VEGG.TABLE.UnitTests.Services;
@@ -28,6 +30,55 @@ public class ProduceServiceTests
         var result = _service.GetAllProduces();
 
         result.Should().BeEquivalentTo(testProduce);
+    }
+
+    [Test]
+    public void GetAllProducesOnSale_ReturnsAllOnSaleProduce()
+    {
+        //arrange
+        List<Produce> produces = testProduce;
+        List<Produce>? expectedProduces = produces.Where(p => p.IsOnSale == true).ToList();
+        if (expectedProduces.Count == 0)
+        {
+            expectedProduces = null;
+        }
+        _mockRepo.Setup(r => r.GetAllProduceOnSale()).Returns(expectedProduces);
+
+        //Act
+        List<Produce>? result = _service.GetAllProduceOnSale();
+
+        //ASSERT
+        //check that the correct function is called
+        _mockRepo.Verify(x => x.GetAllProduceOnSale(), Times.Once);
+        //check result type
+        Assert.IsInstanceOf<List<Produce>>(result);
+        //check the data is matching expected
+        Assert.IsNotNull(result);
+        Assert.That(result, Is.EquivalentTo(expectedProduces));
+    }
+
+    [Test]
+    public void GetAllProducesOnSale_ReturnsEmptyProduceWhenNothingOnSale()
+    {
+        //arrange
+        List<Produce> produces = new List<Produce>(); ;
+        List<Produce>? expectedProduces = produces.Where(p => p.IsOnSale == true).ToList();
+        if (expectedProduces.Count == 0)
+        {
+            expectedProduces = null;
+        }
+        _mockRepo.Setup(r => r.GetAllProduceOnSale()).Returns(expectedProduces);
+
+
+        //Act
+        var result = _service.GetAllProduceOnSale();
+
+        //ASSERT
+        //check that the correct function is called
+        _mockRepo.Verify(x => x.GetAllProduceOnSale(), Times.Once);
+        //check result type
+        Assert.IsNull(result);
+
     }
 
     [Test]
