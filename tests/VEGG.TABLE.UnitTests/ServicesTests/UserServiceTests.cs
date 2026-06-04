@@ -47,7 +47,6 @@ public class UserServiceTests
         //ASSERT
         //check that the correct function is called
         _mockRepo.Verify(x => x.GetAllUsers(), Times.Once);
-
         //check result type
         Assert.IsInstanceOf<List<User>>(result);
         //check the data is matching expected

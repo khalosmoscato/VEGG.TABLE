@@ -5,6 +5,9 @@ public interface IProduceRepository
 {
     List<Produce> GetAllProduces();
     Produce? GetProduceById(int id);
-    Produce AddProduce(Produce produce);
+    List<Produce>? GetProduceByUserId(int userId);
+    List<Produce>? GetProduceByUserIdAll(int userId);
+    List<Produce>? GetAllProduceOnSale();
+    Produce AddProduce(ProduceDTO produceDTO);
     bool DeleteProduce(int id);
 }

@@ -18,6 +18,18 @@ public class ProduceController : ControllerBase
         return Ok(_produceService.GetAllProduces());
     }
 
+     //GET: /api/produce/onsale
+    [HttpGet("onsale")]
+    public IActionResult GetAllProduceOnSale()
+    {
+        var onSale = _produceService.GetAllProduceOnSale();
+        if (onSale != null)
+        {
+            return Ok(onSale);
+        }
+        else return NoContent();
+    }
+
     // GET: api/produce/1
     [HttpGet("{id}")]
     public IActionResult GetProduceById(int id)
@@ -29,11 +41,37 @@ public class ProduceController : ControllerBase
         return Ok(produce);
     }
 
+    // GET: api/produce/seller/1/
+    //Shows what is on sale for a particular seller
+    [HttpGet("seller/{userId}")]
+    public IActionResult GetProduceByUserId(int userId)
+    {
+        List<Produce>? produceList = _produceService.GetProduceByUserId(userId);
+
+        if (produceList == null) return NotFound();
+        
+        if (!produceList.Any()) return NoContent();
+
+        return Ok(produceList);
+    }
+
+    // GET: api/produce/seller/all/1
+    [HttpGet("seller/all/{userId}")]
+    public IActionResult GetProduceByUserIdAll(int userId)
+    {
+        List<Produce>? produceList = _produceService.GetProduceByUserIdAll(userId);
+
+        if (produceList == null) return NotFound();
+
+        if (!produceList.Any()) return NoContent();
+        return Ok(produceList);
+    }
+
     // POST: api/produce
     [HttpPost]
-    public IActionResult AddProduce(Produce produce)
+    public IActionResult AddProduce(ProduceDTO produceDTO)
     {
-        var created = _produceService.AddProduce(produce);
+        var created = _produceService.AddProduce(produceDTO);
         return CreatedAtAction(nameof(GetProduceById), new { id = created.ProduceId }, created);
     }
 
@@ -43,8 +81,7 @@ public class ProduceController : ControllerBase
     {
         var result = _produceService.DeleteProduce(id);
 
-        if (!result)
-            return NotFound();
+        if (!result) { return NotFound(); }
 
         return NoContent();
     }

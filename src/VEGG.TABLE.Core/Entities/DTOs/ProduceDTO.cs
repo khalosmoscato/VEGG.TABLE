@@ -11,4 +11,6 @@ public class ProduceDTO
     public string Description { get; set; } = string.Empty;
     public string PhotograghPath { get; set; } = string.Empty;
     public bool IsOnSale { get; set; } = false;
+    public int UserId { get; set; }
+
 }
