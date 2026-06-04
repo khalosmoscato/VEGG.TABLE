@@ -1,4 +1,6 @@
-﻿namespace VEGG.TABLE.API.Controllers;
+﻿using Microsoft.AspNetCore.Authorization;
+
+namespace VEGG.TABLE.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -11,12 +13,14 @@ public class UserController : ControllerBase
         _userService = userService;
     }
     // GET: api/user
+    [Authorize(Roles = "Admin")]
     [HttpGet]
     public IActionResult GetAllUsers()
     {
         return Ok(_userService.GetAllUsers());
     }
     // GET: api/user/1
+    [Authorize]
     [HttpGet("{id}")]
     public IActionResult GetUserById(int id)
     {
@@ -26,6 +30,8 @@ public class UserController : ControllerBase
 
         return Ok(user);
     }
+    
+
     // POST: api/user
     [HttpPost]
     public IActionResult AddUser(UserDTO userDTO)
@@ -34,6 +40,7 @@ public class UserController : ControllerBase
         return CreatedAtAction(nameof(GetUserById), new { id = created.Id }, created);
     }
     // PUT: api/user/1
+    [Authorize(Roles = "Buyer,Seller")]
     [HttpPut("{id}")]
     public IActionResult UpdateUser(int id, UserDTO userDTO)
     {
@@ -45,6 +52,7 @@ public class UserController : ControllerBase
     }
 
     // PUT: api/user/name
+    [Authorize(Roles = "Buyer,Seller")]
     [HttpPut("{id}/name")]
     public IActionResult UpdateUserName(int id, string name)
     {
@@ -56,6 +64,7 @@ public class UserController : ControllerBase
     }
 
     // DELETE: api/user/1
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
     public IActionResult DeleteUser(int id)
     {

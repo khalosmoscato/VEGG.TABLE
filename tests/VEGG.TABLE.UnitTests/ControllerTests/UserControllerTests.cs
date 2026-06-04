@@ -128,6 +128,31 @@ public class UserControllerTests
         Assert.IsInstanceOf<NoContentResult>(result);
         //cast the controlleroutput as a message object in order to extract its value
     }
+
+    [Test]
+    public void Delete_NotOk()
+    {
+        // Arrange
+        int parameter = 2;
+        List<User> changedUsers = testUsers;
+        User? targetUser = changedUsers.FirstOrDefault(x => x.Id == parameter);
+        if (targetUser != null)
+        {
+            changedUsers.Remove(targetUser);
+        }
+        var mockTuple = (false, changedUsers);
+        _mockService.Setup(repo => repo.DeleteUser(parameter)).Returns(mockTuple);
+
+        // Act
+        var result = _controller.DeleteUser(parameter);
+
+        //ASSERT
+        //check that the correct function is called
+        _mockService.Verify(x => x.DeleteUser(parameter), Times.Once);
+        //check result type
+        Assert.IsInstanceOf<NotFoundResult>(result);
+        
+    }
     [Test]
     public void AddUser_Ok()
     {
@@ -136,7 +161,6 @@ public class UserControllerTests
         {
             Name = "Dylan",
             Email = "Dylan@regex",
-            UserType = UserType.Buyer,
             Password = "password"
         };
         var users = testUsers;
@@ -150,7 +174,7 @@ public class UserControllerTests
             Email = userDTO.Email,
             Name = userDTO.Name,
             Password = userDTO.Password,
-            UserType = userDTO.UserType,
+            UserType = UserType.Buyer,
         };
         _mockService.Setup(r => r.AddUser(userDTO)).Returns(newUser);
         users.Add(newUser);
@@ -186,7 +210,6 @@ public class UserControllerTests
         {
             Name = "Dylan",
             Email = "Dylan@regex",
-            UserType = UserType.Buyer,
             Password = "password"
         };
         User newUser = new User
@@ -195,7 +218,7 @@ public class UserControllerTests
             Email = userDTO.Email,
             Name = userDTO.Name,
             Password = userDTO.Password,
-            UserType = userDTO.UserType,
+            UserType = UserType.Buyer,
         };
 
         foreach (User user in users) { Console.WriteLine(user.Name); }

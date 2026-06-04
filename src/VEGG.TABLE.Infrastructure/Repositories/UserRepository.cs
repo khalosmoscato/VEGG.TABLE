@@ -32,7 +32,7 @@ public class UserRepository : IUserRepository
             Email = userDTO.Email,
             Name = userDTO.Name,
             Password = userDTO.Password,
-            UserType = userDTO.UserType,
+            UserType = UserType.Buyer,
         };
 
         _context.UserTable.Add(user);
@@ -44,9 +44,22 @@ public class UserRepository : IUserRepository
     {
         var existing = _context.UserTable.FirstOrDefault(x => x.Id == id);
         if (existing == null) return null;
-        existing.Name = userDTO.Name;
-        existing.Email = userDTO.Email;
-        existing.UserType = userDTO.UserType;
+
+        if (userDTO.Name != null && userDTO.Name != existing.Name)
+        {
+            existing.Name = userDTO.Name;
+        }
+
+        if (userDTO.Email != null && userDTO.Email != existing.Email)
+        {
+            existing.Email = userDTO.Email;
+        }
+
+        //if (userDTO.UserType != existing.UserType)
+        //{
+        //    existing.UserType = userDTO.UserType;
+        //}
+
         _context.SaveChanges();
         return existing;
     }

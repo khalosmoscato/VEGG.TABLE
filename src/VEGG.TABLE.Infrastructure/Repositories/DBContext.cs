@@ -258,6 +258,14 @@ public class DBContext : DbContext
                 Email = "buyer2@test.com",
                 Password = "$2a$11$fK5Qz7n.uV.z8L3M9KqW.0f2gQ8m8hXyLhZ9KqW.0f2gQ8m8hXy", //veggie4life
                 UserType = UserType.Buyer
+            },
+            new User
+            {
+                Id = 8,
+                Name = "AdminUser",
+                Email = "admin@vegg.table",
+                Password = "$2a$11$.L.EhNZir7n.hylCEenduOkBlqrdyXHt0jtDqMrW46jy0.pKbkMw2", //highthere
+                UserType = UserType.Admin
             }
         );
         // Configure the relationship between Farm and User
