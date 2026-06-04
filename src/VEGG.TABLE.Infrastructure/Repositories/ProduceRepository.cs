@@ -81,41 +81,41 @@ public class ProduceRepository : IProduceRepository
             return null;
         }
 
-        if (produceDTO.Name != null && produceDTO.Name != targetProduce.Name)
+        if (produceDTO.Name != null)
         {
             targetProduce.Name = produceDTO.Name;
         }
-        if (produceDTO.Description != null && produceDTO.Description != targetProduce.Description)
+        if (produceDTO.Description != null)
         {
             targetProduce.Description = produceDTO.Description;
         }
-        if (produceDTO.PhotograghPath != null && produceDTO.PhotograghPath != targetProduce.PhotograghPath)
+        if (produceDTO.PhotograghPath != null )
         {
             targetProduce.PhotograghPath = produceDTO.PhotograghPath;
         }
-        if (produceDTO.Category != targetProduce.Category)
+        if (produceDTO.Category != null)
         {
-            targetProduce.Category = produceDTO.Category;
+            targetProduce.Category = (Category)produceDTO.Category;
         }
-        if (produceDTO.IsOnSale != targetProduce.IsOnSale)
+        if (produceDTO.IsOnSale != null)
         {
-            targetProduce.IsOnSale = produceDTO.IsOnSale;
+            targetProduce.IsOnSale = (bool)produceDTO.IsOnSale;
         }
-        if (produceDTO.Stock != targetProduce.Stock)
+        if (produceDTO.Stock != null)
         {
-            targetProduce.Stock = produceDTO.Stock;
+            targetProduce.Stock = (int)produceDTO.Stock;
         }
-        if (produceDTO.Price != targetProduce.Price)
+        if (produceDTO.Price != null)
         {
-            targetProduce.Price = produceDTO.Price;
+            targetProduce.Price = (double)produceDTO.Price;
         }
-        if (produceDTO.Weight != targetProduce.Weight)
+        if (produceDTO.Weight != null)
         {
-            targetProduce.Weight = produceDTO.Weight;
+            targetProduce.Weight = (double)produceDTO.Weight;
         }
-        if (produceDTO.UserId != targetProduce.UserId)
+        if (produceDTO.UserId != null)
         {
-            targetProduce.UserId = produceDTO.UserId;
+            targetProduce.UserId = (int)produceDTO.UserId;
         }
 
         _context.SaveChanges();

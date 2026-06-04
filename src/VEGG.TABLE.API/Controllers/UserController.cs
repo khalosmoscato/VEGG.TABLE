@@ -33,7 +33,7 @@ public class UserController : ControllerBase
         var created = _userService.AddUser(userDTO);
         return CreatedAtAction(nameof(GetUserById), new { id = created.Id }, created);
     }
-    // PUT: api/user/1
+    // PATCH: api/user/1
     [HttpPut("{id}")]
     public IActionResult UpdateUser(int id, UserDTO userDTO)
     {
@@ -44,7 +44,7 @@ public class UserController : ControllerBase
         return Ok(result);
     }
 
-    // PUT: api/user/name
+    // PATCH: api/user/name
     [HttpPut("{id}/name")]
     public IActionResult UpdateUserName(int id, string name)
     {
