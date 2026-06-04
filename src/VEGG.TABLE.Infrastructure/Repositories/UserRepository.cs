@@ -55,10 +55,10 @@ public class UserRepository : IUserRepository
             existing.Email = userDTO.Email;
         }
 
-        if (userDTO.UserType != existing.UserType)
-        {
-            existing.UserType = userDTO.UserType;
-        }
+        //if (userDTO.UserType != existing.UserType)
+        //{
+        //    existing.UserType = userDTO.UserType;
+        //}
 
         _context.SaveChanges();
         return existing;
