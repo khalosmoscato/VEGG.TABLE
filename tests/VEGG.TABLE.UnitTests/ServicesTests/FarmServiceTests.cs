@@ -2,8 +2,8 @@
 
 public class FarmServiceTests
 {
-    private DBContext _context;
-    private FarmService _farmService;
+    private DBContext? _context;
+    private FarmService? _farmService;
 
     [SetUp]
     public void Setup()
@@ -21,22 +21,32 @@ public class FarmServiceTests
     [TearDown]
     public void TearDown()
     {
-        _context.Dispose();
+        _context?.Dispose();
     }
 
     [Test]
     public async Task GetAllFarmsAsync_WhenFarmsExist_ReturnsCorrectList()
     {
         // Arrange
-        _context.Farms.Add(new Farm { Name = "Hackney City Farm" });
-        _context.Farms.Add(new Farm { Name = "Spitalfields Farm" });
+        var owner = new User
+        {
+            Name = "TestFarmer",
+            Email = "test@test.com",
+            Password = "hashed_pw",
+            UserType = UserType.Seller
+        };
+        _context!.UserTable.Add(owner);
+        await _context.SaveChangesAsync();
+        _context.Farms.Add(new Farm { Name = "Hackney City Farm", Owner = owner });
+        _context.Farms.Add(new Farm { Name = "Spitalfields Farm", Owner = owner });
         await _context.SaveChangesAsync();
 
         // Act
-        var result = await _farmService.GetFarms();
+        var result = await _farmService!.GetFarms();
 
         // Assert
         Assert.That(result, Is.Not.Null);
         Assert.That(result.Count(), Is.EqualTo(2));
+        Assert.That(result.First().OwnerName, Is.EqualTo("TestFarmer"));
     }
 }

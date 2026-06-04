@@ -6,8 +6,8 @@ namespace VEGG.TABLE.UnitTests.Repositories;
 
 public class FarmRepositoryTests
 {
-    private DBContext _context;
-    private FarmRepository _repository;
+    private DBContext? _context;
+    private FarmRepository? _repository;
 
     [SetUp]
     public void Setup()
@@ -23,22 +23,23 @@ public class FarmRepositoryTests
     [TearDown]
     public void TearDown()
     {
-        _context.Dispose();
+        _context!.Dispose();
     }
 
     [Test]
     public async Task GetAllFarms_ShouldReturnAllFarms()
     {
         // Arrange
-        _context.Farms.Add(new Farm { Name = "Hackney City Farm" });
-        _context.Farms.Add(new Farm { Name = "Spitalfields Farm" });
+        var owner = new User { Name = "TestUser", Email = "test@test.com", Password = "pw" };
+        _context!.Farms.Add(new Farm { Name = "Hackney City Farm", Owner = owner });
+        _context.Farms.Add(new Farm { Name = "Spitalfields Farm", Owner = owner });
         await _context.SaveChangesAsync();
 
         // Act
-        var result = await _repository.GetFarms();
+        var result = await _repository!.GetFarms();
 
         // Assert
         Assert.That(result.Count(), Is.EqualTo(2));
-        Assert.That(result.Any(f => f.Name == "Hackney City Farm"), Is.True);
+        Assert.That(result.First().OwnerName, Is.EqualTo("TestUser"));
     }
 }
