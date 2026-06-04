@@ -13,5 +13,5 @@ public class Farm
     public double Lat { get; set; }
     public double Lng { get; set; }
     public int OwnerId { get; set; }
-    public List<Produce> Inventory { get; set; } = new();
+    public User? Owner { get; set; }
 }

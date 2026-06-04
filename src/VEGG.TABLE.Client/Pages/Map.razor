@@ -1,4 +1,4 @@
-﻿<PageTitle>Map</PageTitle>
+﻿<PageTitle>VEGG.TABLE: Map</PageTitle>
 
 @page "/map"
 @inject IHttpClientFactory ClientFactory
@@ -14,14 +14,14 @@
 </div>
 
 @code {
-    private List<Farm>? farms;
+    private List<FarmDTO>? farms;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
             var http = ClientFactory.CreateClient("PublicAPI");
-            farms = await http.GetFromJsonAsync<List<Farm>>("/api/farms");
+            farms = await http.GetFromJsonAsync<List<FarmDTO>>("/api/farms");
 
             if (farms != null)
             {
