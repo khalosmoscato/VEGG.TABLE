@@ -1,5 +1,4 @@
-using VEGG.TABLE.Core.Entities;
-using VEGG.TABLE.Core.Interfaces;
+
 
 namespace VEGG.TABLE.Infrastructure.Data;
 
@@ -51,7 +50,7 @@ public class ProduceRepository : IProduceRepository
         if (!onSaleList.Any()) {return onSaleList;}
         return null;
     }
-    public Produce AddProduce(ProduceDTO produceDTO)
+    public Produce AddProduce(CreateProduceDTO produceDTO)
     {
         Produce produce = new Produce {
             Category = produceDTO.Category,
@@ -70,6 +69,56 @@ public class ProduceRepository : IProduceRepository
         return produce;
     }
 
+    public Produce? UpdateProduce(int id, ProduceDTO produceDTO)
+    {
+        var targetProduce = _context.ProduceTable.FirstOrDefault(p => p.ProduceId == id);
+        //if there is no produce to modify we will return null
+        if (targetProduce == null)
+        {
+            return null;
+        }
+
+        if (produceDTO.Name != null)
+        {
+            targetProduce.Name = produceDTO.Name;
+        }
+        if (produceDTO.Description != null)
+        {
+            targetProduce.Description = produceDTO.Description;
+        }
+        if (produceDTO.PhotograghPath != null )
+        {
+            targetProduce.PhotograghPath = produceDTO.PhotograghPath;
+        }
+        if (produceDTO.Category != null)
+        {
+            targetProduce.Category = (Category)produceDTO.Category;
+        }
+        if (produceDTO.IsOnSale != null)
+        {
+            targetProduce.IsOnSale = (bool)produceDTO.IsOnSale;
+        }
+        if (produceDTO.Stock != null)
+        {
+            targetProduce.Stock = (int)produceDTO.Stock;
+        }
+        if (produceDTO.Price != null)
+        {
+            targetProduce.Price = (double)produceDTO.Price;
+        }
+        if (produceDTO.Weight != null)
+        {
+            targetProduce.Weight = (double)produceDTO.Weight;
+        }
+        if (produceDTO.UserId != null)
+        {
+            targetProduce.UserId = (int)produceDTO.UserId;
+        }
+
+        _context.SaveChanges();
+        return targetProduce;
+    }
+
     public bool DeleteProduce(int id)
     {
         var existing = _context.ProduceTable.FirstOrDefault(p => p.ProduceId == id);
@@ -78,4 +127,5 @@ public class ProduceRepository : IProduceRepository
         _context.SaveChanges();
         return true;
     }
+
 }
