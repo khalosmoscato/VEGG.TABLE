@@ -53,7 +53,7 @@ public class ProduceRepository : IProduceRepository
         if (!onSaleList.Any()) {return onSaleList;}
         return null;
     }
-    public Produce AddProduce(ProduceDTO produceDTO)
+    public Produce AddProduce(CreateProduceDTO produceDTO)
     {
         Produce produce = new Produce {
             Category = produceDTO.Category,

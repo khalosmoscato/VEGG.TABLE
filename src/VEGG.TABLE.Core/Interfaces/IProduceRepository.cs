@@ -8,7 +8,7 @@ public interface IProduceRepository
     List<Produce>? GetProduceByUserId(int userId);
     List<Produce>? GetProduceByUserIdAll(int userId);
     List<Produce>? GetAllProduceOnSale();
-    Produce AddProduce(ProduceDTO produceDTO);
+    Produce AddProduce(CreateProduceDTO produceDTO);
     Produce? UpdateProduce(int id, ProduceDTO produceDTO);
     bool DeleteProduce(int id);
 }

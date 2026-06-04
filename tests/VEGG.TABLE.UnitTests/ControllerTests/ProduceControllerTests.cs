@@ -138,7 +138,7 @@ public class ProduceControllerTests
     {
         //ARRANGE
         var produceList = testProduce;
-        var produceDTO = new ProduceDTO { Name = "Apples", UserId = 1 };
+        var produceDTO = new CreateProduceDTO { Name = "Apples", UserId = 1, Stock =5, Description= "An Apple", IsOnSale = true, Price = 2.00};
         var produce = new Produce { ProduceId = 8, Name = "Apples", UserId = 1 };
         _mockService.Setup(r => r.AddProduce(produceDTO)).Returns(produce);
         //ACT
