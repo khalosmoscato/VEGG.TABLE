@@ -22,8 +22,49 @@ public class ProduceRepository : IProduceRepository
         return _context.ProduceTable.FirstOrDefault(p => p.ProduceId == id);
     }
 
-    public Produce AddProduce(Produce produce)
+    public List<Produce>? GetProduceByUserId(int userId)
     {
+        var user = _context.UserTable.FirstOrDefault(u => u.Id == userId);
+        if (user == null)
+        {
+            return null;
+        }
+        var produceList = _context.ProduceTable.Where(p => p.UserId == userId && p.IsOnSale == true).ToList();
+        return produceList;   
+    }
+    public List<Produce>? GetProduceByUserIdAll(int userId)
+    {
+        var user = _context.UserTable.FirstOrDefault(u => u.Id == userId);
+        if (user == null)
+        {
+            return null;
+        }
+        var produceList = _context.ProduceTable.Where(p => p.UserId == userId).ToList();
+        return produceList;
+    }
+
+    public List<Produce>? GetAllProduceOnSale()
+    {
+        var onSaleList = _context.ProduceTable
+            .Where(p => p.IsOnSale == true)
+            .ToList();
+        if (!onSaleList.Any()) {return onSaleList;}
+        return null;
+    }
+    public Produce AddProduce(ProduceDTO produceDTO)
+    {
+        Produce produce = new Produce {
+            Category = produceDTO.Category,
+            Name = produceDTO.Name,
+            Description = produceDTO.Description,
+            IsOnSale =   produceDTO.IsOnSale,
+            Stock = produceDTO.Stock,
+            Price = produceDTO.Price,
+            Weight = produceDTO.Weight,
+            PhotograghPath = produceDTO.PhotograghPath,
+            UserId = produceDTO.UserId,
+        };
+
         _context.ProduceTable.Add(produce);
         _context.SaveChanges();
         return produce;

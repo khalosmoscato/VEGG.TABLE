@@ -4,7 +4,14 @@
 @inject IHttpClientFactory ClientFactory
 @inject IJSRuntime JS
 
-<div id="farmMap" class="w-full h-[400px] md:h-[600px] lg:h-[700px] border border-gray-300 rounded-lg shadow-sm"></div>
+<div class="flex h-[600px] w-full">
+    
+    <div class="w-1/3 overflow-y-auto border-r border-gray-200 bg-white">
+        <h2 class="p-4 text-xl font-bold text-green-800">Available Farms</h2>
+        <div id="farm-list"></div> </div>
+
+    <div id="farmMap" class="w-2/3 h-[600px] border border-gray-300 rounded-lg shadow-sm"></div>
+</div>
 
 @code {
     private List<FarmDTO>? farms;
