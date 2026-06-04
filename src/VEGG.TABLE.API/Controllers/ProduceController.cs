@@ -76,7 +76,7 @@ public class ProduceController : ControllerBase
     }
 
     // PATCH: api/produce
-    [HttpPatch]
+    [HttpPatch("{id}")]
     public IActionResult UpdateProduce(int id, ProduceDTO produceDTO)
     {
         var updated = _produceService.UpdateProduce(id, produceDTO);

@@ -26,6 +26,8 @@ public class UserController : ControllerBase
 
         return Ok(user);
     }
+    
+
     // POST: api/user
     [HttpPost]
     public IActionResult AddUser(UserDTO userDTO)
