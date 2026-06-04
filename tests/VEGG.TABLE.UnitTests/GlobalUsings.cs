@@ -9,6 +9,7 @@ global using NUnit.Framework;
 
 global using VEGG.TABLE.API.Controllers;
 global using VEGG.TABLE.Core.Entities;
+global using VEGG.TABLE.Core.Entities.DTOs;
 global using VEGG.TABLE.Core.Interfaces;
 global using VEGG.TABLE.Infrastructure.Data;
 global using VEGG.TABLE.Infrastructure.Services;

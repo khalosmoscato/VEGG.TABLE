@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VEGG.TABLE.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using VEGG.TABLE.Infrastructure.Data;
 namespace VEGG.TABLE.Infrastructure.Migrations
 {
     [DbContext(typeof(DBContext))]
-    partial class DBContextModelSnapshot : ModelSnapshot
+    [Migration("20260604092414_AddFarmOwnerRelationship")]
+    partial class AddFarmOwnerRelationship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -377,14 +380,6 @@ namespace VEGG.TABLE.Infrastructure.Migrations
                             Name = "OrganicFan",
                             Password = "$2a$11$fK5Qz7n.uV.z8L3M9KqW.0f2gQ8m8hXyLhZ9KqW.0f2gQ8m8hXy",
                             UserType = 1
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Email = "admin@vegg.table",
-                            Name = "AdminUser",
-                            Password = "$2a$11$.L.EhNZir7n.hylCEenduOkBlqrdyXHt0jtDqMrW46jy0.pKbkMw2",
-                            UserType = 2
                         });
                 });
 

@@ -32,7 +32,7 @@ public class UserRepository : IUserRepository
             Email = userDTO.Email,
             Name = userDTO.Name,
             Password = userDTO.Password,
-            UserType = userDTO.UserType,
+            UserType = UserType.Buyer,
         };
 
         _context.UserTable.Add(user);

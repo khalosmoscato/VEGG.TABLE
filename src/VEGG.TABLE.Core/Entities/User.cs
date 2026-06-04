@@ -7,6 +7,7 @@ public class User
     public required string Email { get; set; }
     public required string Password { get; set; }
     public UserType UserType { get; set; } = UserType.Buyer;
+    public List<Farm> Farms { get; set; } = new();
 }
 public enum UserType
 {

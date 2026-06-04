@@ -1,4 +1,6 @@
-﻿namespace VEGG.TABLE.API.Controllers;
+﻿using VEGG.TABLE.Core.Entities.DTOs;
+
+namespace VEGG.TABLE.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -9,7 +11,7 @@ public class FarmsController : ControllerBase
     public FarmsController(IFarmService service) => _service = service;
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Farm>>> GetFarms()
+    public async Task<ActionResult<IEnumerable<FarmDTO>>> GetFarms()
     {
         return Ok(await _service.GetFarms());
     }

@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authorization;
+
 namespace VEGG.TABLE.API.Controllers;
 
 [ApiController]
@@ -12,6 +14,7 @@ public class LikesController : ControllerBase
     }
 
     // POST: api/likes
+    [Authorize]
     [HttpPost]
     public IActionResult AddLike(LikeRequestDTO request)
     {
@@ -21,6 +24,7 @@ public class LikesController : ControllerBase
     }
 
     // DELETE: api/likes?userId=1&produceId=2
+    [Authorize]
     [HttpDelete]
     public IActionResult RemoveLike([FromQuery] int userId, [FromQuery] int produceId)
     {
@@ -30,6 +34,7 @@ public class LikesController : ControllerBase
     }
 
     // GET: api/likes/user/1
+    [Authorize]
     [HttpGet("user/{userId}")]
     public IActionResult GetLikesByUser(int userId)
     {

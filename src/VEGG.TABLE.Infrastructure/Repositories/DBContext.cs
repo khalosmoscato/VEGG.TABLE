@@ -19,6 +19,7 @@ public class DBContext : DbContext
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // Seed data for produce
         modelBuilder.Entity<Produce>().HasData(
             new Produce
             {
@@ -200,6 +201,7 @@ public class DBContext : DbContext
                 UserId = 5,
             }
         );
+        // Seed data for users
         modelBuilder.Entity<User>().HasData(
             new User
             {
@@ -207,20 +209,78 @@ public class DBContext : DbContext
                 Name = "VegManDan",
                 Email = "bossman@live.co.uk",
                 Password = "$2a$11$.L.EhNZir7n.hylCEenduOkBlqrdyXHt0jtDqMrW46jy0.pKbkMw2",
+                UserType = UserType.Seller
+            },
+            new User
+            {
+                Id = 2,
+                Name = "FreshFarmers",
+                Email = "contact@fresh.co.uk",
+                Password = "$2a$11$G7VbY4W8z1zW7F4Q1j6Qj.qH8zM8G.VzS6LhZ9KqW.0f2gQ8m8hXy", //hashed_pw_2
+                UserType = UserType.Seller
+            },
+            new User
+            {
+                Id = 3,
+                Name = "LondonGreens",
+                Email = "info@londongreens.co.uk",
+                Password = "$2a$11$uK8fS9j2lK7mN4Q2x5P5e.rJ0hZ7G.VzS6LhZ9KqW.0f2gQ8m8hXy", //hashed_pw_3
+                UserType = UserType.Seller
+            },
+            new User
+            {
+                Id = 4,
+                Name = "SpitalFieldsOrg",
+                Email = "hello@spital.co.uk",
+                Password = "$2a$11$vN2mX5Q8k1jL4H3x6T9a.rJ0hZ7G.VzS6LhZ9KqW.0f2gQ8m8hXy", //hashed_pw_4
+                UserType = UserType.Seller
+            },
+            new User
+            {
+                Id = 5,
+                Name = "CrystalVeg",
+                Email = "team@crystalveg.co.uk",
+                Password = "$2a$11$wL3bV8k9m2pQ5D4y7R1b.rJ0hZ7G.VzS6LhZ9KqW.0f2gQ8m8hXy", //hashed_pw_5
+                UserType = UserType.Seller
+            },
+            new User
+            {
+                Id = 6,
+                Name = "GreenShopper",
+                Email = "buyer1@test.com",
+                Password = "$2a$11$G7VbY4W8z1zW7F4Q1j6Qj.qH8zM8G.VzS6LhZ9KqW.0f2gQ8m8hXy", //password123
                 UserType = UserType.Buyer
             },
-            new User { Id = 2, Name = "FreshFarmers", Email = "contact@fresh.co.uk", Password = "hashed_pw_2", UserType = UserType.Seller },
-            new User { Id = 3, Name = "LondonGreens", Email = "info@londongreens.co.uk", Password = "hashed_pw_3", UserType = UserType.Seller },
-            new User { Id = 4, Name = "SpitalFieldsOrg", Email = "hello@spital.co.uk", Password = "hashed_pw_4", UserType = UserType.Seller },
-            new User { Id = 5, Name = "CrystalVeg", Email = "team@crystalveg.co.uk", Password = "hashed_pw_5", UserType = UserType.Seller }
+            new User
+            {
+                Id = 7,
+                Name = "OrganicFan",
+                Email = "buyer2@test.com",
+                Password = "$2a$11$fK5Qz7n.uV.z8L3M9KqW.0f2gQ8m8hXyLhZ9KqW.0f2gQ8m8hXy", //veggie4life
+                UserType = UserType.Buyer
+            },
+            new User
+            {
+                Id = 8,
+                Name = "AdminUser",
+                Email = "admin@vegg.table",
+                Password = "$2a$11$.L.EhNZir7n.hylCEenduOkBlqrdyXHt0jtDqMrW46jy0.pKbkMw2", //highthere
+                UserType = UserType.Admin
+            }
         );
+        // Configure the relationship between Farm and User
+        modelBuilder.Entity<Farm>()
+            .HasOne(f => f.Owner)
+            .WithMany(u => u.Farms)
+            .HasForeignKey(f => f.OwnerId)
+            .OnDelete(DeleteBehavior.Restrict);
+        // Seed data for farms
         modelBuilder.Entity<Farm>().HasData(
             new Farm { Id = 1, Name = "Hackney City Farm", Lat = 51.5332, Lng = -0.0632, OwnerId = 1 },
             new Farm { Id = 2, Name = "Surrey Docks Farm", Lat = 51.4988, Lng = -0.0416, OwnerId = 2 },
             new Farm { Id = 3, Name = "Kentish Town City Farm", Lat = 51.5478, Lng = -0.1456, OwnerId = 3 },
             new Farm { Id = 4, Name = "Spitalfields Farm", Lat = 51.5195, Lng = -0.0645, OwnerId = 4 },
-            new Farm { Id = 5, Name = "Crystal Palace Park Farm", Lat = 51.4225, Lng = -0.0635, OwnerId = 5 }
-        );
+            new Farm { Id = 5, Name = "Crystal Palace Park Farm", Lat = 51.4225, Lng = -0.0635, OwnerId = 5 });
         //Junction table for likes
         modelBuilder.Entity<UserProduceLike>()
           .HasKey(like => new { like.UserId, like.ProduceId });
