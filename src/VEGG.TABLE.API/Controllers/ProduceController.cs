@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authorization;
+
 namespace VEGG.TABLE.API.Controllers;
 
 [ApiController]
@@ -68,6 +70,7 @@ public class ProduceController : ControllerBase
     }
 
     // POST: api/produce
+    [Authorize(Roles = "Seller")]
     [HttpPost]
     public IActionResult AddProduce(ProduceDTO produceDTO)
     {
@@ -76,6 +79,7 @@ public class ProduceController : ControllerBase
     }
 
     // DELETE: api/produce/1
+    [Authorize(Roles = "Seller")]
     [HttpDelete("{id}")]
     public IActionResult DeleteProduce(int id)
     {

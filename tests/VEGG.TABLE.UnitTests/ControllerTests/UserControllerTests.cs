@@ -136,7 +136,6 @@ public class UserControllerTests
         {
             Name = "Dylan",
             Email = "Dylan@regex",
-            UserType = UserType.Buyer,
             Password = "password"
         };
         var users = testUsers;
@@ -150,7 +149,7 @@ public class UserControllerTests
             Email = userDTO.Email,
             Name = userDTO.Name,
             Password = userDTO.Password,
-            UserType = userDTO.UserType,
+            UserType = UserType.Buyer,
         };
         _mockService.Setup(r => r.AddUser(userDTO)).Returns(newUser);
         users.Add(newUser);
@@ -186,7 +185,6 @@ public class UserControllerTests
         {
             Name = "Dylan",
             Email = "Dylan@regex",
-            UserType = UserType.Buyer,
             Password = "password"
         };
         User newUser = new User
@@ -195,7 +193,7 @@ public class UserControllerTests
             Email = userDTO.Email,
             Name = userDTO.Name,
             Password = userDTO.Password,
-            UserType = userDTO.UserType,
+            UserType = UserType.Buyer,
         };
 
         foreach (User user in users) { Console.WriteLine(user.Name); }
