@@ -16,7 +16,7 @@ public class ProduceControllerTests
 
     [SetUp]
     public void Setup()
-    {
+    {   
         _mockService = new Mock<IProduceService>();
         _controller = new ProduceController(_mockService.Object);
 
@@ -157,8 +157,10 @@ public class ProduceControllerTests
     [Test]
     public void DeleteProduce_ReturnsTrue_WhenDeleted()
     {
+        //ARRANGE
         _mockService.Setup(s => s.DeleteProduce(1)).Returns(true);
 
+        //ACT
         var result = _controller.DeleteProduce(1);
 
         //ASSERT
