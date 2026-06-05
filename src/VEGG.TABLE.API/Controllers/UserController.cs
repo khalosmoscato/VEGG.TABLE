@@ -13,7 +13,7 @@ public class UserController : ControllerBase
         _userService = userService;
     }
     // GET: api/user
-    [Authorize(Roles = "Admin")]
+    // [Authorize(Roles = "Admin")] // Shop page is not working if Authorization atm
     [HttpGet]
     public IActionResult GetAllUsers()
     {
