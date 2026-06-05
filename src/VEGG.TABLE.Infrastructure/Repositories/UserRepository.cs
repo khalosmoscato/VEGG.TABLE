@@ -31,7 +31,7 @@ public class UserRepository : IUserRepository
             //Id is automatically set by DB
             Email = userDTO.Email,
             Name = userDTO.Name,
-            Password = userDTO.Password,
+            Password = BCrypt.Net.BCrypt.HashPassword(userDTO.Password),
             UserType = UserType.Buyer,
         };
 
