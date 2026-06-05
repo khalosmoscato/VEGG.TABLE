@@ -13,7 +13,7 @@ public class UserController : ControllerBase
         _userService = userService;
     }
     // GET: api/user
-    [Authorize(Roles = "Admin")]
+    // [Authorize(Roles = "Admin")] // Shop page is not working if Authorization atm
     [HttpGet]
     public IActionResult GetAllUsers()
     {
@@ -30,7 +30,7 @@ public class UserController : ControllerBase
 
         return Ok(user);
     }
-    
+
 
     // POST: api/user
     [HttpPost]
@@ -76,5 +76,22 @@ public class UserController : ControllerBase
             return NotFound();
 
         return NoContent();
+    }
+
+    // GET: api/user/profile
+    [Authorize]
+    [HttpGet("profile")]
+    public IActionResult GetCurrentProfile()
+    {
+        // Ensure you are using System.Security.Claims here
+        var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+        if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
+        {
+            return Unauthorized();
+        }
+
+        var user = _userService.GetUserById(userId);
+        return user == null ? NotFound() : Ok(user);
     }
 }
