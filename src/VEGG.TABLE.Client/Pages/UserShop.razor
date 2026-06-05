@@ -1,0 +1,66 @@
+﻿@page "/user-shop/{Id:int}"
+@using VEGG.TABLE.Core.Entities
+@inject IHttpClientFactory ClientFactory
+@inject NavigationManager Nav
+
+<div class="max-w-6xl mx-auto px-4 py-8">
+	<button class="text-emerald-700 hover:underline mb-6 block" @onclick='() => Nav.NavigateTo("/sellers")'>
+		&larr; Back to Producers
+	</button>
+
+	@if (products == null)
+	{
+		<div class="text-center py-20">
+			<p class="text-emerald-900 text-xl font-semibold">Loading shop data...</p>
+		</div>
+	}
+	else
+	{
+		<h1 class="text-4xl font-bold text-emerald-900 mb-8">Shop: @sellerName</h1>
+
+		@if (!products.Any())
+		{
+			<div class="bg-emerald-50 p-10 rounded-2xl text-center border border-dashed border-emerald-200">
+				<p class="text-emerald-800 text-lg">This producer has no items listed at the moment.</p>
+			</div>
+		}
+		else
+		{
+			<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+				@foreach (var item in products)
+				{
+					<ProduceCard Item="item" />
+				}
+			</div>
+		}
+	}
+</div>
+
+@code {
+	[Parameter] public int Id { get; set; }
+	private List<Produce>? products;
+	private string sellerName = "Loading...";
+
+	protected override async Task OnInitializedAsync()
+	{
+		try
+		{
+			var http = ClientFactory.CreateClient("PublicAPI");
+
+			// 1. Fetch products specific to this seller using your API endpoint
+			products = await http.GetFromJsonAsync<List<Produce>>($"api/produce/seller/all/{Id}");
+
+			// 2. Fetch user info to display the name
+			var users = await http.GetFromJsonAsync<List<User>>("api/user");
+			sellerName = users?.FirstOrDefault(u => u.Id == Id)?.Name ?? "Unknown Producer";
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine($"Error loading shop: {ex.Message}");
+			sellerName = "Error loading shop";
+			products = new List<Produce>();
+		}
+
+		StateHasChanged();
+	}
+}
