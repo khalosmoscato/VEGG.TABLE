@@ -1,5 +1,6 @@
 ﻿@page "/sellers"
 @using VEGG.TABLE.Core.Entities
+@using VEGG.TABLE.Core.Entities.DTOs
 @inject IHttpClientFactory ClientFactory
 @inject NavigationManager Nav
 
@@ -42,7 +43,7 @@
 
 @code {
 	private List<Farm>? farms;
-	private List<User>? users;
+	private List<UserResponseDTO>? users;
 
 	protected override async Task OnInitializedAsync()
 	{
@@ -50,12 +51,8 @@
 		{
 			var http = ClientFactory.CreateClient("PublicAPI");
 
-			// Fetch both endpoints
 			farms = await http.GetFromJsonAsync<List<Farm>>("api/farms");
-			var allUsers = await http.GetFromJsonAsync<List<User>>("api/user");
-
-			// Filter users
-			users = allUsers?.Where(u => u.UserType == UserType.Seller).ToList();
+			users = await http.GetFromJsonAsync<List<UserResponseDTO>>("api/user/sellers");
 		}
 		catch (Exception ex)
 		{
