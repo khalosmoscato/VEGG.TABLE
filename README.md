@@ -5,28 +5,55 @@ To promote sustainable microproduce and community food resilience. We provide a 
 Our whiteboard: [Figma Board](https://www.figma.com/board/jRS3cdT5qpY0piIOLnXisa/VEGG.TABLE?node-id=0-1&p=f&t=Jq6VlaDEQLm4XsCp-0) \
 Our Architecture : [Architecture](./Architecture.md)
 ---
-
+![Screenshot of Vegg.Table frontend](./src/VEGG.TABLE.Client/wwwroot/Images/screencap.png)
 ## Running the Project
 
 During the development phase we are using Docker containeristaion to run our Web-application on a range of machines. We are using an MSSQL server which should run locally on your machine.
 
 Please follow these steps in order to ensure all services are correctly initialized:
-1. Open DockerDesktop
-2. After cloning the repo open the project in visual studio 2026. 
+1. After cloning the repo open the project in visual studio 2026. 
+2. Open DockerDesktop.
+3. Open a powershell terminal in root directory in visual studio 2026. 
+4. Run : ```docker compose up --build -d .         
+5. Run : ```docker compose ps
+   - Our Docker.yml script will create an SQL Server container, ensuring the database is active (Docker Desktop must be running).
+   - The Script will then set the API project in the solution as the startup project.
+   - Npm.js will be downloaded and installed by the docker script and starting the tailwind CSS manager.
+   - Each project in the solution will now run.
+6.Open browser http://localhost:5209 to run the Blazor frontend 
+
+- Open browser http://localhost:5167/scalar/v1 to view API calls
+
+**The running the project instructions will not function on a Windows machine using ARM rather than AMD architecture.**
+
+If using a ARM device there will be no need to set up a docker image however you will likely need to setup a private online server with a service such as Microsoft Azure.
+
+First Clone the repository to your machine and open the solution using visual studio 2026.
+
+Manually install  Nodejs at https://nodejs.org/en/download. 
+Openpowershell in the root directory and run. npm and nodejs are required in order to ensure that the tailwind CSS generation works. (more on that [here](./Architecture.md)
+```npm install 
+
+Use the connection string to you own online server to establish a database linkage by using your connection string which follows the pattern :"Server=veggtable.database.windows.net;Database=free-sql-db-6197602;User Id=sqladm;Password={agoodPassword};TrustServerCertificate=True;Encrypt=False"
+
+Replace the default connection string in appsettings.JSON with your connection string.
+To migrate the database to your virtual server run the following two commands in powershell:
+
+```dotnet ef migrations add InitialCreate ` --project .\src\VEGG.TABLE.Infrastructure\VEGG.TABLE.Infrastructure.csproj ` -- startup-project .\src\VEGG.TABLE.API\VEGG.TABLE.API.csproj
+ ``` dotnet ef database update --project .\src\VEGG.TABLE.Infrastructure\VEGG.TABLE.Infrastructure.csproj --startup-project .\src\VEGG.TABLE.API\VEGG.TABLE.API.csproj
 
 
 
-0. **Setup**: Open 4 terminals and ensure Docker Desktop is running.
-1. **Terminal 1 (Database)**: Open your terminal at the root and run `docker-compose up -d`. This starts the SQL Server container, ensuring the database is active (Docker Desktop must be running).
-2. **Terminal 2 (API)**: Navigate to `src/VEGG.TABLE.API/` and run `dotnet run`. This hosts your data service on port 5167.
-3. **Terminal 3 (Tailwind)**: Navigate to `src/VEGG.TABLE.Client/` and run `npm run dev`. This monitors your CSS and recompiles Tailwind styles in real-time.
-4. **Terminal 4 (Blazor Frontend)**: In the same `Client` directory, run `dotnet watch`. This hosts the Blazor application, enabling live-reloading as you modify your code.
+
 
 ## Dependencies
 
 We are using NET10.0 architecture using the most up to date dependencies available in 2026.
 
-The running the project instructions will not function on a Windows machine using ARM rather than AMD architecture.
+node.js is required 
+and running npm install
+
+
 
 ### Our Team of VEGG.TABLE creators
 
