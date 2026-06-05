@@ -2,7 +2,7 @@
 A peer-to-peer marketplace for local produce and surplus food to promote sustainable community sharing.
 
 Our whiteboard: [Figma Board](https://www.figma.com/board/jRS3cdT5qpY0piIOLnXisa/VEGG.TABLE?node-id=0-1&p=f&t=Jq6VlaDEQLm4XsCp-0)
-Our Architecture : [Architecture](./Architecture.md)
+
 ---
 
 ## 🏗️ Project Overview & Architecture
