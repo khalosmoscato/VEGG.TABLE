@@ -32,6 +32,7 @@ docker compose ps
    - The Script will then set the API project in the solution as the startup project.
    - Npm.js will be downloaded and installed by the docker script and starting the tailwind CSS manager.
    - Each project in the solution will now run.
+   
 6.Open browser http://localhost:5209 to run the Blazor frontend 
 
 - Open browser http://localhost:5167/scalar/v1 to view API calls
@@ -62,9 +63,9 @@ To migrate the database to your virtual server run the following two commands in
 ```dotnet ef migrations add InitialCreate ` --project .\src\VEGG.TABLE.Infrastructure\VEGG.TABLE.Infrastructure.csproj ` -- startup-project .\src\VEGG.TABLE.API\VEGG.TABLE.API.csproj
  ``` dotnet ef database update --project .\src\VEGG.TABLE.Infrastructure\VEGG.TABLE.Infrastructure.csproj --startup-project .\src\VEGG.TABLE.API\VEGG.TABLE.API.csproj
 
-
-
-
+   ```npm run install
+   ```dotnet build --project .\src\VEGG.TABLE.API\VEGG.TABLE.API.csproj run
+   ```dotnet watch --project .\src\VEGG.TABLE.Client\VEGG.TABLE.Client.csproj run
 
 ## Dependencies
 
