@@ -4,19 +4,19 @@
 @inject NavigationManager Nav
 
 <div class="max-w-6xl mx-auto px-4 py-8">
-	<button class="text-emerald-700 hover:underline mb-6 block" @onclick='() => Nav.NavigateTo("/sellers")'>
+	<button class="text-accent hover:underline mb-6 block" @onclick='() => Nav.NavigateTo("/sellers")'>
 		&larr; Back to Producers
 	</button>
 
 	@if (products == null)
 	{
 		<div class="text-center py-20">
-			<p class="text-emerald-900 text-xl font-semibold">Loading shop data...</p>
+			<p class="mb-6 text-center text-xl font-semibold">Loading shop data...</p>
 		</div>
 	}
 	else
 	{
-		<h1 class="text-4xl font-bold text-emerald-900 mb-8">Shop: @sellerName</h1>
+		<h1 class="text-primary text-2xl font-bold mb-6">Shop: @sellerName</h1>
 
 		@if (!products.Any())
 		{

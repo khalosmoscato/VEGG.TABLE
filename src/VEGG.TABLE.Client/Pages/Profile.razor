@@ -1,39 +1,157 @@
 ﻿@page "/profile"
 @using Microsoft.AspNetCore.Components.Authorization
 @using VEGG.TABLE.Core.Entities.DTOs
+@using VEGG.TABLE.Client.Services
+@using System.IdentityModel.Tokens.Jwt
 @inject IHttpClientFactory ClientFactory
+@inject AuthenticationStateProvider AuthStateProvider
 
-<div class="p-8">
-    <h1 class="text-2xl font-bold mb-4">Your Profile</h1>
+<div class=max-w-3xl mx-auto px-8 py-8">
+    <h1 class="text-2xl font-bold mb-6 text-center">Your Profile</h1>
 
     @if (userProfile == null)
     {
-        <p><em>Loading your profile...</em></p>
+        <p class="text-gray-900 dark:text-white text-center"><em>Loading your profile...</em></p>
+    }
+    else if (isEditing)
+    {
+        <div class="bg-primary shadow rounded-lg p-6 space-y-4 text-center">
+            <div>
+                <label class="block text-sm font-semibold text-white mb-1">Name</label>
+                <input @bind="editName"
+                       class="w-full border border-emerald-700 rounded-lg px-3 py-2
+                              bg-emerald-800 text-white text-center placeholder-emerald-300
+                              focus:outline-none focus:ring-2 focus:ring-accent" />
+            </div>
+            <div>
+                <label class="block text-sm font-semibold text-white mb-1">Email</label>
+                <input @bind="editEmail" type="email"
+                       class="w-full border border-emerald-700 rounded-lg px-3 py-2
+                              bg-emerald-800 text-white text-center placeholder-emerald-300
+                              focus:outline-none focus:ring-2 focus:ring-accent" />
+            </div>
+
+            @if (!string.IsNullOrEmpty(feedbackMessage))
+            {
+                <p class="text-sm @feedbackColour">@feedbackMessage</p>
+            }
+
+            <div class="flex gap-3 pt-2 justify-center">
+                <button @onclick="SaveChanges" class="btn-accent">
+                    Save Changes
+                </button>
+                <button @onclick="CancelEdit"
+                        class="px-4 py-2 rounded-lg border border-emerald-600
+                               text-white hover:bg-emerald-800
+                               transition-colors duration-200">
+                    Cancel
+                </button>
+            </div>
+        </div>
     }
     else
     {
-        <div class="bg-white shadow rounded-lg p-6">
-            <p><strong>Name:</strong> @userProfile.Name</p>
-            <p><strong>Email:</strong> @userProfile.Email</p>
-            <p><strong>Account Type:</strong> @userProfile.UserType</p>
+        <div class="bg-primary shadow rounded-lg p-6 space-y-2 text-center">
+            <p class="text-white"><strong>Name:</strong> @userProfile.Name</p>
+            <p class="text-white"><strong>Email:</strong> @userProfile.Email</p>
+            <p class="text-white"><strong>Account Type:</strong> @userProfile.UserType</p>
+
+            <div class="flex gap-3 pt-2 justify-center">
+                <button @onclick="StartEdit" class="btn-accent">
+                    Edit Profile
+                </button>
+            </div>
         </div>
     }
 </div>
 
 @code {
     private UserResponseDTO? userProfile;
+    private bool isEditing = false;
+    private int userId = 0;
+
+    private string editName = "";
+    private string editEmail = "";
+
+    private string feedbackMessage = "";
+    private string feedbackColour = "";
 
     protected override async Task OnInitializedAsync()
     {
-        var protectedHttp = ClientFactory.CreateClient("ProtectedAPI");
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var idClaim = authState.User.FindFirst("nameid")?.Value;
+        if (!string.IsNullOrEmpty(idClaim))
+            int.TryParse(idClaim, out userId);
 
+        await LoadProfile();
+    }
+
+    private async Task LoadProfile()
+    {
+        var http = ClientFactory.CreateClient("ProtectedAPI");
         try
         {
-            userProfile = await protectedHttp.GetFromJsonAsync<UserResponseDTO>("api/user/profile");
+            userProfile = await http.GetFromJsonAsync<UserResponseDTO>("api/user/profile");
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Error loading profile: {ex.Message}");
         }
+    }
+
+    private void StartEdit()
+    {
+        editName = userProfile?.Name ?? "";
+        editEmail = userProfile?.Email ?? "";
+        feedbackMessage = "";
+        isEditing = true;
+    }
+
+    private void CancelEdit()
+    {
+        isEditing = false;
+        feedbackMessage = "";
+    }
+
+    private async Task SaveChanges()
+    {
+        if (userProfile == null || userId == 0) return;
+
+        var http = ClientFactory.CreateClient("ProtectedAPI");
+
+        var updatedUser = new UserDTO
+        {
+            Name = editName,
+            Email = editEmail,
+            Password = ""
+        };
+
+        try
+        {
+            var response = await http.PutAsJsonAsync($"api/user/{userId}", updatedUser);
+
+            if (response.IsSuccessStatusCode)
+            {
+                feedbackMessage = "Profile updated successfully!";
+                feedbackColour = "text-green-600 dark:text-green-400";
+                await LoadProfile();
+                StateHasChanged();
+                await Task.Delay(1200);
+                isEditing = false;
+            }
+            else
+            {
+                feedbackMessage = "Something went wrong. Please try again.";
+                feedbackColour = "text-red-500 dark:text-red-400";
+            }
+        }
+        catch (Exception ex)
+        {
+            feedbackMessage = $"Error: {ex.Message}";
+            feedbackColour = "text-red-500 dark:text-red-400";
+            Console.WriteLine($"Error updating profile: {ex.Message}");
+        }
+
+        StateHasChanged();
     }
 }
