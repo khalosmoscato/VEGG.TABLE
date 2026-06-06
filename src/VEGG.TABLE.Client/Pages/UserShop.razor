@@ -4,9 +4,14 @@
 @inject NavigationManager Nav
 
 <div class="max-w-6xl mx-auto px-4 py-8">
-	<button class="text-accent hover:underline mb-6 block" @onclick='() => Nav.NavigateTo("/sellers")'>
-		&larr; Back to Producers
-	</button>
+	<div class="flex justify-left mb-6">
+        <button class="bg-accent text-white px-4 py-2 rounded-md transition-all duration-200 active:scale-95 font-medium"
+                onmouseover="this.style.backgroundColor='#EA580C'"
+                onmouseout="this.style.backgroundColor='#F97316'"
+                @onclick='() => Nav.NavigateTo("/sellers")'>
+            &larr; Back to Producers
+        </button>
+    </div>
 
 	@if (products == null)
 	{

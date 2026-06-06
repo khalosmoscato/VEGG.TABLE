@@ -24,7 +24,9 @@
     <p class="text-sm text-primary-50">Price: £@Item.Price</p>
     <p class="text-sm text-primary-100">In Stock: @Item.Stock</p>
     
-    <button class="w-full mt-4 bg-accent hover:bg-accent-hover text-white py-2 rounded-md transition-all duration-200 active:scale-95 font-medium" 
+    <button class="w-full mt-4 bg-accent text-white py-2 rounded-md transition-all duration-200 active:scale-95 font-medium"
+        onmouseover="this.style.backgroundColor='#EA580C'"
+        onmouseout="this.style.backgroundColor='#F97316'"
             @onclick="ShowLoginMsg">
         Request to Buy
     </button>
