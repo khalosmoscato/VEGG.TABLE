@@ -174,12 +174,51 @@
                 }
             </div>
         }
+
+        @* Liked Produce - shown for ALL user types *@
+        <div class="mt-10">
+            <h2 class="text-4xl font-bold mb-4 text-center">Your Liked Produce</h2>
+
+            @if (likedProduce == null)
+            {
+                <p class="text-center dark:text-gray-400"><em>Loading your liked produce...</em></p>
+            }
+            else if (!likedProduce.Any())
+            {
+                <p class="text-center dark:text-gray-400">You haven't liked any produce yet.</p>
+            }
+            else
+            {
+                <div class="space-y-3">
+                    @foreach (var item in likedProduce)
+                    {
+                        <div class="bg-primary shadow rounded-lg p-4 flex items-center justify-between gap-4">
+                            <div class="flex items-center gap-3">
+                                <span class="text-3xl">@GetProduceEmoji(item.Name)</span>
+                                <div class="text-left">
+                                    <p class="font-semibold text-white">@item.Name</p>
+                                    <p class="text-sm text-emerald-200">£@item.Price · Stock: @item.Stock</p>
+                                </div>
+                            </div>
+                            <button @onclick="() => UnlikeFromProfile(item.ProduceId)"
+                                    style="background-color: #ef4444; transition: background-color 0.2s;"
+                                    onmouseover="this.style.backgroundColor='#b91c1c'"
+                                    onmouseout="this.style.backgroundColor='#ef4444'"
+                                    class="text-xs px-3 py-1 rounded-lg text-white whitespace-nowrap">
+                                Unlike
+                            </button>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
     }
 </div>
 
 @code {
     private UserResponseDTO? userProfile;
     private List<Produce>? produceList;
+    private List<Produce>? likedProduce;
     private bool isEditing = false;
     private int userId = 0;
 
@@ -207,6 +246,7 @@
 
         await LoadProfile();
         await LoadProduce();
+        await LoadLikedProduce();
     }
 
     private async Task LoadProfile()
@@ -236,7 +276,48 @@
         }
     }
 
-    // Profile edit
+    private async Task LoadLikedProduce()
+    {
+        if (userId == 0) return;
+        var http = ClientFactory.CreateClient("ProtectedAPI");
+        try
+        {
+            var likes = await http.GetFromJsonAsync<List<UserProduceLike>>($"api/likes/user/{userId}");
+            if (likes != null && likes.Any())
+            {
+                var publicHttp = ClientFactory.CreateClient("PublicAPI");
+                var allProduce = await publicHttp.GetFromJsonAsync<List<Produce>>("api/produce");
+                var likedIds = likes.Select(l => l.ProduceId).ToHashSet();
+                likedProduce = allProduce?.Where(p => likedIds.Contains(p.ProduceId)).ToList() ?? new();
+            }
+            else
+            {
+                likedProduce = new();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading liked produce: {ex.Message}");
+            likedProduce = new();
+        }
+    }
+
+    private async Task UnlikeFromProfile(int produceId)
+    {
+        var http = ClientFactory.CreateClient("ProtectedAPI");
+        try
+        {
+            var response = await http.DeleteAsync($"api/likes?userId={userId}&produceId={produceId}");
+            if (response.IsSuccessStatusCode)
+                await LoadLikedProduce();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error unliking produce: {ex.Message}");
+        }
+        StateHasChanged();
+    }
+
     private void StartEdit()
     {
         editName = userProfile?.Name ?? "";
@@ -293,7 +374,6 @@
         StateHasChanged();
     }
 
-    // Produce edit
     private void StartProduceEdit(Produce item)
     {
         editingProduceId = item.ProduceId;
