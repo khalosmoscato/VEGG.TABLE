@@ -6,12 +6,12 @@
 @inject IHttpClientFactory ClientFactory
 @inject AuthenticationStateProvider AuthStateProvider
 
-<div class=max-w-3xl mx-auto px-8 py-8">
-    <h1 class="text-2xl font-bold mb-6 text-center">Your Profile</h1>
+<div class="max-w-3xl mx-auto px-8 py-8">
+    <h1 class="text-4xl font-bold mb-6 text-center" >Your Profile</h1>
 
     @if (userProfile == null)
     {
-        <p class="text-gray-900 dark:text-white text-center"><em>Loading your profile...</em></p>
+        <p class="text-center" style="color: #065f46;"><em>Loading your profile...</em></p>
     }
     else if (isEditing)
     {
@@ -37,13 +37,10 @@
             }
 
             <div class="flex gap-3 pt-2 justify-center">
-                <button @onclick="SaveChanges" class="btn-accent">
-                    Save Changes
-                </button>
+                <button @onclick="SaveChanges" class="btn-accent">Save Changes</button>
                 <button @onclick="CancelEdit"
                         class="px-4 py-2 rounded-lg border border-emerald-600
-                               text-white hover:bg-emerald-800
-                               transition-colors duration-200">
+                               text-white hover:bg-emerald-800 transition-colors duration-200">
                     Cancel
                 </button>
             </div>
@@ -56,17 +53,69 @@
             <p class="text-white"><strong>Email:</strong> @userProfile.Email</p>
             <p class="text-white"><strong>Account Type:</strong> @userProfile.UserType</p>
 
-            <div class="flex gap-3 pt-2 justify-center">
-                <button @onclick="StartEdit" class="btn-accent">
-                    Edit Profile
-                </button>
+            <div class="flex gap-3 pt-4 justify-center">
+                <button @onclick="StartEdit" class="btn-accent">Edit Profile</button>
             </div>
         </div>
+
+        @if (userProfile.UserType == UserType.Seller)
+        {
+            <div class="mt-10">
+                <h2 class="text-4xl font-bold mb-4 text-center">Your Produce</h2>
+
+                @if (produceList == null)
+                {
+                    <p class="text-center text-gray-600 dark:text-gray-300"><em>Loading your produce...</em></p>
+                }
+                else if (!produceList.Any())
+                {
+                    <p class="text-center text-gray-600 dark:text-gray-300">You have no produce listings yet.</p>
+                }
+                else
+                {
+                    <div class="space-y-3">
+                        @foreach (var item in produceList)
+                        {
+                            <div class="bg-primary shadow rounded-lg p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                                <div class="flex items-center gap-3">
+                                    <span class="text-3xl">@GetProduceEmoji(item.Name)</span>
+                                    <div class="text-left">
+                                        <p class="font-semibold text-white">@item.Name</p>
+                                        <p class="text-sm text-emerald-200">£@item.Price · Stock: @item.Stock</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <span class="text-xs px-2 py-1 rounded-full font-medium whitespace-nowrap
+                                                 @(item.IsOnSale ? "bg-green-300 text-green-900" : "bg-white/20 text-white")">
+                                        @(item.IsOnSale ? "On Sale" : "Not On Sale")
+                                    </span>
+                                    <button @onclick="() => ToggleSale(item)"
+                                            style="background-color: rgba(255,255,255,0.1); transition: background-color 0.2s;"
+                                            onmouseover="this.style.backgroundColor='#059669'"
+                                            onmouseout="this.style.backgroundColor='rgba(255,255,255,0.1)'"
+                                            class="text-xs px-3 py-1 rounded-lg text-white border border-white/30 whitespace-nowrap">
+                                        @(item.IsOnSale ? "Remove from Sale" : "Put On Sale")
+                                    </button>
+                                    <button @onclick="() => DeleteProduce(item.ProduceId)"
+                                            style="background-color: #ef4444; transition: background-color 0.2s;"
+                                            onmouseover="this.style.backgroundColor='#b91c1c'"
+                                            onmouseout="this.style.backgroundColor='#ef4444'"
+                                            class="text-xs px-3 py-1 rounded-lg text-white whitespace-nowrap">
+                                        Delete
+                                    </button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        }
     }
 </div>
 
 @code {
     private UserResponseDTO? userProfile;
+    private List<Produce>? produceList;
     private bool isEditing = false;
     private int userId = 0;
 
@@ -84,6 +133,7 @@
             int.TryParse(idClaim, out userId);
 
         await LoadProfile();
+        await LoadProduce();
     }
 
     private async Task LoadProfile()
@@ -96,6 +146,20 @@
         catch (Exception ex)
         {
             Console.WriteLine($"Error loading profile: {ex.Message}");
+        }
+    }
+
+    private async Task LoadProduce()
+    {
+        if (userId == 0) return;
+        var http = ClientFactory.CreateClient("ProtectedAPI");
+        try
+        {
+            produceList = await http.GetFromJsonAsync<List<Produce>>($"api/produce/seller/all/{userId}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading produce: {ex.Message}");
         }
     }
 
@@ -133,7 +197,7 @@
             if (response.IsSuccessStatusCode)
             {
                 feedbackMessage = "Profile updated successfully!";
-                feedbackColour = "text-green-600 dark:text-green-400";
+                feedbackColour = "text-green-400";
                 await LoadProfile();
                 StateHasChanged();
                 await Task.Delay(1200);
@@ -142,16 +206,62 @@
             else
             {
                 feedbackMessage = "Something went wrong. Please try again.";
-                feedbackColour = "text-red-500 dark:text-red-400";
+                feedbackColour = "text-red-400";
             }
         }
         catch (Exception ex)
         {
             feedbackMessage = $"Error: {ex.Message}";
-            feedbackColour = "text-red-500 dark:text-red-400";
+            feedbackColour = "text-red-400";
             Console.WriteLine($"Error updating profile: {ex.Message}");
         }
 
         StateHasChanged();
     }
+
+    private async Task ToggleSale(Produce item)
+    {
+        var http = ClientFactory.CreateClient("ProtectedAPI");
+        var dto = new ProduceDTO { IsOnSale = !item.IsOnSale };
+        try
+        {
+            var response = await http.PatchAsJsonAsync($"api/produce/{item.ProduceId}", dto);
+            if (response.IsSuccessStatusCode)
+                await LoadProduce();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error toggling sale: {ex.Message}");
+        }
+    }
+
+    private async Task DeleteProduce(int produceId)
+    {
+        var http = ClientFactory.CreateClient("ProtectedAPI");
+        try
+        {
+            var response = await http.DeleteAsync($"api/produce/{produceId}");
+            if (response.IsSuccessStatusCode)
+                await LoadProduce();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error deleting produce: {ex.Message}");
+        }
+    }
+
+    private string GetProduceEmoji(string name) => name.ToLower() switch
+    {
+        var n when n.Contains("plum") => "🍑",
+        var n when n.Contains("apple") => "🍎",
+        var n when n.Contains("banana") => "🍌",
+        var n when n.Contains("carrot") => "🥕",
+        var n when n.Contains("tomato") => "🍅",
+        var n when n.Contains("potato") => "🥔",
+        var n when n.Contains("strawberry") => "🍓",
+        var n when n.Contains("lettuce") => "🥬",
+        var n when n.Contains("orange") => "🍊",
+        var n when n.Contains("cucumber") => "🥒",
+        _ => "🥦"
+    };
 }

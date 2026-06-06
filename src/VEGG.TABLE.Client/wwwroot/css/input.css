@@ -24,6 +24,14 @@
         background-color: var(--color-bg-body-dark);
         color: var(--color-text-main-dark);
     }
+
+    h1, h2 {
+        color: var(--color-primary);
+    }
+
+    .dark h1, .dark h2, .dark h3 {
+        color: var(--color-text-main-dark);
+    }
 }
 
 @layer components {
