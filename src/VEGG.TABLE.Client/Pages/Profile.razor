@@ -7,11 +7,11 @@
 @inject AuthenticationStateProvider AuthStateProvider
 
 <div class="max-w-3xl mx-auto px-8 py-8">
-    <h1 class="text-4xl font-bold mb-6 text-center" >Your Profile</h1>
+    <h1 class="text-4xl font-bold mb-6 text-center">Your Profile</h1>
 
     @if (userProfile == null)
     {
-        <p class="text-center" style="color: #065f46;"><em>Loading your profile...</em></p>
+        <p class="text-center text-accent"><em>Loading your profile...</em></p>
     }
     else if (isEditing)
     {
@@ -76,35 +76,99 @@
                     <div class="space-y-3">
                         @foreach (var item in produceList)
                         {
-                            <div class="bg-primary shadow rounded-lg p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                                <div class="flex items-center gap-3">
-                                    <span class="text-3xl">@GetProduceEmoji(item.Name)</span>
-                                    <div class="text-left">
-                                        <p class="font-semibold text-white">@item.Name</p>
-                                        <p class="text-sm text-emerald-200">£@item.Price · Stock: @item.Stock</p>
+                            @if (editingProduceId == item.ProduceId)
+                            {
+                                <div class="bg-primary shadow rounded-lg p-6 space-y-3">
+                                    <p class="text-white font-semibold text-center">
+                                        Editing: @GetProduceEmoji(item.Name) @item.Name
+                                    </p>
+                                    <div>
+                                        <label class="block text-sm font-semibold text-white mb-1">Name</label>
+                                        <input @bind="editProdName"
+                                               class="w-full border border-emerald-700 rounded-lg px-3 py-2
+                                                      bg-emerald-800 text-white placeholder-emerald-300
+                                                      focus:outline-none focus:ring-2 focus:ring-accent" />
+                                    </div>
+                                    <div class="flex gap-3">
+                                        <div class="flex-1">
+                                            <label class="block text-sm font-semibold text-white mb-1">Price (£)</label>
+                                            <input @bind="editProdPrice" type="number" step="0.01"
+                                                   class="w-full border border-emerald-700 rounded-lg px-3 py-2
+                                                          bg-emerald-800 text-white placeholder-emerald-300
+                                                          focus:outline-none focus:ring-2 focus:ring-accent" />
+                                        </div>
+                                        <div class="flex-1">
+                                            <label class="block text-sm font-semibold text-white mb-1">Stock</label>
+                                            <input @bind="editProdStock" type="number"
+                                                   class="w-full border border-emerald-700 rounded-lg px-3 py-2
+                                                          bg-emerald-800 text-white placeholder-emerald-300
+                                                          focus:outline-none focus:ring-2 focus:ring-accent" />
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-semibold text-white mb-1">Description</label>
+                                        <textarea @bind="editProdDescription" rows="2"
+                                                  class="w-full border border-emerald-700 rounded-lg px-3 py-2
+                                                         bg-emerald-800 text-white placeholder-emerald-300
+                                                         focus:outline-none focus:ring-2 focus:ring-accent" />
+                                    </div>
+
+                                    @if (!string.IsNullOrEmpty(produceFeedbackMessage))
+                                    {
+                                        <p class="text-sm text-center @produceFeedbackColour">@produceFeedbackMessage</p>
+                                    }
+
+                                    <div class="flex gap-3 justify-center pt-2">
+                                        <button @onclick="() => SaveProduceChanges(item.ProduceId)" class="btn-accent">
+                                            Save Changes
+                                        </button>
+                                        <button @onclick="CancelProduceEdit"
+                                                class="px-4 py-2 rounded-lg border border-emerald-600
+                                                       text-white hover:bg-emerald-800 transition-colors duration-200">
+                                            Cancel
+                                        </button>
                                     </div>
                                 </div>
-                                <div class="flex items-center gap-2 flex-wrap">
-                                    <span class="text-xs px-2 py-1 rounded-full font-medium whitespace-nowrap
-                                                 @(item.IsOnSale ? "bg-green-300 text-green-900" : "bg-white/20 text-white")">
-                                        @(item.IsOnSale ? "On Sale" : "Not On Sale")
-                                    </span>
-                                    <button @onclick="() => ToggleSale(item)"
-                                            style="background-color: rgba(255,255,255,0.1); transition: background-color 0.2s;"
-                                            onmouseover="this.style.backgroundColor='#059669'"
-                                            onmouseout="this.style.backgroundColor='rgba(255,255,255,0.1)'"
-                                            class="text-xs px-3 py-1 rounded-lg text-white border border-white/30 whitespace-nowrap">
-                                        @(item.IsOnSale ? "Remove from Sale" : "Put On Sale")
-                                    </button>
-                                    <button @onclick="() => DeleteProduce(item.ProduceId)"
-                                            style="background-color: #ef4444; transition: background-color 0.2s;"
-                                            onmouseover="this.style.backgroundColor='#b91c1c'"
-                                            onmouseout="this.style.backgroundColor='#ef4444'"
-                                            class="text-xs px-3 py-1 rounded-lg text-white whitespace-nowrap">
-                                        Delete
-                                    </button>
+                            }
+                            else
+                            {
+                                <div class="bg-primary shadow rounded-lg p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                                    <div class="flex items-center gap-3">
+                                        <span class="text-3xl">@GetProduceEmoji(item.Name)</span>
+                                        <div class="text-left">
+                                            <p class="font-semibold text-white">@item.Name</p>
+                                            <p class="text-sm text-emerald-200">£@item.Price · Stock: @item.Stock</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-2 flex-wrap">
+                                        <span class="text-xs px-2 py-1 rounded-full font-medium whitespace-nowrap
+                                                     @(item.IsOnSale ? "bg-green-300 text-green-900" : "bg-white/20 text-white")">
+                                            @(item.IsOnSale ? "On Sale" : "Not On Sale")
+                                        </span>
+                                        <button @onclick="() => StartProduceEdit(item)"
+                                                style="background-color: rgba(255,255,255,0.1); transition: background-color 0.2s;"
+                                                onmouseover="this.style.backgroundColor='#059669'"
+                                                onmouseout="this.style.backgroundColor='rgba(255,255,255,0.1)'"
+                                                class="text-xs px-3 py-1 rounded-lg text-white border border-white/30 whitespace-nowrap">
+                                            Edit
+                                        </button>
+                                        <button @onclick="() => ToggleSale(item)"
+                                                style="background-color: rgba(255,255,255,0.1); transition: background-color 0.2s;"
+                                                onmouseover="this.style.backgroundColor='#059669'"
+                                                onmouseout="this.style.backgroundColor='rgba(255,255,255,0.1)'"
+                                                class="text-xs px-3 py-1 rounded-lg text-white border border-white/30 whitespace-nowrap">
+                                            @(item.IsOnSale ? "Remove from Sale" : "Put On Sale")
+                                        </button>
+                                        <button @onclick="() => DeleteProduce(item.ProduceId)"
+                                                style="background-color: #ef4444; transition: background-color 0.2s;"
+                                                onmouseover="this.style.backgroundColor='#b91c1c'"
+                                                onmouseout="this.style.backgroundColor='#ef4444'"
+                                                class="text-xs px-3 py-1 rounded-lg text-white whitespace-nowrap">
+                                            Delete
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
+                            }
                         }
                     </div>
                 }
@@ -119,11 +183,20 @@
     private bool isEditing = false;
     private int userId = 0;
 
+    // Profile edit fields
     private string editName = "";
     private string editEmail = "";
-
     private string feedbackMessage = "";
     private string feedbackColour = "";
+
+    // Produce edit fields
+    private int? editingProduceId = null;
+    private string editProdName = "";
+    private double editProdPrice = 0;
+    private int editProdStock = 0;
+    private string editProdDescription = "";
+    private string produceFeedbackMessage = "";
+    private string produceFeedbackColour = "";
 
     protected override async Task OnInitializedAsync()
     {
@@ -163,6 +236,7 @@
         }
     }
 
+    // Profile edit
     private void StartEdit()
     {
         editName = userProfile?.Name ?? "";
@@ -214,6 +288,64 @@
             feedbackMessage = $"Error: {ex.Message}";
             feedbackColour = "text-red-400";
             Console.WriteLine($"Error updating profile: {ex.Message}");
+        }
+
+        StateHasChanged();
+    }
+
+    // Produce edit
+    private void StartProduceEdit(Produce item)
+    {
+        editingProduceId = item.ProduceId;
+        editProdName = item.Name;
+        editProdPrice = item.Price;
+        editProdStock = item.Stock;
+        editProdDescription = item.Description;
+        produceFeedbackMessage = "";
+    }
+
+    private void CancelProduceEdit()
+    {
+        editingProduceId = null;
+        produceFeedbackMessage = "";
+    }
+
+    private async Task SaveProduceChanges(int produceId)
+    {
+        var http = ClientFactory.CreateClient("ProtectedAPI");
+
+        var dto = new ProduceDTO
+        {
+            Name = editProdName,
+            Price = editProdPrice,
+            Stock = editProdStock,
+            Description = editProdDescription
+        };
+
+        try
+        {
+            var response = await http.PatchAsJsonAsync($"api/produce/{produceId}", dto);
+
+            if (response.IsSuccessStatusCode)
+            {
+                produceFeedbackMessage = "Updated successfully!";
+                produceFeedbackColour = "text-green-400";
+                await LoadProduce();
+                StateHasChanged();
+                await Task.Delay(1200);
+                editingProduceId = null;
+            }
+            else
+            {
+                produceFeedbackMessage = "Something went wrong. Please try again.";
+                produceFeedbackColour = "text-red-400";
+            }
+        }
+        catch (Exception ex)
+        {
+            produceFeedbackMessage = $"Error: {ex.Message}";
+            produceFeedbackColour = "text-red-400";
+            Console.WriteLine($"Error updating produce: {ex.Message}");
         }
 
         StateHasChanged();
