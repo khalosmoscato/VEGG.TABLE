@@ -172,6 +172,115 @@
                         }
                     </div>
                 }
+
+                @* Add Produce Form *@
+                @if (isAddingProduce)
+                {
+                    <div class="bg-primary shadow rounded-lg p-6 space-y-3 mt-4">
+                        <p class="text-white font-semibold text-center">Add New Produce</p>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-white mb-1">Name</label>
+                            <select @bind="newProdName"
+                                    class="w-full border border-emerald-700 rounded-lg px-3 py-2
+                                           bg-emerald-800 text-white focus:outline-none focus:ring-2 focus:ring-accent">
+                                <option value="">-- Select a produce --</option>
+                                <option value="Plums">🍑 Plums</option>
+                                <option value="Apples">🍎 Apples</option>
+                                <option value="Bananas">🍌 Bananas</option>
+                                <option value="Carrots">🥕 Carrots</option>
+                                <option value="Tomatoes">🍅 Tomatoes</option>
+                                <option value="Potatoes">🥔 Potatoes</option>
+                                <option value="Strawberries">🍓 Strawberries</option>
+                                <option value="Lettuce">🥬 Lettuce</option>
+                                <option value="Oranges">🍊 Oranges</option>
+                                <option value="Cucumbers">🥒 Cucumbers</option>
+                                <option value="Broccoli">🥦 Broccoli</option>
+                            </select>
+                        </div>
+
+                        <div class="flex gap-3">
+                            <div class="flex-1">
+                                <label class="block text-sm font-semibold text-white mb-1">Price (£)</label>
+                                <input @bind="newProdPrice" type="number" step="0.01" min="0"
+                                       class="w-full border border-emerald-700 rounded-lg px-3 py-2
+                                              bg-emerald-800 text-white placeholder-emerald-300
+                                              focus:outline-none focus:ring-2 focus:ring-accent" />
+                            </div>
+                            <div class="flex-1">
+                                <label class="block text-sm font-semibold text-white mb-1">Stock</label>
+                                <input @bind="newProdStock" type="number" min="0"
+                                       class="w-full border border-emerald-700 rounded-lg px-3 py-2
+                                              bg-emerald-800 text-white placeholder-emerald-300
+                                              focus:outline-none focus:ring-2 focus:ring-accent" />
+                            </div>
+                            <div class="flex-1">
+                                <label class="block text-sm font-semibold text-white mb-1">Weight (kg)</label>
+                                <input @bind="newProdWeight" type="number" step="0.01" min="0"
+                                       class="w-full border border-emerald-700 rounded-lg px-3 py-2
+                                              bg-emerald-800 text-white placeholder-emerald-300
+                                              focus:outline-none focus:ring-2 focus:ring-accent" />
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-white mb-1">Category</label>
+                            <select @bind="newProdCategory"
+                                    class="w-full border border-emerald-700 rounded-lg px-3 py-2
+                                           bg-emerald-800 text-white focus:outline-none focus:ring-2 focus:ring-accent">
+                                <option value="@Category.LeafyGreens">Leafy Greens (Spinach, Kale, Lettuce)</option>
+                                <option value="@Category.Cruciferous">Cruciferous (Broccoli, Cauliflower)</option>
+                                <option value="@Category.RootAndTuber">Root & Tuber (Carrots, Potatoes)</option>
+                                <option value="@Category.Allium">Allium (Onions, Garlic)</option>
+                                <option value="@Category.FruitVegetables">Fruit Vegetables (Tomatoes, Cucumbers)</option>
+                                <option value="@Category.PodsAndSeeds">Pods & Seeds (Peas, Green Beans)</option>
+                                <option value="@Category.StemsAndShoots">Stems & Shoots (Asparagus, Celery)</option>
+                                <option value="@Category.Mushrooms">Mushrooms</option>
+                                <option value="@Category.Herbs">Herbs (Parsley, Basil)</option>
+                                <option value="@Category.Unkown">Other</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-white mb-1">Description</label>
+                            <textarea @bind="newProdDescription" rows="2"
+                                      class="w-full border border-emerald-700 rounded-lg px-3 py-2
+                                             bg-emerald-800 text-white placeholder-emerald-300
+                                             focus:outline-none focus:ring-2 focus:ring-accent"
+                                      placeholder="Describe your produce..." />
+                        </div>
+
+                        <div class="flex items-center gap-2">
+                            <input type="checkbox" @bind="newProdIsOnSale" id="isOnSale"
+                                   class="w-4 h-4 accent-accent" />
+                            <label for="isOnSale" class="text-sm text-white">List immediately for sale</label>
+                        </div>
+
+                        @if (!string.IsNullOrEmpty(addProduceFeedbackMessage))
+                        {
+                            <p class="text-sm text-center @addProduceFeedbackColour">@addProduceFeedbackMessage</p>
+                        }
+
+                        <div class="flex gap-3 justify-center pt-2">
+                            <button @onclick="SubmitNewProduce" class="btn-accent">
+                                Add Produce
+                            </button>
+                            <button @onclick="CancelAddProduce"
+                                    class="px-4 py-2 rounded-lg border border-emerald-600
+                                           text-white hover:bg-emerald-800 transition-colors duration-200">
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="flex justify-center mt-4">
+                        <button @onclick="() => isAddingProduce = true" class="btn-accent">
+                            + Add New Produce
+                        </button>
+                    </div>
+                }
             </div>
         }
 
@@ -236,6 +345,18 @@
     private string editProdDescription = "";
     private string produceFeedbackMessage = "";
     private string produceFeedbackColour = "";
+
+    // Add produce fields
+    private bool isAddingProduce = false;
+    private string newProdName = "";
+    private double newProdPrice = 0;
+    private int newProdStock = 0;
+    private double newProdWeight = 0;
+    private Category newProdCategory = Category.Unkown;
+    private string newProdDescription = "";
+    private bool newProdIsOnSale = false;
+    private string addProduceFeedbackMessage = "";
+    private string addProduceFeedbackColour = "";
 
     protected override async Task OnInitializedAsync()
     {
@@ -460,6 +581,75 @@
         {
             Console.WriteLine($"Error deleting produce: {ex.Message}");
         }
+    }
+
+    private void CancelAddProduce()
+    {
+        isAddingProduce = false;
+        newProdName = "";
+        newProdPrice = 0;
+        newProdStock = 0;
+        newProdWeight = 0;
+        newProdCategory = Category.Unkown;
+        newProdDescription = "";
+        newProdIsOnSale = false;
+        addProduceFeedbackMessage = "";
+    }
+
+    private async Task SubmitNewProduce()
+    {
+        if (string.IsNullOrWhiteSpace(newProdName))
+        {
+            addProduceFeedbackMessage = "Please select a produce name.";
+            addProduceFeedbackColour = "text-red-400";
+            StateHasChanged();
+            return;
+        }
+
+        var http = ClientFactory.CreateClient("ProtectedAPI");
+
+        var dto = new CreateProduceDTO
+        {
+            Name = newProdName,
+            Price = newProdPrice,
+            Stock = newProdStock,
+            Weight = newProdWeight,
+            Category = newProdCategory,
+            Description = newProdDescription,
+            PhotograghPath = "",
+            IsOnSale = newProdIsOnSale,
+            UserId = userId
+        };
+
+        try
+        {
+            var response = await http.PostAsJsonAsync("api/produce", dto);
+
+            if (response.IsSuccessStatusCode)
+            {
+                addProduceFeedbackMessage = "Produce added successfully!";
+                addProduceFeedbackColour = "text-green-400";
+                await LoadProduce();
+                StateHasChanged();
+                await Task.Delay(1200);
+                CancelAddProduce();
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                addProduceFeedbackMessage = "Something went wrong. Please try again.";
+                addProduceFeedbackColour = "text-red-400";
+                Console.WriteLine($"Add produce failed: {error}");
+            }
+        }
+        catch (Exception ex)
+        {
+            addProduceFeedbackMessage = $"Error: {ex.Message}";
+            addProduceFeedbackColour = "text-red-400";
+            Console.WriteLine($"Error adding produce: {ex.Message}");
+        }
+
+        StateHasChanged();
     }
 
     private string GetProduceEmoji(string name) => name.ToLower() switch
