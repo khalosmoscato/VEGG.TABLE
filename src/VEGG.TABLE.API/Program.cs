@@ -9,14 +9,29 @@ using Scalar.AspNetCore;
 using VEGG.TABLE.API.HealthChecks;
 
 
-var json = File.ReadAllText("Properties/launchSettings.json");
-using var doc = JsonDocument.Parse(json);
-var APIUrl = doc.RootElement
+using System.Text.Json;
+
+// APIURL
+var jsonAPI = File.ReadAllText("Properties/launchSettings.json");
+using var docAPI = JsonDocument.Parse(jsonAPI);
+
+var APIUrl = docAPI.RootElement
     .GetProperty("profiles")
     .GetProperty("http")
     .GetProperty("applicationUrl")
     .GetString();
 
+// ClientURL
+var baseDir = Directory.GetCurrentDirectory();
+var clientPath = Path.GetFullPath(
+    Path.Combine(baseDir, "..", "VEGG.TABLE.Client", "Properties", "launchSettings.json"));
+var jsonClient = File.ReadAllText(clientPath);
+using var docClient = JsonDocument.Parse(jsonClient);
+var ClientUrl = docClient.RootElement
+    .GetProperty("profiles")
+    .GetProperty("http")
+    .GetProperty("applicationUrl")
+    .GetString();
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -56,7 +71,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowClient", policy =>
     {
-        policy.WithOrigins(APIUrl) // Update to your Client port
+        policy.WithOrigins(ClientUrl) // Update to your Client port
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
