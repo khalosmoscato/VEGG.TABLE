@@ -8,6 +8,16 @@ using Scalar.AspNetCore;
 
 using VEGG.TABLE.API.HealthChecks;
 
+
+var json = File.ReadAllText("Properties/launchSettings.json");
+using var doc = JsonDocument.Parse(json);
+var APIUrl = doc.RootElement
+    .GetProperty("profiles")
+    .GetProperty("http")
+    .GetProperty("applicationUrl")
+    .GetString();
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // 1. Add native OpenAPI support
@@ -46,7 +56,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowClient", policy =>
     {
-        policy.WithOrigins("http://localhost:5209") // Update to your Client port
+        policy.WithOrigins(APIUrl) // Update to your Client port
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
