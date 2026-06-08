@@ -22,7 +22,8 @@
                 .addTo(map)
                 .bindPopup(`
                     <b>${farm.name}</b><br>
-                    Contact: <a href="mailto:${farm.ownerEmail}">${farm.ownerEmail || 'N/A'}</a>
+                    Contact: <a href="mailto:${farm.ownerEmail}">${farm.ownerEmail || 'N/A'}</a><br>
+                    <a href="/user-shop/${farm.id}" class="text-green-700 font-bold">Visit Shop</a>
                 `);
             // Creates the Sidebar Item
             const item = document.createElement('div');

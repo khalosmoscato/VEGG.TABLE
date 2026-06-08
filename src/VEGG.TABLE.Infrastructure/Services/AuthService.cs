@@ -41,7 +41,15 @@ public class AuthService : IAuthService
 
     private string GenerateJwtToken(User user)
     {
-        var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!); // Inject IConfiguration
+        // 1. Get the raw string first
+        var keyString = _configuration["Jwt:Key"];
+
+        // 2. Log it to check what is actually being loaded
+        Console.WriteLine($"DEBUG: JWT Key used for signing is: {keyString}");
+
+        // 3. Define the key variable only once
+        var key = Encoding.UTF8.GetBytes(keyString!);
+
         var claims = new[] {
         new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
         new Claim(ClaimTypes.Email, user.Email),
@@ -54,6 +62,7 @@ public class AuthService : IAuthService
             Expires = DateTime.UtcNow.AddDays(7),
             Issuer = _configuration["Jwt:Issuer"],
             Audience = _configuration["Jwt:Audience"],
+            // 4. Use the single 'key' variable defined above
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
 

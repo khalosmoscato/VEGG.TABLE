@@ -24,14 +24,14 @@ public class UserRepository : IUserRepository
 
     public User AddUser(UserDTO userDTO)
     {
-       
+
 
         User user = new User
         {
             //Id is automatically set by DB
             Email = userDTO.Email,
             Name = userDTO.Name,
-            Password = userDTO.Password,
+            Password = BCrypt.Net.BCrypt.HashPassword(userDTO.Password),
             UserType = UserType.Buyer,
         };
 

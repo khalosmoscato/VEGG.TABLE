@@ -42,4 +42,12 @@
         .nav-link-stable:hover {
             @apply bg-accent text-white;
         }
+
+    .login-btn-custom {
+        @apply bg-accent text-white px-4 py-2 rounded-md transition-colors duration-300;
+    }
+
+        .login-btn-custom:hover {
+            @apply !bg-orange-600;
+        }
 }

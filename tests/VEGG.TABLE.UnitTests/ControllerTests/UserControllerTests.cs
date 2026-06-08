@@ -151,7 +151,7 @@ public class UserControllerTests
         _mockService.Verify(x => x.DeleteUser(parameter), Times.Once);
         //check result type
         Assert.IsInstanceOf<NotFoundResult>(result);
-        
+
     }
     [Test]
     public void AddUser_Ok()

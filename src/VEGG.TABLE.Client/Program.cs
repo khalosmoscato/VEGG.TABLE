@@ -1,3 +1,6 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
+
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -13,18 +16,23 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddAuthorizationCore();
 builder.Services.AddScoped<AuthenticationStateProvider, AuthStateProvider>();
 
-//// HttpClient configuration
-//builder.Services.AddTransient<AuthHandler>();
-//builder.Services.AddHttpClient("API", client =>
-//    client.BaseAddress = new Uri("http://localhost:5167"))
-//    .AddHttpMessageHandler<AuthHandler>();
+// Configure Global JSON options to handle Enums as Strings
+var jsonOptions = new JsonSerializerOptions
+{
+    PropertyNameCaseInsensitive = true,
+    Converters = { new JsonStringEnumConverter() }
+};
 
 // Public client
-builder.Services.AddHttpClient("PublicAPI", client => client.BaseAddress = new Uri("http://localhost:5167"));
+builder.Services.AddHttpClient("PublicAPI", client =>
+    client.BaseAddress = new Uri("http://localhost:5167"))
+    .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler());
 
 // Protected client (with AuthHandler)
 builder.Services.AddTransient<AuthHandler>();
-builder.Services.AddHttpClient("ProtectedAPI", client => client.BaseAddress = new Uri("http://localhost:5167"))
-                .AddHttpMessageHandler<AuthHandler>();
+builder.Services.AddHttpClient("ProtectedAPI", client =>
+    client.BaseAddress = new Uri("http://localhost:5167/"))
+    .AddHttpMessageHandler<AuthHandler>()
+    .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler());
 
 await builder.Build().RunAsync();

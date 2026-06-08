@@ -20,7 +20,7 @@ public class ProduceController : ControllerBase
         return Ok(_produceService.GetAllProduces());
     }
 
-     //GET: /api/produce/onsale
+    //GET: /api/produce/onsale
     [HttpGet("onsale")]
     public IActionResult GetAllProduceOnSale()
     {
@@ -51,7 +51,7 @@ public class ProduceController : ControllerBase
         List<Produce>? produceList = _produceService.GetProduceByUserId(userId);
 
         if (produceList == null) return NotFound();
-        
+
         if (!produceList.Any()) return NoContent();
 
         return Ok(produceList);
@@ -83,7 +83,7 @@ public class ProduceController : ControllerBase
     public IActionResult UpdateProduce(int id, ProduceDTO produceDTO)
     {
         var updated = _produceService.UpdateProduce(id, produceDTO);
-        if(updated == null) return NotFound();
+        if (updated == null) return NotFound();
         return Ok(updated);
     }
 

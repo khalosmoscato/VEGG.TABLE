@@ -1,19 +1,39 @@
-﻿<PageTitle>VEGG.TABLE: Profile</PageTitle>
-@page "/profile"
-<!-- THIS PAGE NEEDS TO BE CREATED ONCE LOGIN/REGISTER IS COMPLETED. IF THE USER IS A SELLER IT WILL DISPLAY THEIR PRODUCE LISTINGS AND THEY CAN EDIT THEM, ADD MORE, DELETE, ALSO EDIT THEIR ACCOUNTS / IF THE USER LOGGED IN IS A BUYER ONLY THEY CAN VIEW THEIR PURCHASE HISTORY AND EDIT THEIR ACCOUNT / IF THE USER LOGGED IN IS AN ADMIN THEY CAN CHANGE VARIOUS ASPECTS OF THE WEBSITE POSSIBLY, MODERATE LISTINGS ETC ..-->
-<PageTitle>Counter</PageTitle>
+﻿@page "/profile"
+@using Microsoft.AspNetCore.Components.Authorization
+@using VEGG.TABLE.Core.Entities.DTOs
+@inject IHttpClientFactory ClientFactory
 
-<h1>Counter</h1>
+<div class="p-8">
+    <h1 class="text-2xl font-bold mb-4">Your Profile</h1>
 
-<p role="status">Current count: @currentCount</p>
-
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+    @if (userProfile == null)
+    {
+        <p><em>Loading your profile...</em></p>
+    }
+    else
+    {
+        <div class="bg-white shadow rounded-lg p-6">
+            <p><strong>Name:</strong> @userProfile.Name</p>
+            <p><strong>Email:</strong> @userProfile.Email</p>
+            <p><strong>Account Type:</strong> @userProfile.UserType</p>
+        </div>
+    }
+</div>
 
 @code {
-    private int currentCount = 0;
+    private UserResponseDTO? userProfile;
 
-    private void IncrementCount()
+    protected override async Task OnInitializedAsync()
     {
-        currentCount++;
+        var protectedHttp = ClientFactory.CreateClient("ProtectedAPI");
+
+        try
+        {
+            userProfile = await protectedHttp.GetFromJsonAsync<UserResponseDTO>("api/user/profile");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading profile: {ex.Message}");
+        }
     }
 }

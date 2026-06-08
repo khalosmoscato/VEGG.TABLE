@@ -16,7 +16,7 @@ public class ProduceControllerTests
 
     [SetUp]
     public void Setup()
-    {   
+    {
         _mockService = new Mock<IProduceService>();
         _controller = new ProduceController(_mockService.Object);
 
@@ -72,7 +72,7 @@ public class ProduceControllerTests
         var resultPayload = resultObject?.Value as List<Produce>;
         //check the data is matching expected
         Assert.IsNotNull(result);
-        Assert.That(resultPayload, Is.EquivalentTo(expectedProduces));
+        Assert.That(resultPayload, Is.EquivalentTo(expectedProduces!));
     }
 
     [Test]
@@ -138,12 +138,12 @@ public class ProduceControllerTests
     {
         //ARRANGE
         var produceList = testProduce;
-        var produceDTO = new CreateProduceDTO { Name = "Apples", UserId = 1, Stock =5, Description= "An Apple", IsOnSale = true, Price = 2.00};
+        var produceDTO = new CreateProduceDTO { Name = "Apples", UserId = 1, Stock = 5, Description = "An Apple", IsOnSale = true, Price = 2.00 };
         var produce = new Produce { ProduceId = 8, Name = "Apples", UserId = 1 };
         _mockService.Setup(r => r.AddProduce(produceDTO)).Returns(produce);
         //ACT
         var result = _controller.AddProduce(produceDTO);
-       
+
         //ASSERT
         //check that the correct function is called
         _mockService.Verify(x => x.AddProduce(produceDTO), Times.Once);
@@ -214,7 +214,7 @@ public class ProduceControllerTests
         _mockService.Verify(x => x.DeleteProduce(1), Times.Once);
         //check result type
         Assert.IsInstanceOf<NoContentResult>(result);
-        
+
     }
 
     [Test]
@@ -228,7 +228,7 @@ public class ProduceControllerTests
         _mockService.Verify(x => x.DeleteProduce(99), Times.Once);
         //check result type
         Assert.IsInstanceOf<NotFoundResult>(result);
-       
+
     }
 
     [Test]
@@ -239,7 +239,7 @@ public class ProduceControllerTests
         var produceList = DummyProduce.DummyProduceList;
         var expectedProduce = produceList.Where(p => p.UserId == parameter).ToList();
         _mockService.Setup(s => s.GetProduceByUserIdAll(parameter)).Returns(expectedProduce);
-        
+
         foreach (Produce p in expectedProduce) Console.WriteLine(p.Name + p.ProduceId);
         //Act
         var result = _controller.GetProduceByUserIdAll(parameter);
@@ -292,9 +292,11 @@ public class ProduceControllerTests
         var produceList = DummyProduce.DummyProduceList;
         List<Produce>? expectedProduce = null;
         var user = produceList.FirstOrDefault(p => p.UserId == parameter);
-            if(user != null){
+        if (user != null)
+        {
             expectedProduce = produceList.Where(p => p.UserId == parameter && p.IsOnSale == true).ToList();
-            };
+        }
+        ;
         _mockService.Setup(s => s.GetProduceByUserId(parameter)).Returns(expectedProduce);
 
         //ACT
@@ -325,6 +327,6 @@ public class ProduceControllerTests
         _mockService.Verify(x => x.GetProduceByUserId(parameter), Times.Once);
         //check result type
         Assert.IsInstanceOf<NoContentResult>(result);
-        
+
     }
 }
