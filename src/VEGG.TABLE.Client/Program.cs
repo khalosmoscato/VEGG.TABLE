@@ -8,9 +8,23 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using VEGG.TABLE.Client;
 using VEGG.TABLE.Client.Services;
 
-var json = File.ReadAllText("Properties/launchSettings.json");
-using var doc = JsonDocument.Parse(json);
-var CLientUrl = doc.RootElement
+// APIURL
+var baseDir = Directory.GetCurrentDirectory();
+var APIPath = Path.GetFullPath(
+    Path.Combine(baseDir, "..", "VEGG.TABLE.API", "Properties", "launchSettings.json"));
+var jsonAPI = File.ReadAllText(APIPath);
+using var docAPI = JsonDocument.Parse(jsonAPI);
+var APIUrl = docAPI.RootElement
+    .GetProperty("profiles")
+    .GetProperty("http")
+    .GetProperty("applicationUrl")
+    .GetString();
+// ClientURL
+var clientPath = Path.GetFullPath(
+    Path.Combine(baseDir, "..", "VEGG.TABLE.Client", "Properties", "launchSettings.json"));
+var jsonClient = File.ReadAllText(clientPath);
+using var docClient = JsonDocument.Parse(jsonClient);
+var ClientUrl = docClient.RootElement
     .GetProperty("profiles")
     .GetProperty("http")
     .GetProperty("applicationUrl")
@@ -34,13 +48,13 @@ var jsonOptions = new JsonSerializerOptions
 
 // Public client
 builder.Services.AddHttpClient("PublicAPI", client =>
-    client.BaseAddress = new Uri(CLientUrl))
+    client.BaseAddress = new Uri(APIUrl))
     .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler());
 
 // Protected client (with AuthHandler)
 builder.Services.AddTransient<AuthHandler>();
 builder.Services.AddHttpClient("ProtectedAPI", client =>
-    client.BaseAddress = new Uri(CLientUrl))
+    client.BaseAddress = new Uri(APIUrl))
     .AddHttpMessageHandler<AuthHandler>()
     .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler());
 

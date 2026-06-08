@@ -3,18 +3,16 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-
 using Scalar.AspNetCore;
-
 using VEGG.TABLE.API.HealthChecks;
-
-
 using System.Text.Json;
 
 // APIURL
-var jsonAPI = File.ReadAllText("Properties/launchSettings.json");
+var baseDir = Directory.GetCurrentDirectory();
+var APIPath = Path.GetFullPath(
+    Path.Combine(baseDir, "..", "VEGG.TABLE.API", "Properties", "launchSettings.json"));
+var jsonAPI = File.ReadAllText(APIPath);
 using var docAPI = JsonDocument.Parse(jsonAPI);
-
 var APIUrl = docAPI.RootElement
     .GetProperty("profiles")
     .GetProperty("http")
@@ -22,7 +20,6 @@ var APIUrl = docAPI.RootElement
     .GetString();
 
 // ClientURL
-var baseDir = Directory.GetCurrentDirectory();
 var clientPath = Path.GetFullPath(
     Path.Combine(baseDir, "..", "VEGG.TABLE.Client", "Properties", "launchSettings.json"));
 var jsonClient = File.ReadAllText(clientPath);
