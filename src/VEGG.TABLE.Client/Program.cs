@@ -23,15 +23,15 @@ var jsonOptions = new JsonSerializerOptions
     Converters = { new JsonStringEnumConverter() }
 };
 
-// Public client
+// create Public client for API server
 builder.Services.AddHttpClient("PublicAPI", client =>
-    client.BaseAddress = new Uri("http://localhost:5167"))
+    client.BaseAddress = new Uri(URLs.APIURL))//server for API
     .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler());
 
-// Protected client (with AuthHandler)
+// Protected client (with AuthHandler) for API server
 builder.Services.AddTransient<AuthHandler>();
 builder.Services.AddHttpClient("ProtectedAPI", client =>
-    client.BaseAddress = new Uri("http://localhost:5167/"))
+    client.BaseAddress = new Uri(URLs.APIURL))//server for API
     .AddHttpMessageHandler<AuthHandler>()
     .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler());
 

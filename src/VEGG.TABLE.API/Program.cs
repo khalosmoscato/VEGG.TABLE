@@ -6,6 +6,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 using Scalar.AspNetCore;
 
+using VEGG.TABLE.API;
 using VEGG.TABLE.API.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -46,7 +47,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowClient", policy =>
     {
-        policy.WithOrigins("http://localhost:5209") // Update to your Client port
+        policy.WithOrigins(URLs.ClientURL) // Allow clientto connect to the port of our local API 
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
