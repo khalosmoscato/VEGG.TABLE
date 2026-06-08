@@ -1,33 +1,58 @@
-<PageTitle>VEGG.TABLE: Register</PageTitle>
 @page "/register"
+@using VEGG.TABLE.Core.Entities
+@inject HttpClient Http
+@inject NavigationManager Navigation
+@inject IJSRuntime JS
 
-<div class="max-w-md mx-auto p-6 mt-10">
-    <div class="bg-primary p-8 rounded-lg shadow-sm">
-        <h1 class="text-2xl font-bold text-accent mb-6">Create Account</h1>
-        
-        <div class="space-y-4">
-            <div>
-                <label for="fullName" class="block text-white text-sm font-medium mb-1">Full Name</label>
-                <input id="fullName" name="fullName" type="text" autocomplete="name" class="w-full text-white p-2 rounded border border-gray-300" placeholder="John Doe" />
-            </div>
-            
-            <div>
-                <label for="email" class="block text-white text-sm font-medium mb-1">Email</label>
-                <input id="email" name="email" type="email" autocomplete="email" class="w-full text-white p-2 rounded border border-gray-300" placeholder="your@email.com" />
-            </div>
-            
-            <div>
-                <label for="password" class="block text-white text-sm font-medium mb-1">Password</label>
-                <input id="password" name="password" type="password" autocomplete="new-password" class="w-full text-white p-2 rounded border border-gray-300" placeholder="••••••••" />
-            </div>
+<h3>Register Account</h3>
 
-            <button type="submit" class="w-full bg-accent text-white font-bold py-2 rounded hover:bg-orange-600 transition-colors mt-4">
-                Register
-            </button>
-        </div>
-        
-        <p class="text-white text-sm mt-4 text-center">
-            Already have an account? <a href="login" class="text-accent underline">Sign in here</a>
-        </p>
-    </div>
-</div>
+<EditForm Model="@user" OnValidSubmit="HandleRegister">
+	<div class="mb-3">
+		<label>Full Name</label>
+		<InputText @bind-Value="user.Name" class="form-control" placeholder="Enter name" />
+	</div>
+	<div class="mb-3">
+		<label>Email Address</label>
+		<InputText @bind-Value="user.Email" class="form-control" placeholder="Enter email" />
+	</div>
+	<div class="mb-3">
+		<label>Password</label>
+		<InputText @bind-Value="user.Password" type="password" class="form-control" placeholder="Enter password" />
+	</div>
+	<div class="mb-3">
+		<label>I am a...</label>
+		<InputSelect @bind-Value="user.UserType" class="form-control">
+			<option value="@UserType.Buyer">Buyer</option>
+			<option value="@UserType.Seller">Seller</option>
+		</InputSelect>
+	</div>
+	<button type="submit" class="btn btn-primary">Register</button>
+</EditForm>
+
+@code {
+	private UserDTO user = new UserDTO { Name = "", Email = "", Password = "" };
+
+	private async Task HandleRegister()
+	{
+		try
+		{
+			// The route must match [Route("api/[controller]")] in UserController
+			var response = await Http.PostAsJsonAsync("api/user", user);
+
+			if (response.IsSuccessStatusCode)
+			{
+				await JS.InvokeVoidAsync("alert", "Registration successful!");
+				Navigation.NavigateTo("/login");
+			}
+			else
+			{
+				var error = await response.Content.ReadAsStringAsync();
+				await JS.InvokeVoidAsync("alert", $"Registration failed: {error}");
+			}
+		}
+		catch (Exception ex)
+		{
+			await JS.InvokeVoidAsync("alert", $"System error: {ex.Message}");
+		}
+	}
+}
