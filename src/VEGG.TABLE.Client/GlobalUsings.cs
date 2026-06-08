@@ -6,5 +6,5 @@ global using Microsoft.AspNetCore.Components.Forms;
 global using Microsoft.AspNetCore.Components.Web;
 global using Microsoft.AspNetCore.Components.WebAssembly.Http;
 
-global using VEGG.TABLE.Core.Entities;
+global using VEGG.TABLE.Core.URLs;
 global using VEGG.TABLE.Core.Entities.DTOs;

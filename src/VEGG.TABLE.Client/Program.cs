@@ -8,30 +8,8 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using VEGG.TABLE.Client;
 using VEGG.TABLE.Client.Services;
 
-// APIURL
-var baseDir = Directory.GetCurrentDirectory();
-var APIPath = Path.GetFullPath(
-    Path.Combine(baseDir, "..", "VEGG.TABLE.API", "Properties", "launchSettings.json"));
-var jsonAPI = File.ReadAllText(APIPath);
-using var docAPI = JsonDocument.Parse(jsonAPI);
-var APIUrl = docAPI.RootElement
-    .GetProperty("profiles")
-    .GetProperty("http")
-    .GetProperty("applicationUrl")
-    .GetString();
-APIUrl = "http://localhost:5167";
-
-// ClientURL
-var clientPath = Path.GetFullPath(
-    Path.Combine(baseDir, "..", "VEGG.TABLE.Client", "Properties", "launchSettings.json"));
-var jsonClient = File.ReadAllText(clientPath);
-using var docClient = JsonDocument.Parse(jsonClient);
-var ClientUrl = docClient.RootElement
-    .GetProperty("profiles")
-    .GetProperty("http")
-    .GetProperty("applicationUrl")
-    .GetString();
-ClientUrl = "http://localhost:5215";
+string APIUrl = "http://localhost:5167";
+//string ClientUrl = "http://localhost:5215";
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
