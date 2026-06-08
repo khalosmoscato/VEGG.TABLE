@@ -1,5 +1,6 @@
 ﻿@page "/sellers"
 @using VEGG.TABLE.Core.Entities
+@using VEGG.TABLE.Core.Entities.DTOs
 @inject IHttpClientFactory ClientFactory
 @inject NavigationManager Nav
 
@@ -43,25 +44,26 @@
 </div>
 
 @code {
-    private List<Farm>? farms;
-    private List<User>? users;
+	private List<Farm>? farms;
+	private List<UserResponseDTO>? users;
 
-    protected override async Task OnInitializedAsync()
-    {
-        try
-        {
-            var http = ClientFactory.CreateClient("PublicAPI");
-            farms = await http.GetFromJsonAsync<List<Farm>>("api/farms");
-            var allUsers = await http.GetFromJsonAsync<List<User>>("api/user");
-            users = allUsers?.Where(u => u.UserType == UserType.Seller).ToList();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error loading data: {ex.Message}");
-        }
-        finally
-        {
-            StateHasChanged();
-        }
-    }
+	protected override async Task OnInitializedAsync()
+	{
+		try
+		{
+			var http = ClientFactory.CreateClient("PublicAPI");
+
+			farms = await http.GetFromJsonAsync<List<Farm>>("api/farms");
+			users = await http.GetFromJsonAsync<List<UserResponseDTO>>("api/user/sellers");
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine($"Error loading data: {ex.Message}");
+		}
+		finally
+		{
+			// Force re-render once fetching is attempted
+			StateHasChanged();
+		}
+	}
 }
