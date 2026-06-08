@@ -15,7 +15,7 @@ using static System.Net.WebRequestMethods;
 var baseDir = Directory.GetCurrentDirectory();
 var APIPath = Path.GetFullPath(
     Path.Combine(baseDir, "..", "VEGG.TABLE.API", "Properties", "launchSettings.json"));
-var jsonAPI = File.ReadAllText(APIPath);
+var jsonAPI = System.IO.File.ReadAllText(APIPath);
 using var docAPI = JsonDocument.Parse(jsonAPI);
 var APIUrl = docAPI.RootElement
     .GetProperty("profiles")
@@ -23,11 +23,10 @@ var APIUrl = docAPI.RootElement
     .GetProperty("applicationUrl")
     .GetString();
 APIUrl = "http://localhost:5167";
-
 // ClientURL
 var clientPath = Path.GetFullPath(
     Path.Combine(baseDir, "..", "VEGG.TABLE.Client", "Properties", "launchSettings.json"));
-var jsonClient = File.ReadAllText(clientPath);
+var jsonClient = System.IO.File.ReadAllText(clientPath);
 using var docClient = JsonDocument.Parse(jsonClient);
 var ClientUrl = docClient.RootElement
     .GetProperty("profiles")

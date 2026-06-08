@@ -19,6 +19,8 @@ var APIUrl = docAPI.RootElement
     .GetProperty("http")
     .GetProperty("applicationUrl")
     .GetString();
+APIUrl = "http://localhost:5167";
+
 // ClientURL
 var clientPath = Path.GetFullPath(
     Path.Combine(baseDir, "..", "VEGG.TABLE.Client", "Properties", "launchSettings.json"));
@@ -29,7 +31,7 @@ var ClientUrl = docClient.RootElement
     .GetProperty("http")
     .GetProperty("applicationUrl")
     .GetString();
-
+ClientUrl = "http://localhost:5215";
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
