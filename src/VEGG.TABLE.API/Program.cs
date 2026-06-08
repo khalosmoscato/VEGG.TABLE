@@ -1,11 +1,15 @@
 using System.Text.Json;
+using System.Text.Json;
 
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+
 using Scalar.AspNetCore;
+
 using VEGG.TABLE.API.HealthChecks;
-using System.Text.Json;
+
+using static System.Net.WebRequestMethods;
 
 // APIURL
 var baseDir = Directory.GetCurrentDirectory();
@@ -18,6 +22,7 @@ var APIUrl = docAPI.RootElement
     .GetProperty("http")
     .GetProperty("applicationUrl")
     .GetString();
+APIUrl = "http://localhost:5167";
 
 // ClientURL
 var clientPath = Path.GetFullPath(
@@ -29,6 +34,7 @@ var ClientUrl = docClient.RootElement
     .GetProperty("http")
     .GetProperty("applicationUrl")
     .GetString();
+ClientUrl = "http://localhost:5215";
 
 var builder = WebApplication.CreateBuilder(args);
 
