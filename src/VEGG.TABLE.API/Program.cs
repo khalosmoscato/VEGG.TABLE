@@ -8,10 +8,12 @@ using Scalar.AspNetCore;
 
 using VEGG.TABLE.API.HealthChecks;
 
-using static System.Net.WebRequestMethods;
-
 //string APIUrl = "http://localhost:5167";
 string ClientUrl = "http://localhost:5215";
+
+
+//toogle which if true will connect to the local server using that string and if toggle = flase will use Azure
+bool serverLocalToggle = false;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,8 +38,11 @@ builder.Services.AddScoped<IFarmRepository, FarmRepository>();
 builder.Services.AddScoped<IFarmService, FarmService>();
 
 // Get the connection string from appsettings.json
-string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-    ?? throw new InvalidOperationException("Missing connection string 'DefaultConnection'.");
+string connectionStringSelect = "DefaultConnection";
+if (!serverLocalToggle) { connectionStringSelect = "DefaultConnection2"; }
+    string connectionString = builder.Configuration.GetConnectionString(connectionStringSelect)
+            ?? throw new InvalidOperationException("Missing connection string 'DefaultConnection'.");
+
 
 // Add a service to the build in the form of our database context, configured to use SQL Server.
 builder.Services.AddDbContext<DBContext>(options => options.UseSqlServer(connectionString));

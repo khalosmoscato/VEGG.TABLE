@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using VEGG.TABLE.Client;
 using VEGG.TABLE.Client.Services;
 
-string APIUrl = "http://localhost:5167";
+string apiUrl = "http://localhost:5167";
 //string ClientUrl = "http://localhost:5215";
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
@@ -28,13 +28,13 @@ var jsonOptions = new JsonSerializerOptions
 
 // Public client
 builder.Services.AddHttpClient("PublicAPI", client =>
-    client.BaseAddress = new Uri(APIUrl))
+    client.BaseAddress = new Uri(apiUrl))
     .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler());
 
 // Protected client (with AuthHandler)
 builder.Services.AddTransient<AuthHandler>();
 builder.Services.AddHttpClient("ProtectedAPI", client =>
-    client.BaseAddress = new Uri(APIUrl))
+    client.BaseAddress = new Uri(apiUrl))
     .AddHttpMessageHandler<AuthHandler>()
     .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler());
 
