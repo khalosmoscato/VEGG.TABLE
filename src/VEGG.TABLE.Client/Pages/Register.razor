@@ -1,33 +1,76 @@
-<PageTitle>VEGG.TABLE: Register</PageTitle>
 @page "/register"
+@using VEGG.TABLE.Core.Entities
+@inject IHttpClientFactory ClientFactory
+@inject NavigationManager Navigation
+@inject IJSRuntime JS
 
-<div class="max-w-md mx-auto p-6 mt-10">
-    <div class="bg-primary p-8 rounded-lg shadow-sm">
-        <h1 class="text-2xl font-bold text-accent mb-6">Create Account</h1>
-        
-        <div class="space-y-4">
-            <div>
-                <label for="fullName" class="block text-white text-sm font-medium mb-1">Full Name</label>
-                <input id="fullName" name="fullName" type="text" autocomplete="name" class="w-full text-white p-2 rounded border border-gray-300" placeholder="John Doe" />
-            </div>
-            
-            <div>
-                <label for="email" class="block text-white text-sm font-medium mb-1">Email</label>
-                <input id="email" name="email" type="email" autocomplete="email" class="w-full text-white p-2 rounded border border-gray-300" placeholder="your@email.com" />
-            </div>
-            
-            <div>
-                <label for="password" class="block text-white text-sm font-medium mb-1">Password</label>
-                <input id="password" name="password" type="password" autocomplete="new-password" class="w-full text-white p-2 rounded border border-gray-300" placeholder="••••••••" />
-            </div>
+@* Remove 'bg-gray-50' to make the background transparent/match your site's main theme *@
+<div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
 
-            <button type="submit" class="w-full bg-accent text-white font-bold py-2 rounded hover:bg-orange-600 transition-colors mt-4">
-                Register
-            </button>
-        </div>
-        
-        <p class="text-white text-sm mt-4 text-center">
-            Already have an account? <a href="login" class="text-accent underline">Sign in here</a>
-        </p>
-    </div>
+	@* Card: Removed border-2 border-[#E98226] to eliminate the orange outline *@
+	<div class="max-w-md w-full space-y-8 bg-[#175A36] p-10 rounded-xl shadow-lg">
+		<div>
+			<h2 class="mt-6 text-center text-3xl font-extrabold text-[#E98226]">Sign Up</h2>
+			<p class="mt-2 text-center text-sm text-white">
+				Create an account as a Buyer, Seller, or Admin
+			</p>
+		</div>
+
+		<EditForm Model="@user" OnValidSubmit="HandleRegister" class="mt-8 space-y-6">
+			<div class="rounded-md shadow-sm -space-y-px">
+				<div class="mb-4">
+					<label class="block text-sm font-medium text-[#E98226]">Full Name</label>
+					@* Simplified input: Removed border-2 border-[#E98226] *@
+					<InputText @bind-Value="user.Name" class="appearance-none rounded-md relative block w-full px-3 py-2 bg-[#44A377] text-white focus:outline-none focus:ring-2 focus:ring-[#E98226] sm:text-sm" placeholder="John Doe" />
+				</div>
+				<div class="mb-4">
+					<label class="block text-sm font-medium text-[#E98226]">Email Address</label>
+					<InputText @bind-Value="user.Email" class="appearance-none rounded-md relative block w-full px-3 py-2 bg-[#44A377] text-white focus:outline-none focus:ring-2 focus:ring-[#E98226] sm:text-sm" placeholder="email@example.com" />
+				</div>
+				<div class="mb-4">
+					<label class="block text-sm font-medium text-[#E98226]">Password</label>
+					<InputText @bind-Value="user.Password" type="password" class="appearance-none rounded-md relative block w-full px-3 py-2 bg-[#44A377] text-white focus:outline-none focus:ring-2 focus:ring-[#E98226] sm:text-sm" placeholder="••••••••" />
+				</div>
+				<div class="mb-6">
+					<label class="block text-sm font-medium text-[#E98226]">Account Type</label>
+					@* Simplified select: Removed border-2 border-[#E98226] *@
+					<InputSelect @bind-Value="user.UserType" class="mt-1 block w-full pl-3 pr-10 py-2 text-base bg-[#44A377] text-white focus:outline-none focus:ring-2 focus:ring-[#E98226] sm:text-sm rounded-md">
+						<option value="@UserType.Buyer">Buyer</option>
+						<option value="@UserType.Seller">Seller</option>
+						<option value="@UserType.Admin">Admin</option>
+					</InputSelect>
+				</div>
+			</div>
+
+			<div>
+				<button type="submit" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-[#E98226] hover:bg-[#F2A45C] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#E98226]">
+					Register Account
+				</button>
+			</div>
+
+			<div class="text-center mt-6">
+				<span class="text-white text-sm">Already have an account?</span>
+				<a href="/login" class="font-medium text-[#E98226] hover:text-[#F2A45C] text-sm ml-1 transition duration-150">Sign in here</a>
+			</div>
+		</EditForm>
+	</div>
 </div>
+
+@code {
+	private UserDTO user = new UserDTO { Name = "", Email = "", Password = "" };
+
+	private async Task HandleRegister()
+	{
+		var client = ClientFactory.CreateClient("PublicAPI");
+		var response = await client.PostAsJsonAsync("api/user", user);
+
+		if (response.IsSuccessStatusCode)
+		{
+			Navigation.NavigateTo("/login");
+		}
+		else
+		{
+			await JS.InvokeVoidAsync("alert", "Registration failed. Please check your inputs.");
+		}
+	}
+}
