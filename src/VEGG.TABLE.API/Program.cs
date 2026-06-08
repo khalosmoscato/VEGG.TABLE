@@ -8,6 +8,13 @@ using Scalar.AspNetCore;
 
 using VEGG.TABLE.API.HealthChecks;
 
+//string APIUrl = "http://localhost:5167";
+string ClientUrl = "http://localhost:5215";
+
+
+//toogle which if true will connect to the local server using that string and if toggle = flase will use Azure
+bool serverLocalToggle = false;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // 1. Add native OpenAPI support
@@ -31,8 +38,11 @@ builder.Services.AddScoped<IFarmRepository, FarmRepository>();
 builder.Services.AddScoped<IFarmService, FarmService>();
 
 // Get the connection string from appsettings.json
-string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-    ?? throw new InvalidOperationException("Missing connection string 'DefaultConnection'.");
+string connectionStringSelect = "DefaultConnection";
+if (!serverLocalToggle) { connectionStringSelect = "DefaultConnection2"; }
+    string connectionString = builder.Configuration.GetConnectionString(connectionStringSelect)
+            ?? throw new InvalidOperationException("Missing connection string 'DefaultConnection'.");
+
 
 // Add a service to the build in the form of our database context, configured to use SQL Server.
 builder.Services.AddDbContext<DBContext>(options => options.UseSqlServer(connectionString));
@@ -46,7 +56,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowClient", policy =>
     {
-        policy.WithOrigins("http://localhost:5209") // Update to your Client port
+        policy.WithOrigins(ClientUrl) // Update to your Client port
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
