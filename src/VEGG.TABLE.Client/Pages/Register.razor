@@ -4,32 +4,37 @@
 @inject NavigationManager Navigation
 @inject IJSRuntime JS
 
-<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-	<div class="max-w-md w-full space-y-8 bg-white p-10 rounded-xl shadow-lg border-t-4 border-emerald-600">
+@* Remove 'bg-gray-50' to make the background transparent/match your site's main theme *@
+<div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+
+	@* Card: Removed border-2 border-[#E98226] to eliminate the orange outline *@
+	<div class="max-w-md w-full space-y-8 bg-[#175A36] p-10 rounded-xl shadow-lg">
 		<div>
-			<h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Create your account</h2>
-			<p class="mt-2 text-center text-sm text-gray-600">
-				Join the marketplace as a Buyer, Seller, or Admin
+			<h2 class="mt-6 text-center text-3xl font-extrabold text-[#E98226]">Sign Up</h2>
+			<p class="mt-2 text-center text-sm text-white">
+				Create an account as a Buyer, Seller, or Admin
 			</p>
 		</div>
 
 		<EditForm Model="@user" OnValidSubmit="HandleRegister" class="mt-8 space-y-6">
 			<div class="rounded-md shadow-sm -space-y-px">
 				<div class="mb-4">
-					<label class="block text-sm font-medium text-gray-700">Full Name</label>
-					<InputText @bind-Value="user.Name" class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm" placeholder="John Doe" />
+					<label class="block text-sm font-medium text-[#E98226]">Full Name</label>
+					@* Simplified input: Removed border-2 border-[#E98226] *@
+					<InputText @bind-Value="user.Name" class="appearance-none rounded-md relative block w-full px-3 py-2 bg-[#44A377] text-white focus:outline-none focus:ring-2 focus:ring-[#E98226] sm:text-sm" placeholder="John Doe" />
 				</div>
 				<div class="mb-4">
-					<label class="block text-sm font-medium text-gray-700">Email Address</label>
-					<InputText @bind-Value="user.Email" class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm" placeholder="email@example.com" />
+					<label class="block text-sm font-medium text-[#E98226]">Email Address</label>
+					<InputText @bind-Value="user.Email" class="appearance-none rounded-md relative block w-full px-3 py-2 bg-[#44A377] text-white focus:outline-none focus:ring-2 focus:ring-[#E98226] sm:text-sm" placeholder="email@example.com" />
 				</div>
 				<div class="mb-4">
-					<label class="block text-sm font-medium text-gray-700">Password</label>
-					<InputText @bind-Value="user.Password" type="password" class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm" placeholder="••••••••" />
+					<label class="block text-sm font-medium text-[#E98226]">Password</label>
+					<InputText @bind-Value="user.Password" type="password" class="appearance-none rounded-md relative block w-full px-3 py-2 bg-[#44A377] text-white focus:outline-none focus:ring-2 focus:ring-[#E98226] sm:text-sm" placeholder="••••••••" />
 				</div>
 				<div class="mb-6">
-					<label class="block text-sm font-medium text-gray-700">Role</label>
-					<InputSelect @bind-Value="user.UserType" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm rounded-md">
+					<label class="block text-sm font-medium text-[#E98226]">Account Type</label>
+					@* Simplified select: Removed border-2 border-[#E98226] *@
+					<InputSelect @bind-Value="user.UserType" class="mt-1 block w-full pl-3 pr-10 py-2 text-base bg-[#44A377] text-white focus:outline-none focus:ring-2 focus:ring-[#E98226] sm:text-sm rounded-md">
 						<option value="@UserType.Buyer">Buyer</option>
 						<option value="@UserType.Seller">Seller</option>
 						<option value="@UserType.Admin">Admin</option>
@@ -38,9 +43,14 @@
 			</div>
 
 			<div>
-				<button type="submit" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-emerald-600 hover:bg-orange-500 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500">
+				<button type="submit" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-[#E98226] hover:bg-[#F2A45C] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#E98226]">
 					Register Account
 				</button>
+			</div>
+
+			<div class="text-center mt-6">
+				<span class="text-white text-sm">Already have an account?</span>
+				<a href="/login" class="font-medium text-[#E98226] hover:text-[#F2A45C] text-sm ml-1 transition duration-150">Sign in here</a>
 			</div>
 		</EditForm>
 	</div>
