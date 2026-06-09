@@ -1,0 +1,73 @@
+﻿@using VEGG.TABLE.Core.Entities
+@inject NavigationManager Navigation
+
+<div>
+    <label for="categorySelect" class="block text-base font-medium text-accent mb-1 text-center w-full">Category:</label>
+    <select id="categorySelect" @onchange="OnCategoryChange"
+            class="bg-white border border-primary text-primary text-center font-semibold text-base rounded-lg p-2.5 w-64 outline-none focus:ring-2 focus:ring-emerald-500">
+        <option value="all">All Produce</option>
+        <option value="fruit">Fruit</option>
+        <option value="vegetable">Vegetable</option>
+    </select>
+</div>
+
+@* Product Feed *@
+<h2 class="text-2xl font-bold mb-6 text-center">Available Produce</h2>
+
+@if (filteredList == null)
+{
+    <p><em>Loading fresh produce...</em></p>
+}
+else
+{
+    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        @foreach (var item in filteredList)
+        {
+            <ProduceCard Item="item" />
+        }
+    </div>
+}
+
+@code {
+
+    private List<Produce>? Produces;
+    private List<Produce>? filteredList;
+    private string searchTerm = "";
+    private string selectedCategory = "all";
+
+    private readonly string[] FruitNames = { "Plums", "Apples", "Bananas", "Strawberries", "Oranges" };
+    private readonly string[] VegNames = { "Carrots", "Tomatoes", "Potatoes", "Lettuce", "Cucumbers" };
+
+    
+
+    private void ApplyFilters()
+    {
+        filteredList = Produces?.Where(p => 
+            MatchesCategory(p.Name) &&
+            (string.IsNullOrWhiteSpace(searchTerm) || p.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+        ).ToList();
+    }
+
+    private bool MatchesCategory(string name)
+    {
+        if (selectedCategory == "fruit") 
+            return FruitNames.Contains(name, StringComparer.OrdinalIgnoreCase);
+            
+        if (selectedCategory == "vegetable") 
+            return VegNames.Contains(name, StringComparer.OrdinalIgnoreCase);
+            
+        return true; 
+    }
+
+    private void OnCategoryChange(ChangeEventArgs e)
+    {
+        selectedCategory = e.Value?.ToString() ?? "all";
+        ApplyFilters();
+    }
+
+    private void OnSearchInput(ChangeEventArgs e)
+    {
+        searchTerm = e.Value?.ToString() ?? "";
+        ApplyFilters();
+    }
+}
