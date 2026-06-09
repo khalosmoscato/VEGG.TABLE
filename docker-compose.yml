@@ -29,13 +29,18 @@ services:
       dockerfile: src/VEGG.TABLE.API/Dockerfile
     container_name: veggtable-api
     ports:
-      - "127.0.0.1:5167:5167"
+      - "127.0.0.1:7277:7277"
     environment:
       # API talks to sqlserver via the container hostname, not localhost:14333
       ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=master;User Id=sa;Password=Veggtable#7;TrustServerCertificate=true;"
       Jwt__Key: "YourSuperSecretKeyMustBeAtLeast16CharactersLong"
       Jwt__Issuer: "VEGG.TABLE.API"
       Jwt__Audience: "VEGG.TABLE.Client"
+      ASPNETCORE_URLS: "https://+:7277"
+      ASPNETCORE_Kestrel__Certificates__Default__Path: /https/aspnetapp.pfx
+      ASPNETCORE_Kestrel__Certificates__Default__Password: yourpassword123
+    volumes:
+      - ${HOME}/.aspnet/https:/https:ro
     depends_on:
       sqlserver:
         condition: service_healthy
@@ -45,11 +50,20 @@ services:
       context: .
       dockerfile: src/VEGG.TABLE.Client/Dockerfile
     container_name: veggtable-client
+  
+  caddy:
+    image: caddy:latest
+    container_name: veggtable-proxy
     ports:
-      # Host port 5209 (matches CORS allowlist), container nginx on 80
-      - "127.0.0.1:5209:80"
+      - "5209:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
     depends_on:
+      - client
       - api
+
 
 volumes:
   veggtable-mssql-data:
+  caddy_data:

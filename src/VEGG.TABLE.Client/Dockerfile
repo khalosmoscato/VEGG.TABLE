@@ -23,4 +23,13 @@ RUN dotnet publish src/VEGG.TABLE.Client/VEGG.TABLE.Client.csproj -c Release -o 
 # Stage 3: nginx - serve static files
 FROM nginx:alpine
 COPY --from=blazor /publish/wwwroot /usr/share/nginx/html
+RUN echo 'server { \
+    listen 80; \
+    server_name localhost; \
+    root /usr/share/nginx/html; \
+    index index.html; \
+    location / { \
+        try_files $uri $uri/ /index.html; \
+    } \
+}' > /etc/nginx/conf.d/default.conf
 EXPOSE 80
