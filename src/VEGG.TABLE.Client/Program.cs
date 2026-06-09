@@ -15,7 +15,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 // Authentication services
 builder.Services.AddAuthorizationCore();
 builder.Services.AddScoped<AuthenticationStateProvider, AuthStateProvider>();
-builder.Services.AddHttpClient(); 
+builder.Services.AddHttpClient();
 
 // Configure Global JSON options to handle Enums as Strings
 var jsonOptions = new JsonSerializerOptions
