@@ -19,7 +19,6 @@ public class produceLoader
     {
         if (UseMockData)
         {
-
             produces = DummyProduce._DummyProduceList;
             Console.WriteLine($"Produces null? {produces == null}");
             Console.WriteLine($"Count: {produces?.Count}");
@@ -30,6 +29,24 @@ public class produceLoader
 
             produces = await http.GetFromJsonAsync<List<Produce>>(
                 "api/produce");
+        }
+        return produces;
+    }
+
+    public async Task<List<Produce>?> GetTheUsersProduceAsync(int id)
+    {
+        if (UseMockData)
+        {
+            produces = DummyProduce._DummyProduceList;
+            Console.WriteLine($"Produces null? {produces == null}");
+            Console.WriteLine($"Count: {produces?.Count}");
+        }
+        else
+        {
+            var http = _clientFactory.CreateClient("PublicAPI");
+
+            produces = await http.GetFromJsonAsync<List<Produce>>(
+                "api/produce/seller/all/{id}");
         }
         return produces;
     }

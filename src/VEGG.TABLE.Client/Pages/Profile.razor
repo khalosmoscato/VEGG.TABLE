@@ -1,6 +1,12 @@
 ﻿@page "/profile"
 @using VEGG.TABLE.Core.Entities
+@using VEGG.TABLE.Client.Services
+
 @inject IHttpClientFactory ClientFactory
+@inject NavigationManager Navigation
+@inject produceLoader produceLoader
+
+
 
 <div class="p-8">
     <h1 class="text-2xl font-bold mb-4">Your Profile</h1>
@@ -19,7 +25,7 @@
     }
 </div>
 <div>
-    @if (products == null)
+    @if (_Produces == null)
     {
         <div class="text-center py-20">
             <p class="text-emerald-900 text-xl font-semibold">Loading your produce...</p>
@@ -27,9 +33,9 @@
     }
     else
     {
-        <h1 class="text-4xl font-bold text-emerald-900 mb-8">Shop: @userName</h1>
+        <h1 class="text-4xl font-bold text-emerald-900 mb-8">Your Shop: @userName</h1>
 
-        @if (!products.Any())
+        @if (!_Produces.Any())
         {
             <div class="bg-emerald-50 p-10 rounded-2xl text-center border border-dashed border-emerald-200">
                 <p class="text-emerald-800 text-lg">You have no items listed at the moment.</p>
@@ -37,19 +43,25 @@
         }
         else
         {
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                @foreach (var item in products)
+            <ProduceSummaryList Produces="_Produces"></ProduceSummaryList>
+            @* <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                @foreach (var item in _Produces)
                 {
                     <ProduceCard Item="item" />
                 }
-            </div>
+            </div> *@
         }
     }
 </div>
 
 @code {
 
-    [Parameter] public int Id { get; set; }
+    [Parameter]
+    public List<Produce>? _Produces { get; set; }
+
+    [Parameter] 
+    public int Id { get; set; }
+
     private List<Produce>? products;
     private string userName = "Loading...";
 
@@ -57,7 +69,25 @@
 
     protected override async Task OnInitializedAsync()
     {
+        //get the users items
+        try
+        {
+            //Fetch products specific to this seller using your API endpoint
+            _Produces = await produceLoader.GetTheUsersProduceAsync(Id);
+
+            Console.WriteLine($"Loaded {_Produces?.Count} produce items");
+
+            //ApplyFilters();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading shop: {ex.Message}");
+            userName = "Error loading shop";
+            products = new List<Produce>();
+        }
+    
         var protectedHttp = ClientFactory.CreateClient("ProtectedAPI");
+
         //get the user
         try
         {
@@ -67,18 +97,6 @@
         {
             Console.WriteLine($"Error loading profile: {ex.Message}");
         }
-            //get the users items
-        // try
-        // {
-        //     Fetch products specific to this seller using your API endpoint
-        //     products = await protectedHttp.GetFromJsonAsync<List<Produce>>($"api/produce/seller/all/{Id}");
-        // }
-        // catch (Exception ex)
-        // {
-        //     Console.WriteLine($"Error loading shop: {ex.Message}");
-        //     userName = "Error loading shop";
-        //     products = new List<Produce>();
-        // }
 
         StateHasChanged();
     }
