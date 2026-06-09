@@ -13,11 +13,12 @@ string ClientUrl = "http://localhost:5215";
 
 
 //toogle which if true will connect to the local server using that string and if toggle = flase will use Azure
-bool serverLocalToggle = false;
+bool serverLocalToggle = true;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // 1. Add native OpenAPI support
+
 builder.Services.AddOpenApi();
 
 // Add other services
