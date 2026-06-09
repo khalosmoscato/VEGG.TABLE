@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 
+using VEGG.TABLE.Core.Entities.DTOs;
+
 namespace VEGG.TABLE.API.Controllers;
 
 [ApiController]
@@ -13,11 +15,27 @@ public class UserController : ControllerBase
         _userService = userService;
     }
     // GET: api/user
-    // [Authorize(Roles = "Admin")] // Shop page is not working if Authorization atm
+    [Authorize(Roles = "Admin")]
     [HttpGet]
     public IActionResult GetAllUsers()
     {
         return Ok(_userService.GetAllUsers());
+    }
+
+    // GET: api/user/sellers (public)
+    [HttpGet("sellers")]
+    public IActionResult GetSellers()
+    {
+        var sellers = _userService.GetAllUsers()
+            .Where(u => u.UserType == UserType.Seller)
+            .Select(u => new UserResponseDTO
+            {
+                Id = u.Id,
+                Name = u.Name,
+                Email = u.Email,
+                UserType = u.UserType
+            });
+        return Ok(sellers);
     }
     // GET: api/user/1
     [Authorize]
