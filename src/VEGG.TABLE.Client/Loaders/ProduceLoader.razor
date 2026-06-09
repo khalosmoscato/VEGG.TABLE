@@ -1,0 +1,31 @@
+﻿
+@using Microsoft.AspNetCore.Components.Authorization
+@using VEGG.TABLE.Core.Entities
+@inject IHttpClientFactory ClientFactory
+
+@using System.Net.Http.Json
+
+@code 
+{
+    private HttpClient? http;
+    private List<Produce>? produces;
+
+    protected override async Task OnInitializedAsync()
+    {
+        http = new HttpClient();
+
+        // Using PublicAPI client to avoid sending auth headers for this public data
+        http = ClientFactory.CreateClient("PublicAPI");
+        produces = await http.GetFromJsonAsync<List<Produce>>("api/produce");
+    }
+
+}
+@if (produces != null)
+{
+    <div><ProduceCardSummary Products="produces" /></div>
+}
+else
+{
+    <div>Loading Produce...</div>
+}
+

@@ -38,7 +38,7 @@
 </div>
 
 @code {
-	[Parameter] public int Id { get; set; }
+    [Parameter] public int UserId { get; set; }
 	private List<Produce>? products;
 	private string sellerName = "Loading...";
 
@@ -49,11 +49,11 @@
 			var http = ClientFactory.CreateClient("PublicAPI");
 
 			// 1. Fetch products specific to this seller using your API endpoint
-			products = await http.GetFromJsonAsync<List<Produce>>($"api/produce/seller/all/{Id}");
+			products = await http.GetFromJsonAsync<List<Produce>>($"api/produce/seller/{UserId}");
 
 			// 2. Fetch sellers (public) to display the name
 			var sellers = await http.GetFromJsonAsync<List<UserResponseDTO>>("api/user/sellers");
-			sellerName = sellers?.FirstOrDefault(s => s.Id == Id)?.Name ?? "Unknown Producer";
+            sellerName = sellers?.FirstOrDefault(s => s.Id == UserId)?.Name ?? "Unknown Producer";
 		}
 		catch (Exception ex)
 		{

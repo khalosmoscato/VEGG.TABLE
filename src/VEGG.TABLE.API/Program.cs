@@ -11,8 +11,7 @@ using VEGG.TABLE.API.HealthChecks;
 //string APIUrl = "http://localhost:5167";
 string ClientUrl = "http://localhost:5215";
 
-
-//toogle which if true will connect to the local server using that string and if toggle = flase will use Azure
+//toggle which if true will connect to the local server using that string and if toggle = false will use Azure
 bool serverLocalToggle = false;
 
 var builder = WebApplication.CreateBuilder(args);
