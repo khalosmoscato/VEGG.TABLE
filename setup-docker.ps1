@@ -1,3 +1,10 @@
+# Before running this script, ensure you have allowed the execution of PowerShell scripts on your system:
+# > Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+# Then run:
+# > .\setup-docker.ps1
+
+
+
 # 1. Ensure the user has the required directories
 $certDir = "$env:USERPROFILE\.aspnet\https"
 if (!(Test-Path $certDir)) {
