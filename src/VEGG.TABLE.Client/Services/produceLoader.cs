@@ -1,7 +1,7 @@
 ﻿using VEGG.TABLE.Client.Resources;
 using VEGG.TABLE.Core.Entities;
 
-namespace VEGG.TABLE.Client.Loaders.Resources;
+namespace VEGG.TABLE.Client.Services;
 
 public class produceLoader
 {
@@ -15,7 +15,7 @@ public class produceLoader
     {
         _clientFactory = clientFactory;
     }
-    public async Task<List<Produce>> GetTheProduceAsync()
+    public async Task<List<Produce>?> GetTheProduceAsync()
     {
         if (UseMockData)
         {

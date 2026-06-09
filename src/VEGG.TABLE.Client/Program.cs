@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using VEGG.TABLE.Client;
 using VEGG.TABLE.Client.Services;
 using VEGG.TABLE.Core.Entities;
-using VEGG.TABLE.Client.Loaders;
 
 string apiUrl = "http://localhost:5167";
 //string ClientUrl = "http://localhost:5215";
@@ -24,8 +23,6 @@ builder.Services.AddScoped<AuthenticationStateProvider, AuthStateProvider>();
 
 //Addprduceloader
 builder.Services.AddScoped<produceLoader>();
-builder.Services.AddScoped<VEGG.TABLE.Client.Loaders.produceLoader>();
-
 
 // Configure Global JSON options to handle Enums as Strings
 var jsonOptions = new JsonSerializerOptions

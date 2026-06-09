@@ -1,6 +1,5 @@
 ﻿
 @using VEGG.TABLE.Core.Entities
-@using VEGG.TABLE.Client.Loaders
 
 @inject NavigationManager Navigation
 @inject produceLoader produceLoader
@@ -56,19 +55,14 @@ else
 
 
     protected override async Task OnInitializedAsync()
-
     {
-        produceLoader _produceLoader = new;
-        Produces = await produceLoader.GetTheProduceAsync().Result;
+        Produces = await produceLoader.GetTheProduceAsync();
+
+        Console.WriteLine($"Loaded {Produces?.Count} produce items");
+
+        ApplyFilters();
     }
-
-    // @inject ProduceLoader ProduceLoader
-
-    // protected override async Task OnInitializedAsync()
-    // {
-    //     Produces = await ProduceLoader.GetTheProduceAsync();
-    // }
-
+   
     private void ApplyFilters()
     {
         filteredList = Produces?.Where(p => 
