@@ -45,13 +45,12 @@
 @* Divider Line *@
 <div class="border-t border-primary my-8"></div>
 
-	<ProduceSummaryList Produces ="Produces" ></ProduceSummaryList>
-
+	<ProduceSummaryList Produces = "_Produces"></ProduceSummaryList>
 
 
     @code {
 
         [Parameter]
-        public List<Produce>? Produces { get; set; }
+        public List<Produce>? _Produces { get; set; }
 
     }

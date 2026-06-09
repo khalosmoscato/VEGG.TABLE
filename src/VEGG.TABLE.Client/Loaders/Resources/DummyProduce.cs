@@ -6,7 +6,7 @@ namespace VEGG.TABLE.Client.Resources;
 
 internal class DummyProduce
 {
-    private static readonly List<Produce> _DummyProduceList = new List<Produce>
+    public static readonly List<Produce> _DummyProduceList = new List<Produce>
     {
     new()
     {
@@ -73,10 +73,9 @@ internal class DummyProduce
 
     public static Task<List<Produce>> GetProduceAsync()
     {
-       var produces = _DummyProduceList.Select(p => p).ToList();
-       
-       return Task.FromResult(produces);
+        var produces = _DummyProduceList.ToList();
 
+        return Task.FromResult(produces);
     }
 
 }

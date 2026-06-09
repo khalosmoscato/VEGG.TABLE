@@ -23,7 +23,8 @@ builder.Services.AddAuthorizationCore();
 builder.Services.AddScoped<AuthenticationStateProvider, AuthStateProvider>();
 
 //Addprduceloader
-builder.Services.AddScoped<ProduceLoader>();
+builder.Services.AddScoped<produceLoader>();
+builder.Services.AddScoped<VEGG.TABLE.Client.Loaders.produceLoader>();
 
 
 // Configure Global JSON options to handle Enums as Strings

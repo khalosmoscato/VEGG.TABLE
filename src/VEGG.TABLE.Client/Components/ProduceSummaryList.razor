@@ -3,7 +3,7 @@
 @using VEGG.TABLE.Client.Loaders
 
 @inject NavigationManager Navigation
-@inject ProduceLoader produceLoader
+@inject produceLoader produceLoader
 
 @* Search and Filter Section *@
 <div class="mb-6 flex flex-wrap gap-4 items-end justify-center">
@@ -42,20 +42,32 @@ else
 
 @code {
 
-    
-
     [Parameter]
     public List<Produce>? Produces { get; set; }
 
-    //private List<Produce>? Produces;
-    private List<Produce>? filteredList;
+    [Parameter]
+    public List<Produce>? filteredList { get; set; }
+
     private string searchTerm = "";
     private string selectedCategory = "all";
 
     private readonly string[] FruitNames = { "Plums", "Apples", "Bananas", "Strawberries", "Oranges" };
     private readonly string[] VegNames = { "Carrots", "Tomatoes", "Potatoes", "Lettuce", "Cucumbers" };
 
-    
+
+    protected override async Task OnInitializedAsync()
+
+    {
+        produceLoader _produceLoader = new;
+        Produces = await produceLoader.GetTheProduceAsync().Result;
+    }
+
+    // @inject ProduceLoader ProduceLoader
+
+    // protected override async Task OnInitializedAsync()
+    // {
+    //     Produces = await ProduceLoader.GetTheProduceAsync();
+    // }
 
     private void ApplyFilters()
     {
@@ -70,7 +82,6 @@ else
     {
         ApplyFilters();
     }
-
 
     private bool MatchesCategory(string name)
     {

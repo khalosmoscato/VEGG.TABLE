@@ -1,20 +1,20 @@
-﻿@* 
-@using System.Net.Http.Json
-@using VEGG.TABLE.Core.Entities
-@using VEGG.TABLE.Client.Resources;
+﻿using VEGG.TABLE.Client.Resources;
+using VEGG.TABLE.Core.Entities;
 
+namespace VEGG.TABLE.Client.Loaders.Resources;
 
-@inject IHttpClientFactory ClientFactory
-
-
-
-@code
+public class produceLoader
 {
-
     private List<Produce>? produces;
 
-    private const bool UseMockData = false;
+    private const bool UseMockData = true;
 
+    private readonly IHttpClientFactory _clientFactory;
+
+    public produceLoader(IHttpClientFactory clientFactory)
+    {
+        _clientFactory = clientFactory;
+    }
     public async Task<List<Produce>> GetTheProduceAsync()
     {
         if (UseMockData)
@@ -26,21 +26,11 @@
         }
         else
         {
-            var http = ClientFactory.CreateClient("PublicAPI");
+            var http = _clientFactory.CreateClient("PublicAPI");
 
             produces = await http.GetFromJsonAsync<List<Produce>>(
                 "api/produce");
         }
         return produces;
     }
-
 }
-
-    @if (produces != null)
-    {
-    <ProduceSummaryList Produces="produces"></ProduceSummaryList>
-    }
-    else
-    {
-        <div>Loading Produce...</div>
-    } *@
