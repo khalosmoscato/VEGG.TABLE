@@ -15,6 +15,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 // Authentication services
 builder.Services.AddAuthorizationCore();
 builder.Services.AddScoped<AuthenticationStateProvider, AuthStateProvider>();
+builder.Services.AddHttpClient();
 
 // Configure Global JSON options to handle Enums as Strings
 var jsonOptions = new JsonSerializerOptions
@@ -25,13 +26,13 @@ var jsonOptions = new JsonSerializerOptions
 
 // Public client
 builder.Services.AddHttpClient("PublicAPI", client =>
-    client.BaseAddress = new Uri("http://localhost:5167"))
+    client.BaseAddress = new Uri("https://localhost:7277"))
     .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler());
 
 // Protected client (with AuthHandler)
 builder.Services.AddTransient<AuthHandler>();
 builder.Services.AddHttpClient("ProtectedAPI", client =>
-    client.BaseAddress = new Uri("http://localhost:5167/"))
+    client.BaseAddress = new Uri("https://localhost:7277/"))
     .AddHttpMessageHandler<AuthHandler>()
     .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler());
 

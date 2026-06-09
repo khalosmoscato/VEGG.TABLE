@@ -1,0 +1,7 @@
+localhost:443 {
+    reverse_proxy /api/* api:7277 {
+        header_up Host {host}
+    }
+
+    reverse_proxy /* client:80
+}
