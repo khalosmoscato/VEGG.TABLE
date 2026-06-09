@@ -1,20 +1,32 @@
-﻿@using VEGG.TABLE.Core.Entities
-@inject NavigationManager Navigation
+﻿
+@using VEGG.TABLE.Core.Entities
+@using VEGG.TABLE.Client.Loaders
 
-<div>
-    <label for="categorySelect" class="block text-base font-medium text-accent mb-1 text-center w-full">Category:</label>
-    <select id="categorySelect" @onchange="OnCategoryChange"
-            class="bg-white border border-primary text-primary text-center font-semibold text-base rounded-lg p-2.5 w-64 outline-none focus:ring-2 focus:ring-emerald-500">
-        <option value="all">All Produce</option>
-        <option value="fruit">Fruit</option>
-        <option value="vegetable">Vegetable</option>
-    </select>
+@inject NavigationManager Navigation
+@inject ProduceLoader produceLoader
+
+@* Search and Filter Section *@
+<div class="mb-6 flex flex-wrap gap-4 items-end justify-center">
+    <div>
+        <label for="searchInput" class="block text-base font-medium text-accent mb-1 text-center w-full">Search:</label>
+        <input id="searchInput" type="text" @oninput="OnSearchInput" placeholder="Search produce..." 
+               class="bg-white border border-primary text-primary font-semibold placeholder:font-semibold placeholder:text-primary text-center text-base rounded-lg p-2.5 w-64 focus:ring-2 focus:ring-emerald-500 outline-none" />
+    </div>
+    <div>
+        <label for="categorySelect" class="block text-base font-medium text-accent mb-1 text-center w-full">Category:</label>
+        <select id="categorySelect" @onchange="OnCategoryChange"
+                class="bg-white border border-primary text-primary text-center font-semibold text-base rounded-lg p-2.5 w-64 outline-none focus:ring-2 focus:ring-emerald-500">
+            <option value="all">All Produce</option>
+            <option value="fruit">Fruit</option>
+            <option value="vegetable">Vegetable</option>
+        </select>
+    </div>
 </div>
 
 @* Product Feed *@
 <h2 class="text-2xl font-bold mb-6 text-center">Available Produce</h2>
 
-@if (filteredList == null)
+@if (Produces == null)
 {
     <p><em>Loading fresh produce...</em></p>
 }
@@ -30,7 +42,12 @@ else
 
 @code {
 
-    private List<Produce>? Produces;
+    
+
+    [Parameter]
+    public List<Produce>? Produces { get; set; }
+
+    //private List<Produce>? Produces;
     private List<Produce>? filteredList;
     private string searchTerm = "";
     private string selectedCategory = "all";
@@ -47,6 +64,13 @@ else
             (string.IsNullOrWhiteSpace(searchTerm) || p.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
         ).ToList();
     }
+
+    //This runs automatically whenever the parent component updates the 'Produces' list
+    protected override void OnParametersSet()
+    {
+        ApplyFilters();
+    }
+
 
     private bool MatchesCategory(string name)
     {

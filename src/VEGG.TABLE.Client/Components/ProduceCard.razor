@@ -1,5 +1,10 @@
 ﻿@using VEGG.TABLE.Core.Entities
+@using VEGG.TABLE.Client.Loaders
+
 @inject NavigationManager Navigation
+@inject List<Produce> DummyProduce
+@inject ProduceLoader produceLoader
+
 
 <div class="produce-card relative border border-primary/20 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 p-4 bg-primary text-white flex flex-col text-center">
     

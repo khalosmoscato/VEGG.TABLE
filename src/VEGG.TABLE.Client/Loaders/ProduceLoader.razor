@@ -1,31 +1,50 @@
 ﻿
-@using Microsoft.AspNetCore.Components.Authorization
+@using System.Net.Http.Json
 @using VEGG.TABLE.Core.Entities
+@using VEGG.TABLE.Client.Resources;
+
+
 @inject IHttpClientFactory ClientFactory
 
-@using System.Net.Http.Json
 
-@code 
+
+@code
 {
-    private HttpClient? http;
+
+    [Inject]
+    private NavigationManager Navigation { get; set; } = default!;
+
     private List<Produce>? produces;
+
+    private const bool UseMockData = true;
 
     protected override async Task OnInitializedAsync()
     {
-        http = new HttpClient();
+        if (UseMockData)
+        {
+            using var client = new HttpClient
+            {
+                BaseAddress = new Uri(Navigation.BaseUri)
+            };
 
-        // Using PublicAPI client to avoid sending auth headers for this public data
-        http = ClientFactory.CreateClient("PublicAPI");
-        produces = await http.GetFromJsonAsync<List<Produce>>("api/produce");
+            produces = await DummyProduce.GetProduceAsync();
+        }
+        else
+        {
+            var http = ClientFactory.CreateClient("PublicAPI");
+
+            produces = await http.GetFromJsonAsync<List<Produce>>(
+                "api/produce");
+        }
     }
 
 }
-@if (produces != null)
-{
-    <div><ProduceSummaryList Products="produces" /></div>
-}
-else
-{
-    <div>Loading Produce...</div>
-}
 
+    @if (produces != null)
+    {
+    <ProduceSummaryList Produces="produces"></ProduceSummaryList>
+    }
+    else
+    {
+        <div>Loading Produce...</div>
+    }

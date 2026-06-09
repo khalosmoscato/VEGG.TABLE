@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Net.Http.Json;
 
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
@@ -7,6 +8,8 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
 using VEGG.TABLE.Client;
 using VEGG.TABLE.Client.Services;
+using VEGG.TABLE.Core.Entities;
+using VEGG.TABLE.Client.Loaders;
 
 string apiUrl = "http://localhost:5167";
 //string ClientUrl = "http://localhost:5215";
@@ -19,12 +22,17 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddAuthorizationCore();
 builder.Services.AddScoped<AuthenticationStateProvider, AuthStateProvider>();
 
+//Addprduceloader
+builder.Services.AddScoped<ProduceLoader>();
+
+
 // Configure Global JSON options to handle Enums as Strings
 var jsonOptions = new JsonSerializerOptions
 {
     PropertyNameCaseInsensitive = true,
     Converters = { new JsonStringEnumConverter() }
 };
+
 
 // Public client
 builder.Services.AddHttpClient("PublicAPI", client =>
@@ -39,3 +47,14 @@ builder.Services.AddHttpClient("ProtectedAPI", client =>
     .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler());
 
 await builder.Build().RunAsync();
+
+
+
+
+
+//var produces = File.ReadAllText(
+//                "Resources/Produce.json");
+////foreach (var produce in produces) {
+////    Console.WriteLine(produce.Name);
+////    };
+//Console.WriteLine(produces);

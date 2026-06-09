@@ -1,0 +1,58 @@
+[
+  {
+    "produceId": 1,
+    "name": "Spinach",
+    "stock": 50,
+    "price": 1.99,
+    "weight": 0.25,
+    "category": "LeafyGreens",
+    "description": "Fresh baby spinach leaves.",
+    "photograghPath": "/images/spinach.jpg",
+    "isOnSale": false,
+    "isLiked": true,
+    "isPurchased": true,
+    "userId": 1
+  },
+  {
+    "produceId": 2,
+    "name": "Broccoli",
+    "stock": 30,
+    "price": 2.49,
+    "weight": 0.45,
+    "category": "Cruciferous",
+    "description": "Organic broccoli crowns.",
+    "photograghPath": "/images/broccoli.jpg",
+    "isOnSale": true,
+    "isLiked": true,
+    "isPurchased": true,
+    "userId": 1
+  },
+  {
+    "produceId": 3,
+    "name": "Broccoli",
+    "stock": 40,
+    "price": 2.79,
+    "weight": 0.55,
+    "category": "Cruciferous",
+    "description": "Fresh green broccoli crowns.",
+    "photograghPath": "images/broccoli.jpg",
+    "isOnSale": true,
+    "isLiked": true,
+    "isPurchased": false,
+    "userId": 2
+  },
+  {
+    "produceId": 4,
+    "name": "Cauliflower",
+    "stock": 12,
+    "price": 3.25,
+    "weight": 0.8,
+    "category": "Cruciferous",
+    "description": "Large white cauliflower head.",
+    "photograghPath": "images/cauliflower.jpg",
+    "isOnSale": false,
+    "isLiked": false,
+    "isPurchased": true,
+    "userId": 2
+  }
+]
