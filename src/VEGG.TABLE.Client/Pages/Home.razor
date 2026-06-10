@@ -2,69 +2,62 @@
 @page "/"
 @using VEGG.TABLE.Core.Entities
 @using VEGG.TABLE.Client.Components
+@using VEGG.TABLE.Client.Services
+@using Microsoft.AspNetCore.Components.Authorization
 @inject IHttpClientFactory ClientFactory
+@inject AuthenticationStateProvider AuthStateProvider
 
 @* Hero / Welcome Section *@
 <div class="bg-emerald-800 text-white p-8 rounded-lg mb-8 shadow-md text-center">
-    <h1 class="text-3xl font-bold mb-2">Welcome to VEGG.TABLE</h1>
+    <h1 class="text-3xl font-bold mb-2 text-white">Welcome to VEGG.TABLE</h1>
     <p class="max-w-2xl mx-auto">
         Connecting local, sustainable produce directly to your community. 
         Precision-grown, farm-fresh, and ready for you to collect.
     </p>
 </div>
 
-@* Divider Line *@
 <div class="border-t border-primary my-8"></div>
 
-@* How It Works Section *@
 <div class="mt-12 mb-12">
     <h2 class="text-2xl font-bold mb-6 text-center">How VEGG.TABLE Works</h2>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        
         <div class="bg-white p-6 rounded-lg border border-emerald-200 shadow-sm text-center">
             <div class="text-orange-500 text-3xl mb-4">🛒</div>
             <h4 class="font-bold text-emerald-900 mb-2">1. Request</h4>
             <p class="text-emerald-700 text-sm">Browse fresh, local produce and click "Request to Buy" on what you need.</p>
         </div>
-
         <div class="bg-white p-6 rounded-lg border border-emerald-200 shadow-sm text-center">
             <div class="text-orange-500 text-3xl mb-4">🤝</div>
             <h4 class="font-bold text-emerald-900 mb-2">2. Connect</h4>
             <p class="text-emerald-700 text-sm">We put you in touch with the local grower to arrange the final details.</p>
         </div>
-
         <div class="bg-white p-6 rounded-lg border border-emerald-200 shadow-sm text-center">
             <div class="text-orange-500 text-3xl mb-4">🥕</div>
             <h4 class="font-bold text-emerald-900 mb-2">3. Collect</h4>
             <p class="text-emerald-700 text-sm">Pick up your fresh goods directly from the farm or community hub.</p>
         </div>
-
     </div>
 </div>
 
-@* Divider Line *@
 <div class="border-t border-primary my-8"></div>
 
-@* Search and Filter Section *@
 <div class="mb-6 flex flex-wrap gap-4 items-end justify-center">
     <div>
         <label for="searchInput" class="block text-base font-medium text-accent mb-1 text-center w-full">Search:</label>
         <input id="searchInput" type="text" @oninput="OnSearchInput" placeholder="Search produce..." 
                class="bg-white border border-primary text-primary font-semibold placeholder:font-semibold placeholder:text-primary text-center text-base rounded-lg p-2.5 w-64 focus:ring-2 focus:ring-emerald-500 outline-none" />
     </div>
-
-	<div>
-		<label for="categorySelect" class="block text-base font-medium text-accent mb-1 text-center w-full">Category:</label>
-		<select id="categorySelect" @onchange="OnCategoryChange"
-				class="bg-white border border-primary text-primary text-center font-semibold text-base rounded-lg p-2.5 w-64 outline-none focus:ring-2 focus:ring-emerald-500">
-			<option value="all">All Produce</option>
-			<option value="fruit">Fruit</option>
-			<option value="vegetable">Vegetable</option>
-		</select>
-	</div>
+    <div>
+        <label for="categorySelect" class="block text-base font-medium text-accent mb-1 text-center w-full">Category:</label>
+        <select id="categorySelect" @onchange="OnCategoryChange"
+                class="bg-white border border-primary text-primary text-center font-semibold text-base rounded-lg p-2.5 w-64 outline-none focus:ring-2 focus:ring-emerald-500">
+            <option value="all">All Produce</option>
+            <option value="fruit">Fruit</option>
+            <option value="vegetable">Vegetable</option>
+        </select>
+    </div>
 </div> 
 
-@* Product Feed *@
 <h2 class="text-2xl font-bold mb-6 text-center">Available Produce</h2>
 
 @if (filteredList == null)
@@ -76,7 +69,10 @@ else
     <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
         @foreach (var item in filteredList)
         {
-            <ProduceCard Item="item" />
+            <ProduceCard Item="item"
+                         UserId="userId"
+                         LikedProduceIds="likedProduceIds"
+                         OnLikeToggled="HandleLikeToggled" />
         }
     </div>
 }
@@ -86,16 +82,44 @@ else
     private List<Produce>? filteredList;
     private string searchTerm = "";
     private string selectedCategory = "all";
+    private int userId = 0;
+    private HashSet<int> likedProduceIds = new();
 
     private readonly string[] FruitNames = { "Plums", "Apples", "Bananas", "Strawberries", "Oranges" };
     private readonly string[] VegNames = { "Carrots", "Tomatoes", "Potatoes", "Lettuce", "Cucumbers" };
 
     protected override async Task OnInitializedAsync()
     {
-        // Using PublicAPI client to avoid sending auth headers for this public data
-        var http = ClientFactory.CreateClient("PublicAPI");
-        allProduce = await http.GetFromJsonAsync<List<Produce>>("api/produce");
+        // Get userId from JWT
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var idClaim = authState.User.FindFirst("nameid")?.Value;
+        if (!string.IsNullOrEmpty(idClaim))
+            int.TryParse(idClaim, out userId);
+
+        var publicHttp = ClientFactory.CreateClient("PublicAPI");
+        allProduce = await publicHttp.GetFromJsonAsync<List<Produce>>("api/produce");
         filteredList = allProduce;
+
+        // Load liked produce if logged in
+        if (userId != 0)
+        {
+            try
+            {
+                var protectedHttp = ClientFactory.CreateClient("ProtectedAPI");
+                var likes = await protectedHttp.GetFromJsonAsync<List<UserProduceLike>>($"api/likes/user/{userId}");
+                likedProduceIds = likes?.Select(l => l.ProduceId).ToHashSet() ?? new();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading likes: {ex.Message}");
+            }
+        }
+    }
+
+    private void HandleLikeToggled(int produceId)
+    {
+        // HashSet is already updated in ProduceCard, just trigger re-render
+        StateHasChanged();
     }
 
     private void ApplyFilters()
@@ -110,10 +134,8 @@ else
     {
         if (selectedCategory == "fruit") 
             return FruitNames.Contains(name, StringComparer.OrdinalIgnoreCase);
-            
         if (selectedCategory == "vegetable") 
             return VegNames.Contains(name, StringComparer.OrdinalIgnoreCase);
-            
         return true; 
     }
 

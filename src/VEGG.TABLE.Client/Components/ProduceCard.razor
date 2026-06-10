@@ -1,10 +1,14 @@
 ﻿@using VEGG.TABLE.Core.Entities
 @inject NavigationManager Navigation
+@inject IHttpClientFactory ClientFactory
 
 <div class="produce-card relative border border-primary/20 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 p-4 bg-primary text-white flex flex-col text-center">
     
-    <button @onclick="ShowLoginMsg" class="absolute top-2 right-2 p-2 hover:bg-white/10 rounded-full transition-all">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 transition-colors duration-200 text-white/50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <button @onclick="HandleLikeClick" class="absolute top-2 right-2 p-2 hover:bg-white/10 rounded-full transition-all">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 transition-colors duration-200" viewBox="0 0 24 24"
+             fill="@(isLiked ? "white" : "none")"
+             stroke="@(isLiked ? "white" : "currentColor")"
+             stroke-width="2">
             <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
         </svg>
     </button>
@@ -24,7 +28,9 @@
     <p class="text-sm text-primary-50">Price: £@Item.Price</p>
     <p class="text-sm text-primary-100">In Stock: @Item.Stock</p>
     
-    <button class="w-full mt-4 bg-accent hover:bg-accent-hover text-white py-2 rounded-md transition-all duration-200 active:scale-95 font-medium" 
+    <button class="w-full mt-4 bg-accent text-white py-2 rounded-md transition-all duration-200 active:scale-95 font-medium"
+            onmouseover="this.style.backgroundColor='#EA580C'"
+            onmouseout="this.style.backgroundColor='#F97316'"
             @onclick="ShowLoginMsg">
         Request to Buy
     </button>
@@ -32,9 +38,39 @@
 
 @code {
     [Parameter] public Produce Item { get; set; } = default!;
-    private bool showLoginMsg = false;
+    [Parameter] public int UserId { get; set; } = 0;
+    [Parameter] public HashSet<int> LikedProduceIds { get; set; } = new();
+    [Parameter] public EventCallback<int> OnLikeToggled { get; set; }
 
-    // The shared method that handles the popup
+    private bool showLoginMsg = false;
+    private bool isLiked => LikedProduceIds.Contains(Item.ProduceId);
+
+    private async Task HandleLikeClick()
+    {
+        if (UserId == 0)
+        {
+            await ShowLoginMsg();
+            return;
+        }
+
+        var http = ClientFactory.CreateClient("ProtectedAPI");
+
+        if (isLiked)
+        {
+            await http.DeleteAsync($"api/likes?userId={UserId}&produceId={Item.ProduceId}");
+            LikedProduceIds.Remove(Item.ProduceId);
+        }
+        else
+        {
+            var dto = new LikeRequestDTO { UserId = UserId, ProduceId = Item.ProduceId };
+            await http.PostAsJsonAsync("api/likes", dto);
+            LikedProduceIds.Add(Item.ProduceId);
+        }
+
+        await OnLikeToggled.InvokeAsync(Item.ProduceId);
+        StateHasChanged();
+    }
+
     private async Task ShowLoginMsg()
     {
         showLoginMsg = true;
@@ -52,7 +88,7 @@
         var n when n.Contains("carrot") => "🥕",
         var n when n.Contains("tomato") => "🍅",
         var n when n.Contains("potato") => "🥔",
-        var n when n.Contains("strawberry") => "🍓",
+        var n when n.Contains("strawberr") => "🍓",
         var n when n.Contains("lettuce") => "🥬",
         var n when n.Contains("orange") => "🍊",
         var n when n.Contains("cucumber") => "🥒",

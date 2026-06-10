@@ -5,7 +5,7 @@
 @inject NavigationManager Nav
 @inject IJSRuntime JS
 
-<div class="relative w-full bg-primary text-white shadow-lg px-4 py-3 flex items-center justify-between">
+<div class="relative w-full bg-primary text-white shadow-lg px-4 py-3 flex items-center justify-between" style="z-index: 1001;">
     <a href="/" class="flex items-center gap-2">
         <img src="/images/logo.png" alt="VEGG.TABLE" class="h-16 md:h-24 w-auto object-contain block" />
         <span class="text-xl font-bold hidden min-[320px]:inline-block md:text-2xl whitespace-nowrap">VEGG.TABLE</span>
@@ -17,7 +17,7 @@
 
     <nav class="@(isExpanded ? "flex flex-col items-center text-center" : "hidden") 
                  lg:flex lg:flex-row lg:flex-1 lg:justify-end lg:items-center 
-                 absolute lg:static top-full left-0 w-full bg-primary p-4 gap-6 z-50 shadow-md lg:shadow-none">
+                 absolute lg:static top-full left-0 w-full bg-primary p-4 gap-2 z-50 shadow-md lg:shadow-none">
         
         <NavLink class="nav-link-stable" href="" Match="NavLinkMatch.All" @onclick="CloseNav">
             <span class="bi bi-house-door-fill"></span> Home
