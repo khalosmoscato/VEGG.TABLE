@@ -34,6 +34,16 @@ Our whiteboard: [Figma Board](https://www.figma.com/board/jRS3cdT5qpY0piIOLnXisa
 
 ---
 
+## ✨ Core Features & Functionality
+
+* **Peer-to-Peer Marketplace**: Connects local growers and consumers to share surplus produce and reduce food waste.
+* **Interactive Leaflet Mapping**: Visualises active local farms and pick-up hubs across the community.
+* **Role-Based Profiles**: Dynamic switching between Buyer and Seller views, allowing producers to manage inventory and list new items via full CRUD capabilities.
+* **Instant Purchase Intent**: Integrated `mailto:` actions allowing users to seamlessly initiate contact for produce collection.
+* **Theme Persistence**: Seamless light and dark mode switching powered by Tailwind CSS and local storage initialization.
+
+---
+
 ## 🏗️ Project Overview & Architecture
 
 VEGG.TABLE is built using **Clean Architecture**. This design philosophy separates the application into distinct layers, ensuring that our domain logic, infrastructure (data access), and the user interface (Blazor) remain decoupled and maintainable.
