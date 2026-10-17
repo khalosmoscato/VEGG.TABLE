@@ -22,14 +22,28 @@
     {
         if (firstRender)
         {
-            isDark = await JS.InvokeAsync<bool>("themeManager.initializeTheme");
-            StateHasChanged();
+            try
+            {
+                isDark = await JS.InvokeAsync<bool>("themeManager.initializeTheme");
+                StateHasChanged();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error initialising theme: {ex.Message}");
+            }
         }
     }
 
     private async Task ToggleTheme()
     {
-        isDark = !isDark;
-        await JS.InvokeVoidAsync("themeManager.toggleTheme", isDark);
+        try
+        {
+            isDark = !isDark;
+            await JS.InvokeVoidAsync("themeManager.toggleTheme", isDark);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error toggling theme: {ex.Message}");
+        }
     }
 }
