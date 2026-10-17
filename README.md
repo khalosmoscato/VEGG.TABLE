@@ -5,6 +5,35 @@ Our whiteboard: [Figma Board](https://www.figma.com/board/jRS3cdT5qpY0piIOLnXisa
 
 ---
 
+## 📱 Interface & Responsive UI Gallery
+
+### 🏠 Home Marketplace & Shop Overview
+| Desktop (Light) | Desktop (Dark) | Mobile (Light) |
+| :---: | :---: | :---: |
+| <img src="src/VEGG.TABLE.Client/wwwroot/docs/screenshots/desktop-homepage-light.png" width="350" alt="Desktop Homepage Light" /> | <img src="src/VEGG.TABLE.Client/wwwroot/docs/screenshots/desktop-homepage-dark.png" width="350" alt="Desktop Homepage Dark" /> | <img src="src/VEGG.TABLE.Client/wwwroot/docs/screenshots/mobile-home-light.png" width="180" alt="Mobile Home Light" /> |
+
+### 📍 Local Producers, Map & Shop View
+| Desktop Producers List | Shop Detail View | Mobile Producers |
+| :---: | :---: | :---: |
+| <img src="src/VEGG.TABLE.Client/wwwroot/docs/screenshots/desktop-shops-list-dark.png" width="350" alt="Desktop Shops List" /> | <img src="src/VEGG.TABLE.Client/wwwroot/docs/screenshots/desktop-shop-detail-dark.png" width="350" alt="Desktop Shop Detail" /> | <img src="src/VEGG.TABLE.Client/wwwroot/docs/screenshots/mobile-shops-list-dark.png" width="180" alt="Mobile Shops List" /> |
+
+### 🗺️ Map Views (Multi-Device)
+| Desktop Map | Tablet Map | Mobile Landscape Map |
+| :---: | :---: | :---: |
+| <img src="src/VEGG.TABLE.Client/wwwroot/docs/screenshots/desktop-map-dark.png" width="350" alt="Desktop Map" /> | <img src="src/VEGG.TABLE.Client/wwwroot/docs/screenshots/tablet-map-dark.png" width="280" alt="Tablet Map" /> | <img src="src/VEGG.TABLE.Client/wwwroot/docs/screenshots/mobile-landscape-map-dark.png" width="280" alt="Mobile Landscape Map" /> |
+
+### 👤 Profile & Inventory CRUD Management
+| Desktop Profile | CRUD Produce Form | Mobile Profile |
+| :---: | :---: | :---: |
+| <img src="src/VEGG.TABLE.Client/wwwroot/docs/screenshots/desktop-profile-light.png" width="350" alt="Desktop Profile Light" /> | <img src="src/VEGG.TABLE.Client/wwwroot/docs/screenshots/desktop-profile-crud-light.png" width="350" alt="Desktop CRUD Form" /> | <img src="src/VEGG.TABLE.Client/wwwroot/docs/screenshots/mobile-profile-light.png" width="180" alt="Mobile Profile Light" /> |
+
+### 🔐 Authentication & Mission
+| Desktop Sign In | Tablet Landscape Sign In | Desktop About | Tablet About |
+| :---: | :---: | :---: | :---: |
+| <img src="src/VEGG.TABLE.Client/wwwroot/docs/screenshots/desktop-login-light.png" width="250" alt="Desktop Login" /> | <img src="src/VEGG.TABLE.Client/wwwroot/docs/screenshots/tablet-landscape-login-dark.png" width="250" alt="Tablet Login" /> | <img src="src/VEGG.TABLE.Client/wwwroot/docs/screenshots/desktop-about-light.png" width="250" alt="Desktop About" /> | <img src="src/VEGG.TABLE.Client/wwwroot/docs/screenshots/tablet-about-light.png" width="200" alt="Tablet About" /> |
+
+---
+
 ## 🏗️ Project Overview & Architecture
 
 VEGG.TABLE is built using **Clean Architecture**. This design philosophy separates the application into distinct layers, ensuring that our domain logic, infrastructure (data access), and the user interface (Blazor) remain decoupled and maintainable.
